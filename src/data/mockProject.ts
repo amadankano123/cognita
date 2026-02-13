@@ -1,0 +1,75 @@
+import { ResearchProject, User } from "@/types/research";
+
+export const mockUser: User = {
+  id: "u1",
+  name: "Dr. Amara Osei",
+  email: "amara.osei@university.edu",
+  role: "Principal Investigator",
+  institution: "University of Agricultural Sciences",
+};
+
+export const defaultProject: ResearchProject = {
+  id: "proj-001",
+  title: "AI-Based Early Detection of Crop Diseases Using Computer Vision",
+  subtitle: "A multi-spectral imaging approach with deep learning for sub-Saharan agriculture",
+  status: "in-progress",
+  createdAt: "2025-09-15",
+  updatedAt: "2026-02-10",
+  deadline: "2026-04-30",
+  progress: 62,
+  wordCount: 8420,
+  targetWordCount: 15000,
+  sections: [
+    { id: "s1", title: "Abstract", order: 1, content: "This proposal presents a novel framework for early detection of crop diseases in sub-Saharan Africa using computer vision and deep learning. By combining multi-spectral drone imagery with convolutional neural networks, we aim to identify pathogen signatures before visible symptoms appear, enabling timely intervention and reducing crop losses by an estimated 30–45%." },
+    { id: "s2", title: "Introduction", order: 2, content: "Crop diseases account for 20–40% of global food production losses annually (FAO, 2023). In sub-Saharan Africa, smallholder farmers—who produce over 70% of the region's food—are disproportionately affected due to limited access to diagnostic tools and extension services. Traditional disease identification relies on visual inspection by trained agronomists, a process that is slow, subjective, and often occurs after significant damage.\n\nRecent advances in computer vision and remote sensing offer transformative potential. Unmanned aerial vehicles (UAVs) equipped with multi-spectral sensors can capture high-resolution imagery across visible and near-infrared wavelengths, revealing physiological stress indicators invisible to the human eye." },
+    { id: "s3", title: "Literature Review", order: 3, content: "Machine learning approaches to plant disease detection have evolved rapidly over the past decade. Mohanty et al. (2016) demonstrated that deep CNNs could classify 26 diseases across 14 crop species with 99.35% accuracy using the PlantVillage dataset. However, subsequent work revealed significant domain shift when models trained on laboratory images were deployed in field conditions (Ferentinos, 2018).\n\nMulti-spectral imaging has emerged as a complementary approach. Studies by Mahlein et al. (2019) showed that specific spectral vegetation indices correlate strongly with early-stage fungal infections in wheat and sugar beet." },
+    { id: "s4", title: "Methodology", order: 4, content: "Our methodology comprises three interconnected phases:\n\n**Phase 1: Data Collection** — We will deploy DJI Matrice 300 RTK drones equipped with MicaSense RedEdge-MX sensors across 12 field sites in Kenya and Ghana. Each site will be surveyed weekly for two growing seasons, capturing imagery in five spectral bands (Blue, Green, Red, Red Edge, NIR).\n\n**Phase 2: Model Development** — We will develop a multi-scale attention network (MSA-Net) that processes both RGB and multi-spectral inputs. The architecture combines EfficientNet-B4 backbones with channel attention modules.\n\n**Phase 3: Field Validation** — Trained models will be deployed on edge devices (NVIDIA Jetson Nano) for real-time inference during drone flights." },
+    { id: "s5", title: "Expected Results", order: 5, content: "We anticipate achieving detection accuracy above 92% for the three target diseases (maize lethal necrosis, cassava brown streak, and tomato late blight) at pre-symptomatic stages, defined as 5–10 days before visible symptoms appear." },
+    { id: "s6", title: "Budget & Timeline", order: 6, content: "Total requested funding: $285,000 over 24 months.\n\nYear 1: Equipment procurement, field site establishment, initial data collection ($165,000)\nYear 2: Model development, validation trials, dissemination ($120,000)" },
+    { id: "s7", title: "References", order: 7, content: "See References tab for complete bibliography." },
+  ],
+  references: [
+    { id: "r1", title: "Using Deep Learning for Image-Based Plant Disease Detection", authors: ["Mohanty, S.P.", "Hughes, D.P.", "Salathé, M."], year: 2016, journal: "Frontiers in Plant Science", doi: "10.3389/fpls.2016.01419", tags: ["deep learning", "plant disease"], abstract: "Deep learning on PlantVillage dataset achieving 99.35% accuracy." },
+    { id: "r2", title: "Deep learning models for plant disease detection and diagnosis", authors: ["Ferentinos, K.P."], year: 2018, journal: "Computers and Electronics in Agriculture", doi: "10.1016/j.compag.2018.01.009", tags: ["CNN", "field conditions"] },
+    { id: "r3", title: "Plant Disease Detection by Imaging Sensors", authors: ["Mahlein, A.K.", "Kuska, M.T.", "Behmann, J."], year: 2019, journal: "Annual Review of Phytopathology", tags: ["spectral imaging", "sensors"] },
+    { id: "r4", title: "EfficientNet: Rethinking Model Scaling for Convolutional Neural Networks", authors: ["Tan, M.", "Le, Q.V."], year: 2019, journal: "ICML 2019", tags: ["architecture", "scaling"] },
+    { id: "r5", title: "Remote sensing for agricultural applications: A meta-review", authors: ["Weiss, M.", "Jacob, F.", "Duveiller, G."], year: 2020, journal: "Remote Sensing of Environment", tags: ["remote sensing", "agriculture", "review"] },
+    { id: "r6", title: "Attention mechanisms in computer vision: A survey", authors: ["Guo, M.H.", "Xu, T.X.", "Liu, J.J."], year: 2022, journal: "Computational Visual Media", tags: ["attention", "survey"] },
+    { id: "r7", title: "Global food losses and food waste", authors: ["FAO"], year: 2023, journal: "FAO Report", tags: ["food loss", "statistics"] },
+    { id: "r8", title: "UAV-based multi-spectral imaging for crop disease monitoring", authors: ["Zhang, J.", "Huang, Y.", "Pu, R."], year: 2021, journal: "Precision Agriculture", doi: "10.1007/s11119-021-09816-7", tags: ["UAV", "multi-spectral"] },
+  ],
+  dataFiles: [
+    { id: "d1", name: "kenya_field_rgb_2025.zip", type: "image/zip", size: "2.3 GB", uploadedAt: "2025-11-20", description: "RGB drone imagery from Kenya field sites (Season 1)" },
+    { id: "d2", name: "ghana_multispectral_batch1.tif", type: "image/tiff", size: "890 MB", uploadedAt: "2025-12-05", description: "Multi-spectral captures from Ghana sites" },
+    { id: "d3", name: "disease_annotations_v2.csv", type: "text/csv", size: "4.2 MB", uploadedAt: "2026-01-15", description: "Expert-annotated disease labels for training" },
+    { id: "d4", name: "weather_data_2025.xlsx", type: "application/xlsx", size: "1.1 MB", uploadedAt: "2026-01-20", description: "Meteorological data from field stations" },
+  ],
+  analysisResults: [
+    { id: "a1", title: "Spectral Index Correlation Analysis", type: "Statistical", status: "completed", summary: "NDVI and GNDVI showed strongest correlation (r=0.87) with early disease presence.", createdAt: "2026-01-25" },
+    { id: "a2", title: "Baseline CNN Performance", type: "Machine Learning", status: "completed", summary: "ResNet-50 baseline achieved 84.2% accuracy on preliminary test set.", createdAt: "2026-02-01" },
+    { id: "a3", title: "MSA-Net v1 Training", type: "Machine Learning", status: "running", createdAt: "2026-02-08" },
+  ],
+  reviewScores: [
+    { category: "Clarity & Structure", score: 8, maxScore: 10 },
+    { category: "Literature Coverage", score: 7, maxScore: 10 },
+    { category: "Methodology Rigor", score: 9, maxScore: 10 },
+    { category: "Feasibility", score: 7, maxScore: 10 },
+    { category: "Impact & Significance", score: 8, maxScore: 10 },
+    { category: "Budget Justification", score: 6, maxScore: 10 },
+  ],
+  reviewIssues: [
+    { id: "ri1", sectionId: "s2", sectionTitle: "Introduction", severity: "major", message: "Missing quantitative data on economic impact specific to target countries (Kenya, Ghana).", suggestion: "Add GDP contribution of agriculture and disease-specific loss figures for Kenya and Ghana." },
+    { id: "ri2", sectionId: "s3", sectionTitle: "Literature Review", severity: "minor", message: "The review could benefit from more recent 2024-2025 references on transformer-based architectures for plant disease detection." },
+    { id: "ri3", sectionId: "s4", sectionTitle: "Methodology", severity: "suggestion", message: "Consider adding a power analysis to justify the sample size of 12 field sites." },
+    { id: "ri4", sectionId: "s6", sectionTitle: "Budget & Timeline", severity: "critical", message: "Budget breakdown lacks line-item detail. Reviewers typically expect itemized costs for equipment, personnel, travel, and indirect costs." },
+    { id: "ri5", sectionId: "s5", sectionTitle: "Expected Results", severity: "minor", message: "The 92% accuracy claim needs statistical confidence intervals or comparison benchmarks." },
+    { id: "ri6", sectionId: "s4", sectionTitle: "Methodology", severity: "major", message: "Ethical approval and data privacy considerations for field site communities are not addressed." },
+  ],
+  collaborators: [
+    { id: "c1", name: "Dr. Amara Osei", email: "amara.osei@university.edu", role: "owner", lastActive: "2026-02-10" },
+    { id: "c2", name: "Prof. James Mwangi", email: "j.mwangi@agri.ac.ke", role: "editor", lastActive: "2026-02-09" },
+    { id: "c3", name: "Dr. Fatima Al-Hassan", email: "fatima.h@techuni.edu", role: "reviewer", lastActive: "2026-02-07" },
+    { id: "c4", name: "Samuel Adu-Gyamfi", email: "s.adu@ghana.edu.gh", role: "editor", lastActive: "2026-02-05" },
+    { id: "c5", name: "Dr. Lin Chen", email: "lin.chen@cv-lab.edu", role: "viewer", lastActive: "2026-01-28" },
+  ],
+};
