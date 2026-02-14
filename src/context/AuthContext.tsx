@@ -6,7 +6,7 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   login: (email: string, password: string) => boolean;
-  signup: (name: string, email: string, password: string) => boolean;
+  signup: (name: string, email: string, password: string, role?: string) => boolean;
   logout: () => void;
 }
 
@@ -20,8 +20,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return true;
   };
 
-  const signup = (_name: string, _email: string, _password: string) => {
-    setUser(mockUser);
+  const signup = (name: string, email: string, _password: string, role?: string) => {
+    setUser({
+      ...mockUser,
+      name: name || mockUser.name,
+      email: email || mockUser.email,
+      role: role || mockUser.role,
+    });
     return true;
   };
 
