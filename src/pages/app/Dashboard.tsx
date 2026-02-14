@@ -2,7 +2,7 @@ import PageHeader from "@/components/layout/PageHeader";
 import { useProject } from "@/context/ProjectContext";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { FileEdit, BookOpen, BarChart3, AlertTriangle, Clock, Users } from "lucide-react";
+import { FileEdit, BookOpen, BarChart3, AlertTriangle, Clock, Users, ShieldCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
@@ -19,6 +19,15 @@ const Dashboard = () => {
     { label: "References", value: project.references.length, icon: BookOpen, onClick: () => navigate("/app/references") },
     { label: "Analyses", value: project.analysisResults.length, icon: BarChart3, onClick: () => navigate("/app/analysis") },
     { label: "Review Issues", value: criticalIssues > 0 ? `${criticalIssues} critical` : "None critical", icon: AlertTriangle, onClick: () => navigate("/app/ai-reviewer") },
+    { label: "Plagiarism", value: "8% similarity", icon: ShieldCheck, onClick: () => {} },
+  ];
+
+  const plagiarismSections = [
+    { section: "Introduction", similarity: 3, sources: 0, status: "clear" as const },
+    { section: "Literature Review", similarity: 12, sources: 2, status: "warning" as const },
+    { section: "Methodology", similarity: 5, sources: 1, status: "clear" as const },
+    { section: "Expected Results", similarity: 2, sources: 0, status: "clear" as const },
+    { section: "Timeline & Budget", similarity: 1, sources: 0, status: "clear" as const },
   ];
 
   return (
@@ -84,6 +93,36 @@ const Dashboard = () => {
               <span className="text-xs text-muted-foreground">{s.content.split(/\s+/).length} words</span>
             </div>
           ))}
+        </div>
+      </Card>
+
+      {/* Plagiarism Checker */}
+      <Card className="shadow-card mt-4">
+        <div className="p-4 border-b border-border flex items-center justify-between">
+          <h3 className="font-display font-semibold flex items-center gap-2">
+            <ShieldCheck className="h-4 w-4 text-primary" /> Plagiarism Check
+          </h3>
+          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-success/10 text-success">Low Risk — 8%</span>
+        </div>
+        <div className="p-4 space-y-3">
+          {plagiarismSections.map((s) => (
+            <div key={s.section} className="flex items-center gap-3 text-sm">
+              <span className="w-40 text-muted-foreground truncate">{s.section}</span>
+              <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
+                <div
+                  className={`h-full rounded-full transition-all ${s.similarity > 10 ? "bg-warning" : "bg-primary"}`}
+                  style={{ width: `${s.similarity}%` }}
+                />
+              </div>
+              <span className="w-10 text-right font-medium">{s.similarity}%</span>
+              <span className={`text-xs w-16 text-right ${s.sources > 0 ? "text-warning" : "text-muted-foreground"}`}>
+                {s.sources > 0 ? `${s.sources} source${s.sources > 1 ? "s" : ""}` : "Clear"}
+              </span>
+            </div>
+          ))}
+          <div className="pt-2 text-xs text-muted-foreground">
+            Last scanned 2 hours ago · 18,400 words checked against 100M+ sources
+          </div>
         </div>
       </Card>
 
