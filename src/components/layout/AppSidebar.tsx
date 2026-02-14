@@ -12,6 +12,7 @@ import {
   Settings,
   ChevronLeft,
   GraduationCap,
+  ShieldCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -24,6 +25,7 @@ const navItems = [
   { title: "Analysis", path: "/app/analysis", icon: BarChart3 },
   { title: "Results", path: "/app/results", icon: ClipboardCheck },
   { title: "AI Reviewer", path: "/app/ai-reviewer", icon: Bot },
+  { title: "Plagiarism Checker", path: "/app/plagiarism", icon: ShieldCheck },
   { title: "Export", path: "/app/export", icon: Download },
   { title: "Collaboration", path: "/app/collaboration", icon: Users },
   { title: "Settings", path: "/app/settings", icon: Settings },

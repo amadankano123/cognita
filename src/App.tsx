@@ -22,6 +22,7 @@ import Results from "./pages/app/Results";
 import Export from "./pages/app/Export";
 import Collaboration from "./pages/app/Collaboration";
 import Settings from "./pages/app/Settings";
+import PlagiarismChecker from "./pages/app/PlagiarismChecker";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,7 @@ const App = () => (
                 <Route path="analysis" element={<Analysis />} />
                 <Route path="results" element={<Results />} />
                 <Route path="export" element={<Export />} />
+                <Route path="plagiarism" element={<PlagiarismChecker />} />
                 <Route path="collaboration" element={<Collaboration />} />
                 <Route path="settings" element={<Settings />} />
               </Route>
