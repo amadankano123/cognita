@@ -4,6 +4,7 @@ import { GraduationCap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/context/AuthContext";
 
 const Auth = () => {
@@ -11,13 +12,19 @@ const Auth = () => {
   const [email, setEmail] = useState("amara.osei@university.edu");
   const [password, setPassword] = useState("password");
   const [name, setName] = useState("");
+  const [role, setRole] = useState("Researcher");
   const { login, signup } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const success = mode === "login" ? login(email, password) : signup(name, email, password);
-    if (success) navigate("/app/dashboard");
+    if (mode === "login") {
+      const success = login(email, password);
+      if (success) navigate("/app/dashboard");
+    } else {
+      const success = signup(name, email, password, role);
+      if (success) navigate("/onboarding");
+    }
   };
 
   return (
@@ -61,13 +68,26 @@ const Auth = () => {
               <Label htmlFor="password">Password</Label>
               <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
+            <div>
+              <Label htmlFor="role">Role</Label>
+              <Select value={role} onValueChange={setRole}>
+                <SelectTrigger id="role" className="w-full">
+                  <SelectValue placeholder="Select your role" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Student">Student</SelectItem>
+                  <SelectItem value="Researcher">Researcher</SelectItem>
+                  <SelectItem value="Supervisor">Supervisor</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
             <Button type="submit" className="w-full">
-              {mode === "login" ? "Sign In" : "Create Account"}
+              {mode === "login" ? "Login" : "Create Account"}
             </Button>
           </form>
 
           <p className="text-xs text-muted-foreground text-center mt-4">
-            Demo credentials are pre-filled. Just click Sign In.
+            Demo credentials are pre-filled. Just click Login.
           </p>
         </div>
       </div>
