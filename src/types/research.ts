@@ -16,6 +16,8 @@ export interface Reference {
   doi?: string;
   tags: string[];
   abstract?: string;
+  status?: "valid" | "missing-doi" | "unchecked";
+  cited?: boolean;
 }
 
 export interface Section {
@@ -34,6 +36,18 @@ export interface DataFile {
   description: string;
 }
 
+export interface DatasetColumn {
+  name: string;
+  type: "text" | "number" | "category";
+}
+
+export interface Dataset {
+  uploaded: boolean;
+  name: string;
+  columns: DatasetColumn[];
+  previewRows: Record<string, string | number>[];
+}
+
 export interface AnalysisResult {
   id: string;
   title: string;
@@ -41,6 +55,9 @@ export interface AnalysisResult {
   status: "pending" | "running" | "completed" | "failed";
   summary?: string;
   createdAt: string;
+  rSquared?: number;
+  pValue?: number;
+  interpretation?: string;
 }
 
 export interface ReviewIssue {
@@ -67,10 +84,36 @@ export interface Collaborator {
   lastActive: string;
 }
 
+export interface ChecklistItem {
+  id: string;
+  label: string;
+  checked: boolean;
+}
+
+export interface ExportRecord {
+  id: string;
+  format: string;
+  citationStyle: string;
+  fileName: string;
+  createdAt: string;
+}
+
+export interface ActivityItem {
+  id: string;
+  user: string;
+  action: string;
+  target: string;
+  timestamp: string;
+}
+
 export interface ResearchProject {
   id: string;
   title: string;
   subtitle: string;
+  discipline: string;
+  targetOutput: string;
+  methodologyType: string;
+  targetJournal: string;
   status: "draft" | "in-progress" | "review" | "submitted";
   createdAt: string;
   updatedAt: string;
@@ -78,10 +121,14 @@ export interface ResearchProject {
   sections: Section[];
   references: Reference[];
   dataFiles: DataFile[];
+  dataset: Dataset;
   analysisResults: AnalysisResult[];
   reviewScores: ReviewScore[];
   reviewIssues: ReviewIssue[];
   collaborators: Collaborator[];
+  checklist: ChecklistItem[];
+  exports: ExportRecord[];
+  activities: ActivityItem[];
   progress: number;
   wordCount: number;
   targetWordCount: number;
