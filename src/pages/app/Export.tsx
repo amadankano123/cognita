@@ -4,9 +4,13 @@ import { useProject } from "@/context/ProjectContext";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { FileText, FileDown, Code, Check } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { FileText, FileDown, Code, Check, Download } from "lucide-react";
 
 type Format = "docx" | "pdf" | "latex";
+type CitationStyle = "apa" | "ieee" | "chicago";
 
 const formats: { id: Format; label: string; icon: React.ElementType; ext: string }[] = [
   { id: "docx", label: "Microsoft Word", icon: FileText, ext: ".docx" },
@@ -15,11 +19,17 @@ const formats: { id: Format; label: string; icon: React.ElementType; ext: string
 ];
 
 const Export = () => {
-  const { project } = useProject();
+  const { project, addExport } = useProject();
   const [selected, setSelected] = useState<Format>("pdf");
+  const [citationStyle, setCitationStyle] = useState<CitationStyle>("apa");
+  const [includeCover, setIncludeCover] = useState(true);
+  const [includeToc, setIncludeToc] = useState(true);
+  const [includeFigures, setIncludeFigures] = useState(true);
   const [exporting, setExporting] = useState(false);
   const [progress, setProgress] = useState(0);
   const [done, setDone] = useState(false);
+
+  const fileName = `AI_Disease_Detection_Manuscript${formats.find((f) => f.id === selected)?.ext}`;
 
   const handleExport = () => {
     setExporting(true);
@@ -32,6 +42,13 @@ const Export = () => {
           clearInterval(interval);
           setExporting(false);
           setDone(true);
+          addExport({
+            id: `exp-${Date.now()}`,
+            format: selected.toUpperCase(),
+            citationStyle: citationStyle.toUpperCase(),
+            fileName,
+            createdAt: new Date().toISOString().split("T")[0],
+          });
           return 100;
         }
         return prev + Math.random() * 15 + 5;
@@ -42,7 +59,7 @@ const Export = () => {
   return (
     <div className="max-w-3xl animate-fade-in">
       <PageHeader
-        title="Export"
+        title="Export Center"
         subtitle="Generate publication-ready documents"
         breadcrumb={project.title}
       />
@@ -64,15 +81,44 @@ const Export = () => {
         ))}
       </div>
 
+      {/* Options */}
+      <Card className="p-5 shadow-card mb-6">
+        <h3 className="font-display font-semibold mb-4">Export Options</h3>
+
+        <div className="mb-4">
+          <Label className="text-sm font-medium mb-2 block">Citation Style</Label>
+          <RadioGroup value={citationStyle} onValueChange={(v) => setCitationStyle(v as CitationStyle)} className="flex gap-4">
+            <div className="flex items-center gap-2"><RadioGroupItem value="apa" id="cs-apa" /><Label htmlFor="cs-apa" className="font-normal">APA</Label></div>
+            <div className="flex items-center gap-2"><RadioGroupItem value="ieee" id="cs-ieee" /><Label htmlFor="cs-ieee" className="font-normal">IEEE</Label></div>
+            <div className="flex items-center gap-2"><RadioGroupItem value="chicago" id="cs-chi" /><Label htmlFor="cs-chi" className="font-normal">Chicago</Label></div>
+          </RadioGroup>
+        </div>
+
+        <div className="space-y-3">
+          <label className="flex items-center gap-3 cursor-pointer">
+            <Checkbox checked={includeCover} onCheckedChange={(v) => setIncludeCover(!!v)} />
+            <span className="text-sm">Include cover page</span>
+          </label>
+          <label className="flex items-center gap-3 cursor-pointer">
+            <Checkbox checked={includeToc} onCheckedChange={(v) => setIncludeToc(!!v)} />
+            <span className="text-sm">Include table of contents</span>
+          </label>
+          <label className="flex items-center gap-3 cursor-pointer">
+            <Checkbox checked={includeFigures} onCheckedChange={(v) => setIncludeFigures(!!v)} />
+            <span className="text-sm">Embed figures inline</span>
+          </label>
+        </div>
+      </Card>
+
       {/* Export action */}
       <Card className="p-5 shadow-card">
         {!exporting && !done && (
           <div className="text-center">
             <p className="text-sm text-muted-foreground mb-4">
-              Export your full proposal as a {formats.find((f) => f.id === selected)?.label} file including all sections and references.
+              Generate your full proposal as {formats.find((f) => f.id === selected)?.label} with {citationStyle.toUpperCase()} citations.
             </p>
             <Button onClick={handleExport} size="lg">
-              Generate {selected.toUpperCase()}
+              Generate Export
             </Button>
           </div>
         )}
@@ -93,15 +139,33 @@ const Export = () => {
               <Check className="h-6 w-6 text-success" />
             </div>
             <p className="font-medium mb-1">Export Complete</p>
-            <p className="text-sm text-muted-foreground mb-4">Your document is ready to download.</p>
-            <Button variant="outline" asChild>
-              <a href="#" onClick={(e) => e.preventDefault()}>
-                Download {project.title.slice(0, 30)}…{formats.find((f) => f.id === selected)?.ext}
-              </a>
+            <p className="text-sm text-muted-foreground mb-4">{fileName}</p>
+            <Button variant="outline" onClick={(e) => e.preventDefault()}>
+              <Download className="h-4 w-4 mr-2" /> Download {fileName}
             </Button>
           </div>
         )}
       </Card>
+
+      {/* Export history */}
+      {project.exports.length > 0 && (
+        <Card className="shadow-card mt-6">
+          <div className="p-4 border-b border-border">
+            <h3 className="font-display font-semibold">Export History</h3>
+          </div>
+          <div className="divide-y divide-border">
+            {project.exports.map((exp) => (
+              <div key={exp.id} className="px-4 py-3 flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium">{exp.fileName}</p>
+                  <p className="text-xs text-muted-foreground">{exp.format} · {exp.citationStyle} · {exp.createdAt}</p>
+                </div>
+                <Button variant="ghost" size="sm"><Download className="h-4 w-4" /></Button>
+              </div>
+            ))}
+          </div>
+        </Card>
+      )}
     </div>
   );
 };

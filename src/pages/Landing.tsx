@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { GraduationCap, FileEdit, BookOpen, Bot, BarChart3, Download, ArrowRight, ShieldCheck, CheckCircle2, Sparkles } from "lucide-react";
+import { GraduationCap, FileEdit, BookOpen, Bot, BarChart3, Download, ArrowRight, ShieldCheck, CheckCircle2, Sparkles, Play, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useAuth } from "@/context/AuthContext";
 import heroBg from "@/assets/hero-bg.jpg";
 
@@ -13,16 +15,10 @@ const features = [
   { icon: ShieldCheck, title: "Plagiarism Checker", desc: "Scan your work against millions of sources instantly" },
 ];
 
-const plagiarismFeatures = [
-  "Cross-reference against 100M+ academic papers",
-  "Real-time similarity scoring per section",
-  "Highlighted overlapping passages with source links",
-  "Exportable plagiarism report for submission",
-];
-
 const Landing = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
+  const [demoOpen, setDemoOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-background">
@@ -39,50 +35,60 @@ const Landing = () => {
             </Button>
           ) : (
             <>
-              <Button variant="ghost" size="sm" onClick={() => navigate("/auth")}>
-                Log in
-              </Button>
-              <Button size="sm" onClick={() => navigate("/auth")}>
-                Get Started
-              </Button>
+              <Button variant="ghost" size="sm" onClick={() => navigate("/auth")}>Log in</Button>
+              <Button size="sm" onClick={() => navigate("/auth")}>Get Started</Button>
             </>
           )}
         </div>
       </nav>
 
-      {/* Hero with background image */}
+      {/* Hero */}
       <section className="relative overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url(${heroBg})` }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[hsl(213,62%,20%/0.85)] via-[hsl(213,62%,30%/0.7)] to-background" />
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${heroBg})` }} />
+        <div className="absolute inset-0 bg-gradient-to-b from-[hsl(224,64%,20%/0.88)] via-[hsl(224,64%,25%/0.75)] to-background" />
         <div className="relative max-w-4xl mx-auto text-center pt-24 pb-28 px-6">
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/20 text-primary-foreground text-sm font-medium mb-6 animate-fade-in border border-primary/30">
             <Sparkles className="h-4 w-4" />
-            AI-Powered Academic Research Platform
+            The Operating System for Academic Research
           </div>
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-tight mb-5 text-primary-foreground animate-fade-in" style={{ animationDelay: "0.1s", animationFillMode: "both" }}>
-            Your Research,{" "}
+            Write. Analyze.{" "}
             <span className="bg-gradient-to-r from-[hsl(200,80%,70%)] to-[hsl(260,70%,75%)] bg-clip-text text-transparent">
-              Unified.
+              Publish.
             </span>
+            {" "}In One Place.
           </h1>
           <p className="text-lg md:text-xl text-[hsl(210,20%,80%)] max-w-2xl mx-auto mb-10 animate-fade-in" style={{ animationDelay: "0.2s", animationFillMode: "both" }}>
-            From proposal drafting to publication-ready export — Cognita brings every stage of academic research into one seamless platform.
+            Stop juggling multiple subscriptions. Cognita brings proposal drafting, reference management, data analysis, and export into one seamless platform.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center animate-fade-in" style={{ animationDelay: "0.3s", animationFillMode: "both" }}>
             <Button size="lg" className="text-base px-8" onClick={() => navigate(isAuthenticated ? "/app/dashboard" : "/auth")}>
-              Start Your Project <ArrowRight className="ml-2 h-4 w-4" />
+              Start Free Project <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
-            <Button size="lg" variant="outline" className="text-base px-8 border-primary/40 text-primary-foreground hover:bg-primary/20 hover:text-primary-foreground" onClick={() => navigate("/auth")}>
-              Watch Demo
+            <Button size="lg" variant="outline" className="text-base px-8 border-primary/40 text-primary-foreground hover:bg-primary/20 hover:text-primary-foreground" onClick={() => setDemoOpen(true)}>
+              <Play className="h-4 w-4 mr-2" /> Watch Demo
             </Button>
           </div>
         </div>
       </section>
 
-      {/* Features Grid */}
+      {/* Demo Modal */}
+      <Dialog open={demoOpen} onOpenChange={setDemoOpen}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Watch Cognita in Action</DialogTitle>
+          </DialogHeader>
+          <div className="aspect-video bg-muted rounded-lg flex items-center justify-center">
+            <div className="text-center text-muted-foreground">
+              <Play className="h-12 w-12 mx-auto mb-3 text-primary" />
+              <p className="font-medium">Demo Video Placeholder</p>
+              <p className="text-sm mt-1">A walkthrough of the Cognita platform will appear here.</p>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Features */}
       <section className="max-w-5xl mx-auto px-6 py-20">
         <h2 className="text-3xl font-bold text-center mb-3">Everything You Need</h2>
         <p className="text-muted-foreground text-center mb-12 max-w-xl mx-auto">
@@ -90,11 +96,7 @@ const Landing = () => {
         </p>
         <div className="grid gap-4 md:grid-cols-3 sm:grid-cols-2">
           {features.map((f, i) => (
-            <div
-              key={f.title}
-              className="group bg-card rounded-xl border border-border p-6 shadow-card hover:shadow-elevated hover:-translate-y-1 transition-all duration-300"
-              style={{ animationDelay: `${i * 0.08}s` }}
-            >
+            <div key={f.title} className="group bg-card rounded-xl border border-border p-6 shadow-card hover:shadow-elevated hover:-translate-y-1 transition-all duration-300">
               <div className="h-11 w-11 rounded-lg bg-accent flex items-center justify-center mb-4 group-hover:bg-primary/10 transition-colors">
                 <f.icon className="h-5 w-5 text-primary" />
               </div>
@@ -105,7 +107,7 @@ const Landing = () => {
         </div>
       </section>
 
-      {/* Plagiarism Checker Panel */}
+      {/* Plagiarism Panel */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-accent/10 to-primary/5" />
         <div className="relative max-w-5xl mx-auto px-6 py-20">
@@ -117,26 +119,23 @@ const Landing = () => {
               </div>
               <h2 className="text-3xl md:text-4xl font-bold mb-4 leading-tight">
                 Plagiarism Checker{" "}
-                <span className="bg-gradient-to-r from-primary to-accent-foreground bg-clip-text text-transparent">
-                  You Can Trust
-                </span>
+                <span className="bg-gradient-to-r from-primary to-accent-foreground bg-clip-text text-transparent">You Can Trust</span>
               </h2>
               <p className="text-muted-foreground mb-6 text-base leading-relaxed">
-                Ensure academic integrity before submission. Our plagiarism checker scans your entire proposal against a vast database of published papers, preprints, and web sources — giving you confidence in every paragraph.
+                Ensure academic integrity before submission. Our plagiarism checker scans your entire proposal against a vast database of published papers, preprints, and web sources.
               </p>
               <ul className="space-y-3 mb-8">
-                {plagiarismFeatures.map((item) => (
+                {["Cross-reference against 100M+ academic papers", "Real-time similarity scoring per section", "Highlighted overlapping passages with source links", "Exportable plagiarism report for submission"].map((item) => (
                   <li key={item} className="flex items-start gap-3 text-sm">
                     <CheckCircle2 className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                     <span className="text-foreground">{item}</span>
                   </li>
                 ))}
               </ul>
-              <Button onClick={() => navigate(isAuthenticated ? "/app/dashboard" : "/auth")}>
+              <Button onClick={() => navigate(isAuthenticated ? "/app/plagiarism" : "/auth")}>
                 Try Plagiarism Checker <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </div>
-            {/* Mock plagiarism report card */}
             <div className="bg-card rounded-2xl border border-border p-6 shadow-elevated">
               <div className="flex items-center justify-between mb-5">
                 <h4 className="font-display font-semibold text-lg">Similarity Report</h4>
@@ -159,19 +158,11 @@ const Landing = () => {
                 </div>
               </div>
               <div className="space-y-2">
-                {[
-                  { section: "Introduction", pct: 3 },
-                  { section: "Literature Review", pct: 12 },
-                  { section: "Methodology", pct: 5 },
-                  { section: "Expected Results", pct: 2 },
-                ].map((s) => (
+                {[{ section: "Introduction", pct: 3 }, { section: "Literature Review", pct: 12 }, { section: "Methodology", pct: 5 }, { section: "Expected Results", pct: 2 }].map((s) => (
                   <div key={s.section} className="flex items-center gap-3 text-sm">
                     <span className="w-36 text-muted-foreground truncate">{s.section}</span>
                     <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
-                      <div
-                        className="h-full rounded-full bg-gradient-to-r from-primary to-accent-foreground transition-all duration-700"
-                        style={{ width: `${s.pct}%` }}
-                      />
+                      <div className="h-full rounded-full bg-gradient-to-r from-primary to-accent-foreground transition-all duration-700" style={{ width: `${s.pct}%` }} />
                     </div>
                     <span className="w-8 text-right font-medium text-foreground">{s.pct}%</span>
                   </div>
@@ -185,9 +176,7 @@ const Landing = () => {
       {/* CTA */}
       <section className="max-w-3xl mx-auto px-6 py-20 text-center">
         <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to elevate your research?</h2>
-        <p className="text-muted-foreground mb-8 max-w-lg mx-auto">
-          Join thousands of researchers using Cognita to write better proposals, faster.
-        </p>
+        <p className="text-muted-foreground mb-8 max-w-lg mx-auto">Join thousands of researchers using Cognita to write better proposals, faster.</p>
         <Button size="lg" className="text-base px-10" onClick={() => navigate(isAuthenticated ? "/app/dashboard" : "/auth")}>
           Get Started Free <ArrowRight className="ml-2 h-4 w-4" />
         </Button>

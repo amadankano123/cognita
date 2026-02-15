@@ -4,42 +4,169 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Card } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { GraduationCap, ArrowLeft, ArrowRight, Check, BookOpen } from "lucide-react";
 
 const Onboarding = () => {
   const navigate = useNavigate();
-  const [title, setTitle] = useState("");
-  const [subtitle, setSubtitle] = useState("");
+  const [step, setStep] = useState(1);
+  const [title, setTitle] = useState("AI-Based Early Detection of Crop Diseases Using Computer Vision");
+  const [discipline, setDiscipline] = useState("Computer Science / Agricultural AI");
+  const [outputType, setOutputType] = useState("journal");
+  const [methodology, setMethodology] = useState("quantitative");
+  const [targetJournal, setTargetJournal] = useState("IEEE Access");
+  const [template, setTemplate] = useState("journal");
 
-  const handleCreate = (e: React.FormEvent) => {
-    e.preventDefault();
-    // In a real app, this would create a new project
+  const handleCreate = () => {
     navigate("/app/dashboard");
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
-      <div className="w-full max-w-lg">
-        <h1 className="text-3xl font-bold text-center mb-2">Create a New Project</h1>
-        <p className="text-muted-foreground text-center mb-8">Set up your research project in seconds.</p>
+    <div className="min-h-screen bg-background">
+      {/* Top bar */}
+      <nav className="h-14 border-b border-border flex items-center px-6 bg-card">
+        <GraduationCap className="h-6 w-6 text-primary mr-2" />
+        <span className="font-display text-lg font-semibold tracking-tight">Cognita</span>
+      </nav>
 
-        <div className="bg-card border border-border rounded-lg p-6 shadow-card">
-          <form onSubmit={handleCreate} className="space-y-5">
-            <div>
-              <Label htmlFor="title">Project Title</Label>
-              <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. AI-Based Early Detection of Crop Diseases" />
+      <div className="max-w-2xl mx-auto px-4 py-10">
+        <h1 className="text-3xl font-bold text-center mb-2">Create a New Project</h1>
+        <p className="text-muted-foreground text-center mb-8">Set up your research project in 3 easy steps.</p>
+
+        {/* Step indicator */}
+        <div className="flex items-center justify-center gap-2 mb-8">
+          {[1, 2, 3].map((s) => (
+            <div key={s} className="flex items-center gap-2">
+              <div className={`h-8 w-8 rounded-full flex items-center justify-center text-sm font-semibold transition-colors ${
+                step > s ? "bg-primary text-primary-foreground" : step === s ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+              }`}>
+                {step > s ? <Check className="h-4 w-4" /> : s}
+              </div>
+              {s < 3 && <div className={`w-16 h-0.5 ${step > s ? "bg-primary" : "bg-muted"}`} />}
             </div>
-            <div>
-              <Label htmlFor="subtitle">Short Description</Label>
-              <Textarea id="subtitle" value={subtitle} onChange={(e) => setSubtitle(e.target.value)} placeholder="A brief summary of your research goals..." rows={3} />
-            </div>
-            <div className="flex gap-3 pt-2">
-              <Button type="submit" className="flex-1">Create Project</Button>
-              <Button type="button" variant="outline" onClick={() => navigate("/app/dashboard")}>
-                Skip — Use Demo
-              </Button>
-            </div>
-          </form>
+          ))}
         </div>
+
+        <Card className="p-6 shadow-card">
+          {/* Step 1: Project Metadata */}
+          {step === 1 && (
+            <div className="space-y-5 animate-fade-in">
+              <h2 className="font-display text-xl font-semibold mb-4">Project Details</h2>
+              <div>
+                <Label htmlFor="title">Project Title</Label>
+                <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. AI-Based Early Detection of Crop Diseases" />
+              </div>
+              <div>
+                <Label htmlFor="discipline">Discipline</Label>
+                <Select value={discipline} onValueChange={setDiscipline}>
+                  <SelectTrigger id="discipline"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Computer Science / Agricultural AI">Computer Science / Agricultural AI</SelectItem>
+                    <SelectItem value="Biomedical Engineering">Biomedical Engineering</SelectItem>
+                    <SelectItem value="Environmental Science">Environmental Science</SelectItem>
+                    <SelectItem value="Social Sciences">Social Sciences</SelectItem>
+                    <SelectItem value="Humanities">Humanities</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <Label>Output Type</Label>
+                <RadioGroup value={outputType} onValueChange={setOutputType} className="flex gap-4 mt-2">
+                  <div className="flex items-center gap-2"><RadioGroupItem value="journal" id="ot-j" /><Label htmlFor="ot-j" className="font-normal">Journal Paper</Label></div>
+                  <div className="flex items-center gap-2"><RadioGroupItem value="proposal" id="ot-p" /><Label htmlFor="ot-p" className="font-normal">Grant Proposal</Label></div>
+                  <div className="flex items-center gap-2"><RadioGroupItem value="thesis" id="ot-t" /><Label htmlFor="ot-t" className="font-normal">Thesis</Label></div>
+                </RadioGroup>
+              </div>
+              <div>
+                <Label>Methodology Type</Label>
+                <RadioGroup value={methodology} onValueChange={setMethodology} className="flex gap-4 mt-2">
+                  <div className="flex items-center gap-2"><RadioGroupItem value="quantitative" id="m-qt" /><Label htmlFor="m-qt" className="font-normal">Quantitative</Label></div>
+                  <div className="flex items-center gap-2"><RadioGroupItem value="qualitative" id="m-ql" /><Label htmlFor="m-ql" className="font-normal">Qualitative</Label></div>
+                  <div className="flex items-center gap-2"><RadioGroupItem value="mixed" id="m-mx" /><Label htmlFor="m-mx" className="font-normal">Mixed Methods</Label></div>
+                </RadioGroup>
+              </div>
+              <div>
+                <Label htmlFor="journal">Target Journal / Venue</Label>
+                <Input id="journal" value={targetJournal} onChange={(e) => setTargetJournal(e.target.value)} placeholder="e.g. IEEE Access" />
+              </div>
+            </div>
+          )}
+
+          {/* Step 2: Template */}
+          {step === 2 && (
+            <div className="space-y-5 animate-fade-in">
+              <h2 className="font-display text-xl font-semibold mb-4">Choose a Template</h2>
+              <div className="grid gap-3">
+                {[
+                  { id: "proposal", label: "Proposal (Generic)", desc: "Standard academic proposal structure" },
+                  { id: "grant", label: "Grant Application (Generic)", desc: "Grant-specific sections with budget template" },
+                  { id: "journal", label: "Journal Paper Skeleton", desc: "IMRaD structure with abstract, intro, methods, results, discussion" },
+                ].map((t) => (
+                  <button
+                    key={t.id}
+                    onClick={() => setTemplate(t.id)}
+                    className={`p-4 rounded-lg border-2 text-left transition-all ${
+                      template === t.id ? "border-primary bg-primary/5" : "border-border hover:border-primary/30"
+                    }`}
+                  >
+                    <p className="font-medium text-sm">{t.label}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{t.desc}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Step 3: Import References */}
+          {step === 3 && (
+            <div className="space-y-5 animate-fade-in">
+              <h2 className="font-display text-xl font-semibold mb-4">Import References</h2>
+              <p className="text-sm text-muted-foreground">Optionally import references to get started with your literature.</p>
+              <div className="grid gap-3">
+                <button
+                  onClick={handleCreate}
+                  className="p-5 rounded-lg border-2 border-primary bg-primary/5 text-left flex items-center gap-4 hover:bg-primary/10 transition-colors"
+                >
+                  <BookOpen className="h-8 w-8 text-primary shrink-0" />
+                  <div>
+                    <p className="font-medium">Import Demo References</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">Load 12 sample references for the demo project</p>
+                  </div>
+                </button>
+                <button
+                  onClick={handleCreate}
+                  className="p-5 rounded-lg border-2 border-border text-left flex items-center gap-4 hover:border-primary/30 transition-colors"
+                >
+                  <div>
+                    <p className="font-medium">Skip — I'll add references later</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">You can always import from DOI or BibTeX in the References tab</p>
+                  </div>
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Navigation */}
+          <div className="flex justify-between mt-8 pt-4 border-t border-border">
+            <Button
+              variant="outline"
+              onClick={() => step === 1 ? navigate("/auth") : setStep(step - 1)}
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" /> Back
+            </Button>
+            {step < 3 ? (
+              <Button onClick={() => setStep(step + 1)}>
+                Next <ArrowRight className="h-4 w-4 ml-2" />
+              </Button>
+            ) : (
+              <Button onClick={handleCreate}>
+                Create Project <Check className="h-4 w-4 ml-2" />
+              </Button>
+            )}
+          </div>
+        </Card>
       </div>
     </div>
   );
