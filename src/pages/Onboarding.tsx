@@ -3,31 +3,40 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { GraduationCap, ArrowLeft, ArrowRight, Check, BookOpen } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, BookOpen, FileText, GraduationCap, ScrollText, BookMarked, FlaskConical } from "lucide-react";
+import cognitaLogo from "@/assets/cognita-logo.jpeg";
 
 const Onboarding = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
-  const [title, setTitle] = useState("AI-Based Early Detection of Crop Diseases Using Computer Vision");
-  const [discipline, setDiscipline] = useState("Computer Science / Agricultural AI");
-  const [outputType, setOutputType] = useState("journal");
+  const [title, setTitle] = useState("Estimation of Post Mortem Interval Using Insects Development and Succession Patterns on Rodenticides Induced Rabbit Carrion");
+  const [discipline, setDiscipline] = useState("Zoology / Forensic Entomology");
+  const [outputType, setOutputType] = useState("thesis");
   const [methodology, setMethodology] = useState("quantitative");
-  const [targetJournal, setTargetJournal] = useState("IEEE Access");
-  const [template, setTemplate] = useState("journal");
+  const [targetJournal, setTargetJournal] = useState("Journal of Forensic Sciences");
+  const [template, setTemplate] = useState("thesis");
 
   const handleCreate = () => {
     navigate("/app/dashboard");
   };
 
+  const templates = [
+    { id: "proposal", label: "Research Proposal", desc: "Standard academic proposal structure with objectives and methodology", icon: FileText },
+    { id: "progress-report", label: "Progress Report", desc: "Periodic research progress update with milestones and findings", icon: ScrollText },
+    { id: "thesis", label: "Thesis", desc: "Full thesis structure with chapters: introduction, literature review, methodology, results, discussion", icon: GraduationCap },
+    { id: "dissertation", label: "Dissertation", desc: "Comprehensive dissertation format with extended literature review and appendices", icon: BookMarked },
+    { id: "journal", label: "Journal Article", desc: "IMRaD structure: abstract, introduction, methods, results, discussion", icon: FlaskConical },
+    { id: "grant", label: "Grant Application", desc: "Grant-specific sections with budget template and impact statement", icon: FileText },
+  ];
+
   return (
     <div className="min-h-screen bg-background">
       {/* Top bar */}
       <nav className="h-14 border-b border-border flex items-center px-6 bg-card">
-        <GraduationCap className="h-6 w-6 text-primary mr-2" />
+        <img src={cognitaLogo} alt="Cognita" className="h-8 w-8 rounded-md object-cover mr-2" />
         <span className="font-display text-lg font-semibold tracking-tight">Cognita</span>
       </nav>
 
@@ -37,32 +46,40 @@ const Onboarding = () => {
 
         {/* Step indicator */}
         <div className="flex items-center justify-center gap-2 mb-8">
-          {[1, 2, 3].map((s) => (
-            <div key={s} className="flex items-center gap-2">
-              <div className={`h-8 w-8 rounded-full flex items-center justify-center text-sm font-semibold transition-colors ${
-                step > s ? "bg-primary text-primary-foreground" : step === s ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
-              }`}>
-                {step > s ? <Check className="h-4 w-4" /> : s}
+          {[
+            { num: 1, label: "Project Details" },
+            { num: 2, label: "Choose Template" },
+            { num: 3, label: "Import References" },
+          ].map((s) => (
+            <div key={s.num} className="flex items-center gap-2">
+              <div className="flex flex-col items-center gap-1">
+                <div className={`h-8 w-8 rounded-full flex items-center justify-center text-sm font-semibold transition-colors ${
+                  step > s.num ? "bg-primary text-primary-foreground" : step === s.num ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"
+                }`}>
+                  {step > s.num ? <Check className="h-4 w-4" /> : s.num}
+                </div>
+                <span className="text-xs text-muted-foreground hidden sm:block">{s.label}</span>
               </div>
-              {s < 3 && <div className={`w-16 h-0.5 ${step > s ? "bg-primary" : "bg-muted"}`} />}
+              {s.num < 3 && <div className={`w-16 h-0.5 mb-5 sm:mb-0 ${step > s.num ? "bg-primary" : "bg-muted"}`} />}
             </div>
           ))}
         </div>
 
         <Card className="p-6 shadow-card">
-          {/* Step 1: Project Metadata */}
+          {/* Step 1: Project Details */}
           {step === 1 && (
             <div className="space-y-5 animate-fade-in">
               <h2 className="font-display text-xl font-semibold mb-4">Project Details</h2>
               <div>
                 <Label htmlFor="title">Project Title</Label>
-                <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. AI-Based Early Detection of Crop Diseases" />
+                <Input id="title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Estimation of Post Mortem Interval..." />
               </div>
               <div>
                 <Label htmlFor="discipline">Discipline</Label>
                 <Select value={discipline} onValueChange={setDiscipline}>
                   <SelectTrigger id="discipline"><SelectValue /></SelectTrigger>
                   <SelectContent>
+                    <SelectItem value="Zoology / Forensic Entomology">Zoology / Forensic Entomology</SelectItem>
                     <SelectItem value="Computer Science / Agricultural AI">Computer Science / Agricultural AI</SelectItem>
                     <SelectItem value="Biomedical Engineering">Biomedical Engineering</SelectItem>
                     <SelectItem value="Environmental Science">Environmental Science</SelectItem>
@@ -73,10 +90,13 @@ const Onboarding = () => {
               </div>
               <div>
                 <Label>Output Type</Label>
-                <RadioGroup value={outputType} onValueChange={setOutputType} className="flex gap-4 mt-2">
+                <RadioGroup value={outputType} onValueChange={setOutputType} className="grid grid-cols-2 gap-2 mt-2">
+                  <div className="flex items-center gap-2"><RadioGroupItem value="thesis" id="ot-th" /><Label htmlFor="ot-th" className="font-normal">Thesis</Label></div>
+                  <div className="flex items-center gap-2"><RadioGroupItem value="dissertation" id="ot-d" /><Label htmlFor="ot-d" className="font-normal">Dissertation</Label></div>
                   <div className="flex items-center gap-2"><RadioGroupItem value="journal" id="ot-j" /><Label htmlFor="ot-j" className="font-normal">Journal Paper</Label></div>
-                  <div className="flex items-center gap-2"><RadioGroupItem value="proposal" id="ot-p" /><Label htmlFor="ot-p" className="font-normal">Grant Proposal</Label></div>
-                  <div className="flex items-center gap-2"><RadioGroupItem value="thesis" id="ot-t" /><Label htmlFor="ot-t" className="font-normal">Thesis</Label></div>
+                  <div className="flex items-center gap-2"><RadioGroupItem value="proposal" id="ot-p" /><Label htmlFor="ot-p" className="font-normal">Proposal</Label></div>
+                  <div className="flex items-center gap-2"><RadioGroupItem value="progress-report" id="ot-pr" /><Label htmlFor="ot-pr" className="font-normal">Progress Report</Label></div>
+                  <div className="flex items-center gap-2"><RadioGroupItem value="grant" id="ot-g" /><Label htmlFor="ot-g" className="font-normal">Grant Application</Label></div>
                 </RadioGroup>
               </div>
               <div>
@@ -89,7 +109,7 @@ const Onboarding = () => {
               </div>
               <div>
                 <Label htmlFor="journal">Target Journal / Venue</Label>
-                <Input id="journal" value={targetJournal} onChange={(e) => setTargetJournal(e.target.value)} placeholder="e.g. IEEE Access" />
+                <Input id="journal" value={targetJournal} onChange={(e) => setTargetJournal(e.target.value)} placeholder="e.g. Journal of Forensic Sciences" />
               </div>
             </div>
           )}
@@ -99,20 +119,19 @@ const Onboarding = () => {
             <div className="space-y-5 animate-fade-in">
               <h2 className="font-display text-xl font-semibold mb-4">Choose a Template</h2>
               <div className="grid gap-3">
-                {[
-                  { id: "proposal", label: "Proposal (Generic)", desc: "Standard academic proposal structure" },
-                  { id: "grant", label: "Grant Application (Generic)", desc: "Grant-specific sections with budget template" },
-                  { id: "journal", label: "Journal Paper Skeleton", desc: "IMRaD structure with abstract, intro, methods, results, discussion" },
-                ].map((t) => (
+                {templates.map((t) => (
                   <button
                     key={t.id}
                     onClick={() => setTemplate(t.id)}
-                    className={`p-4 rounded-lg border-2 text-left transition-all ${
+                    className={`p-4 rounded-lg border-2 text-left transition-all flex items-start gap-3 ${
                       template === t.id ? "border-primary bg-primary/5" : "border-border hover:border-primary/30"
                     }`}
                   >
-                    <p className="font-medium text-sm">{t.label}</p>
-                    <p className="text-xs text-muted-foreground mt-0.5">{t.desc}</p>
+                    <t.icon className={`h-5 w-5 mt-0.5 shrink-0 ${template === t.id ? "text-primary" : "text-muted-foreground"}`} />
+                    <div>
+                      <p className="font-medium text-sm">{t.label}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5">{t.desc}</p>
+                    </div>
                   </button>
                 ))}
               </div>

@@ -11,11 +11,11 @@ import {
   Users,
   Settings,
   ChevronLeft,
-  GraduationCap,
   ShieldCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import cognitaLogo from "@/assets/cognita-logo.jpeg";
 
 const navItems = [
   { title: "Dashboard", path: "/app/dashboard", icon: LayoutDashboard },
@@ -44,7 +44,7 @@ const AppSidebar = () => {
     >
       {/* Logo */}
       <div className="h-14 flex items-center gap-2 px-4 border-b border-sidebar-border shrink-0">
-        <GraduationCap className="h-6 w-6 text-primary shrink-0" />
+        <img src={cognitaLogo} alt="Cognita" className="h-7 w-7 rounded-md object-cover shrink-0" />
         {!collapsed && (
           <span className="font-display text-lg font-semibold text-foreground tracking-tight">
             Cognita
