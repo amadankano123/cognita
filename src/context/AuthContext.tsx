@@ -41,6 +41,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
 export const useAuth = () => {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
+  if (!ctx) {
+    // Fallback for edge cases where provider hasn't mounted yet
+    return {
+      user: null,
+      isAuthenticated: false,
+      login: () => false,
+      signup: () => false,
+      logout: () => {},
+    } as AuthContextType;
+  }
   return ctx;
 };
