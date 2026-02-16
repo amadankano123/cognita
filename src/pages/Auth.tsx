@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { GraduationCap } from "lucide-react";
+import cognitaLogo from "@/assets/cognita-logo.jpeg";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -31,7 +31,7 @@ const Auth = () => {
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <GraduationCap className="h-10 w-10 text-primary mx-auto mb-3" />
+          <img src={cognitaLogo} alt="Cognita" className="h-12 w-12 rounded-lg object-cover mx-auto mb-3" />
           <h1 className="text-2xl font-bold">Welcome to Cognita</h1>
           <p className="text-muted-foreground text-sm mt-1">
             {mode === "login" ? "Sign in to continue" : "Create your account"}

@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { GraduationCap, FileEdit, BookOpen, Bot, BarChart3, Download, ArrowRight, ShieldCheck, CheckCircle2, Sparkles, Play, X } from "lucide-react";
+import { FileEdit, BookOpen, Bot, BarChart3, Download, ArrowRight, ShieldCheck, CheckCircle2, Sparkles, Play, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useAuth } from "@/context/AuthContext";
 import heroBg from "@/assets/hero-bg.jpg";
+import cognitaLogo from "@/assets/cognita-logo.jpeg";
 
 const features = [
   { icon: FileEdit, title: "Proposal Editor", desc: "Structured writing with real-time collaboration" },
@@ -25,7 +26,7 @@ const Landing = () => {
       {/* Nav */}
       <nav className="h-14 border-b border-border flex items-center justify-between px-6 bg-card/80 backdrop-blur-md sticky top-0 z-50">
         <div className="flex items-center gap-2">
-          <GraduationCap className="h-6 w-6 text-primary" />
+          <img src={cognitaLogo} alt="Cognita" className="h-8 w-8 rounded-md object-cover" />
           <span className="font-display text-xl font-semibold tracking-tight">Cognita</span>
         </div>
         <div className="flex gap-2">
@@ -185,7 +186,7 @@ const Landing = () => {
       {/* Footer */}
       <footer className="border-t border-border py-8 px-6 text-center text-sm text-muted-foreground">
         <div className="flex items-center justify-center gap-2 mb-2">
-          <GraduationCap className="h-4 w-4 text-primary" />
+          <img src={cognitaLogo} alt="Cognita" className="h-5 w-5 rounded-sm object-cover" />
           <span className="font-display font-semibold text-foreground">Cognita</span>
         </div>
         © 2026 Cognita. Built for researchers, by researchers.
