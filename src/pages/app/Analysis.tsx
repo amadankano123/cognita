@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Progress } from "@/components/ui/progress";
 import { BarChart3, Play, Save, FileEdit, CheckCircle2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import ContextAwareIndicator from "@/components/layout/ContextAwareIndicator";
 
 const statusColors: Record<string, string> = {
   completed: "bg-success text-success-foreground",
@@ -70,11 +71,14 @@ const Analysis = () => {
 
   return (
     <div className="max-w-5xl animate-fade-in">
-      <PageHeader
-        title="Analysis Studio"
-        subtitle="Run statistical analyses on your data"
-        breadcrumb={project.title}
-      />
+      <div className="flex items-center justify-between flex-wrap gap-3 mb-2">
+        <PageHeader
+          title="Analysis Studio"
+          subtitle="Run statistical analyses on your data"
+          breadcrumb={project.title}
+        />
+        <ContextAwareIndicator />
+      </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Left: Config */}

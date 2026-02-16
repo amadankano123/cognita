@@ -113,5 +113,11 @@ export const defaultProject: ResearchProject = {
     { id: "act2", user: "Prof. James Mwangi", action: "edited", target: "Literature Review", timestamp: "1 day ago" },
     { id: "act3", user: "Dr. Amara Osei", action: "uploaded", target: "disease_annotations_v2.csv", timestamp: "3 days ago" },
     { id: "act4", user: "Samuel Adu-Gyamfi", action: "ran analysis", target: "Spectral Index Correlation", timestamp: "1 week ago" },
+    { id: "act5", user: "Dr. Amara Osei", action: "updated section", target: "Abstract", timestamp: "1 week ago" },
+    { id: "act6", user: "Prof. James Mwangi", action: "added reference", target: "Tan & Le, 2019", timestamp: "1 week ago" },
+    { id: "act7", user: "Dr. Lin Chen", action: "reviewed", target: "Methodology", timestamp: "2 weeks ago" },
+    { id: "act8", user: "Dr. Fatima Al-Hassan", action: "ran plagiarism check on", target: "Full Document", timestamp: "2 weeks ago" },
+    { id: "act9", user: "Dr. Amara Osei", action: "exported", target: "Draft v2 (DOCX)", timestamp: "2 weeks ago" },
+    { id: "act10", user: "Samuel Adu-Gyamfi", action: "uploaded", target: "ghana_multispectral_batch1.tif", timestamp: "3 weeks ago" },
   ],
 };

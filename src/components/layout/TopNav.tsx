@@ -5,6 +5,7 @@ import { LogOut, User, HelpCircle, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import ProjectContextDrawer from "./ProjectContextDrawer";
 
 const TopNav = () => {
   const { user, logout } = useAuth();
@@ -26,6 +27,7 @@ const TopNav = () => {
 
       {/* Right: user + help */}
       <div className="flex items-center gap-3">
+        <ProjectContextDrawer />
         <Dialog>
           <DialogTrigger asChild>
             <button className="text-muted-foreground hover:text-foreground transition-colors" aria-label="Help">

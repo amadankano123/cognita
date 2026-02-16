@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { BookOpen, Search, Save, Download, AlertTriangle, CheckCircle2, Quote } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import ContextAwareIndicator from "@/components/layout/ContextAwareIndicator";
 
 const severityColors: Record<string, string> = {
   critical: "bg-destructive text-destructive-foreground",
@@ -64,6 +65,7 @@ const Editor = () => {
 
       {/* Toolbar */}
       <div className="flex items-center gap-2 mb-4 flex-wrap">
+        <ContextAwareIndicator />
         <Dialog open={citationModalOpen} onOpenChange={setCitationModalOpen}>
           <DialogTrigger asChild>
             <Button variant="outline" size="sm"><Quote className="h-4 w-4 mr-1" /> Insert Citation</Button>
