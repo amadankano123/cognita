@@ -153,15 +153,20 @@ const Dashboard = () => {
             </div>
           </Card>
 
-          {/* Recent activity */}
+          {/* Project Activity Log */}
           <Card className="shadow-card p-4">
-            <h3 className="font-display font-semibold mb-3">Recent Activity</h3>
-            <div className="space-y-3">
-              {project.activities.slice(0, 3).map((a) => (
-                <div key={a.id} className="text-xs text-muted-foreground">
-                  <span className="font-medium text-foreground">{a.user}</span>{" "}
-                  {a.action} <span className="font-medium text-foreground">{a.target}</span>
-                  <p className="text-muted-foreground mt-0.5">{a.timestamp}</p>
+            <h3 className="font-display font-semibold mb-3">Project Activity Log</h3>
+            <div className="space-y-3 max-h-80 overflow-y-auto">
+              {project.activities.slice(0, 10).map((a, i) => (
+                <div key={a.id} className="flex items-start gap-2.5">
+                  <div className="h-5 w-5 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+                    <span className="text-[9px] font-bold text-primary">{i + 1}</span>
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    <span className="font-medium text-foreground">{a.user}</span>{" "}
+                    {a.action} <span className="font-medium text-foreground">{a.target}</span>
+                    <p className="text-muted-foreground/70 mt-0.5">{a.timestamp}</p>
+                  </div>
                 </div>
               ))}
             </div>
