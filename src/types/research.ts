@@ -1,3 +1,8 @@
+export type AppRole = "Postgraduate Student" | "Researcher" | "Supervisor" | "Research Director" | "Compliance Officer";
+
+export const ADMIN_ROLES: AppRole[] = ["Research Director", "Compliance Officer"];
+export const RESEARCHER_ROLES: AppRole[] = ["Postgraduate Student", "Researcher", "Supervisor"];
+
 export interface User {
   id: string;
   name: string;
@@ -114,7 +119,7 @@ export interface ResearchProject {
   targetOutput: string;
   methodologyType: string;
   targetJournal: string;
-  status: "draft" | "in-progress" | "review" | "submitted";
+  status: "draft" | "in-progress" | "review" | "submitted" | "exported";
   createdAt: string;
   updatedAt: string;
   deadline?: string;
@@ -132,4 +137,58 @@ export interface ResearchProject {
   progress: number;
   wordCount: number;
   targetWordCount: number;
+  integrityScore: number;
+  aiUsageLevel: "None" | "Low" | "Moderate" | "High";
+  aiMode: string;
+}
+
+// --- Institution Layer Types ---
+
+export interface InstitutionalProject {
+  id: string;
+  title: string;
+  researcher: string;
+  department: string;
+  status: "draft" | "in-progress" | "review" | "submitted" | "exported";
+  aiUsageLevel: "None" | "Low" | "Moderate" | "High";
+  integrityScore: number;
+  lastUpdated: string;
+  aiMode: string;
+  exportHistory: { date: string; format: string }[];
+  aiReviewHistory: { date: string; score: number }[];
+  integrityIssues: string[];
+  datasetStatus: "not-uploaded" | "uploaded" | "analyzed";
+  sections: { title: string; wordCount: number }[];
+}
+
+export interface InstitutionAlert {
+  id: string;
+  type: "warning" | "critical" | "info";
+  message: string;
+  projectId?: string;
+  timestamp: string;
+}
+
+export interface ResearcherProfile {
+  id: string;
+  name: string;
+  email: string;
+  department: string;
+  role: string;
+  projectCount: number;
+  publications: number;
+  integrityScore: number;
+  lastActive: string;
+}
+
+export interface InstitutionData {
+  name: string;
+  totalResearchers: number;
+  activeProjects: number;
+  publicationsThisYear: number;
+  projects: InstitutionalProject[];
+  alerts: InstitutionAlert[];
+  researchers: ResearcherProfile[];
+  aiReviewsThisMonth: number;
+  departments: string[];
 }

@@ -1,39 +1,55 @@
-import React, { createContext, useContext, useState } from "react";
-import { User } from "@/types/research";
-import { mockUser } from "@/data/mockProject";
+import React, { createContext, useContext, useState, useCallback } from "react";
+import { User, AppRole, ADMIN_ROLES } from "@/types/research";
+import { mockUser, mockAdminUser } from "@/data/mockProject";
 
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => boolean;
-  signup: (name: string, email: string, password: string, role?: string) => boolean;
+  role: AppRole;
+  isAdmin: boolean;
+  login: (email: string, password: string, role: AppRole) => boolean;
+  signup: (name: string, email: string, password: string, role?: AppRole) => boolean;
   logout: () => void;
+  switchRole: (role: AppRole) => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(mockUser); // Pre-logged in for demo
+  const [user, setUser] = useState<User | null>(mockUser);
+  const [role, setRole] = useState<AppRole>("Researcher");
 
-  const login = (_email: string, _password: string) => {
-    setUser(mockUser);
+  const isAdmin = ADMIN_ROLES.includes(role);
+
+  const login = useCallback((_email: string, _password: string, selectedRole: AppRole) => {
+    const isAdminRole = ADMIN_ROLES.includes(selectedRole);
+    setUser(isAdminRole ? { ...mockAdminUser, role: selectedRole } : { ...mockUser, role: selectedRole });
+    setRole(selectedRole);
     return true;
-  };
+  }, []);
 
-  const signup = (name: string, email: string, _password: string, role?: string) => {
-    setUser({
-      ...mockUser,
-      name: name || mockUser.name,
-      email: email || mockUser.email,
-      role: role || mockUser.role,
-    });
+  const signup = useCallback((name: string, email: string, _password: string, selectedRole?: AppRole) => {
+    const r = selectedRole || "Researcher";
+    const isAdminRole = ADMIN_ROLES.includes(r);
+    const base = isAdminRole ? mockAdminUser : mockUser;
+    setUser({ ...base, name: name || base.name, email: email || base.email, role: r });
+    setRole(r);
     return true;
-  };
+  }, []);
 
-  const logout = () => setUser(null);
+  const logout = useCallback(() => {
+    setUser(null);
+    setRole("Researcher");
+  }, []);
+
+  const switchRole = useCallback((newRole: AppRole) => {
+    const isAdminRole = ADMIN_ROLES.includes(newRole);
+    setUser(prev => prev ? { ...(isAdminRole ? mockAdminUser : mockUser), name: prev.name, email: prev.email, role: newRole } : null);
+    setRole(newRole);
+  }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, login, signup, logout }}>
+    <AuthContext.Provider value={{ user, isAuthenticated: !!user, role, isAdmin, login, signup, logout, switchRole }}>
       {children}
     </AuthContext.Provider>
   );
@@ -42,13 +58,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 export const useAuth = () => {
   const ctx = useContext(AuthContext);
   if (!ctx) {
-    // Fallback for edge cases where provider hasn't mounted yet
     return {
       user: null,
       isAuthenticated: false,
+      role: "Researcher" as AppRole,
+      isAdmin: false,
       login: () => false,
       signup: () => false,
       logout: () => {},
+      switchRole: () => {},
     } as AuthContextType;
   }
   return ctx;

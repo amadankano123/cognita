@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
 import { ProjectProvider } from "@/context/ProjectContext";
+import { InstitutionProvider } from "@/context/InstitutionContext";
 
 import Landing from "./pages/Landing";
 import Auth from "./pages/Auth";
@@ -24,38 +25,66 @@ import Collaboration from "./pages/app/Collaboration";
 import Settings from "./pages/app/Settings";
 import PlagiarismChecker from "./pages/app/PlagiarismChecker";
 
+import AdminLayout from "@/components/layout/AdminLayout";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminProjects from "./pages/admin/AdminProjects";
+import AdminResearchers from "./pages/admin/AdminResearchers";
+import AdminCompliance from "./pages/admin/AdminCompliance";
+import AdminAnalytics from "./pages/admin/AdminAnalytics";
+import AdminSettings from "./pages/admin/AdminSettings";
+
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <AuthProvider>
       <ProjectProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Landing />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/onboarding" element={<Onboarding />} />
-              <Route path="/app" element={<AppLayout />}>
-                <Route index element={<Navigate to="dashboard" replace />} />
-                <Route path="dashboard" element={<Dashboard />} />
-                <Route path="editor" element={<Editor />} />
-                <Route path="references" element={<References />} />
-                <Route path="ai-reviewer" element={<AIReviewer />} />
-                <Route path="data" element={<DataPage />} />
-                <Route path="analysis" element={<Analysis />} />
-                <Route path="results" element={<Results />} />
-                <Route path="export" element={<Export />} />
-                <Route path="plagiarism" element={<PlagiarismChecker />} />
-                <Route path="collaboration" element={<Collaboration />} />
-                <Route path="settings" element={<Settings />} />
-              </Route>
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
+        <InstitutionProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Landing />} />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/onboarding" element={<Onboarding />} />
+
+                {/* Researcher Workspace */}
+                <Route path="/app/:projectId" element={<AppLayout />}>
+                  <Route index element={<Navigate to="dashboard" replace />} />
+                  <Route path="dashboard" element={<Dashboard />} />
+                  <Route path="editor" element={<Editor />} />
+                  <Route path="references" element={<References />} />
+                  <Route path="ai-reviewer" element={<AIReviewer />} />
+                  <Route path="data" element={<DataPage />} />
+                  <Route path="analysis" element={<Analysis />} />
+                  <Route path="results" element={<Results />} />
+                  <Route path="export" element={<Export />} />
+                  <Route path="plagiarism" element={<PlagiarismChecker />} />
+                  <Route path="collaboration" element={<Collaboration />} />
+                  <Route path="settings" element={<Settings />} />
+                </Route>
+
+                {/* Legacy redirect */}
+                <Route path="/app" element={<Navigate to="/app/proj-001/dashboard" replace />} />
+                <Route path="/app/dashboard" element={<Navigate to="/app/proj-001/dashboard" replace />} />
+
+                {/* Institution Dashboard */}
+                <Route path="/admin" element={<AdminLayout />}>
+                  <Route index element={<Navigate to="dashboard" replace />} />
+                  <Route path="dashboard" element={<AdminDashboard />} />
+                  <Route path="projects" element={<AdminProjects />} />
+                  <Route path="researchers" element={<AdminResearchers />} />
+                  <Route path="compliance" element={<AdminCompliance />} />
+                  <Route path="analytics" element={<AdminAnalytics />} />
+                  <Route path="settings" element={<AdminSettings />} />
+                </Route>
+
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </TooltipProvider>
+        </InstitutionProvider>
       </ProjectProvider>
     </AuthProvider>
   </QueryClientProvider>
