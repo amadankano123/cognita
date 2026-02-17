@@ -183,6 +183,8 @@ export interface InstitutionalProject {
   status: "draft" | "in-progress" | "review" | "submitted" | "exported";
   aiUsageLevel: "None" | "Low" | "Moderate" | "High";
   integrityScore: number;
+  similarityIndex: number;
+  aiDetectionScore: number;
   lastUpdated: string;
   aiMode: string;
   exportHistory: { date: string; format: string }[];
