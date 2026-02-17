@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import PageHeader from "@/components/layout/PageHeader";
 import { useProject } from "@/context/ProjectContext";
 import { useInstitution } from "@/context/InstitutionContext";
@@ -127,6 +127,8 @@ const Editor = () => {
   const [aiGeneratingSection, setAiGeneratingSection] = useState(false);
   const [aiTopicInput, setAiTopicInput] = useState(project.title);
   const [aiSectionTarget, setAiSectionTarget] = useState("introduction");
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [cursorPos, setCursorPos] = useState<number | undefined>(undefined);
 
   const totalScore = project.reviewScores.reduce((a, s) => a + s.score, 0);
   const maxTotal = project.reviewScores.reduce((a, s) => a + s.maxScore, 0);
@@ -141,9 +143,16 @@ const Editor = () => {
 
   const handleInsertCitation = (ref: typeof project.references[0]) => {
     if (activeSection) {
-      insertCitation(activeSection.id, `(${ref.authors[0].split(",")[0]} et al., ${ref.year})`);
+      const citation = `(${ref.authors[0].split(",")[0]} et al., ${ref.year})`;
+      insertCitation(activeSection.id, citation, cursorPos);
     }
     setCitationModalOpen(false);
+  };
+
+  const handleTextareaSelect = () => {
+    if (textareaRef.current) {
+      setCursorPos(textareaRef.current.selectionStart);
+    }
   };
 
   const handleSaveVersion = () => {
@@ -274,7 +283,7 @@ const Editor = () => {
                   AI Generate
                 </Button>
               </div>
-              <Textarea value={activeSection.content} onChange={e => updateSection(activeSection.id, e.target.value)} className="flex-1 border-0 rounded-none resize-none focus-visible:ring-0 p-4 text-sm leading-relaxed font-body" placeholder="Start writing…" />
+              <Textarea ref={textareaRef} value={activeSection.content} onChange={e => { updateSection(activeSection.id, e.target.value); setCursorPos(e.target.selectionStart); }} onSelect={handleTextareaSelect} onClick={handleTextareaSelect} onKeyUp={handleTextareaSelect} className="flex-1 border-0 rounded-none resize-none focus-visible:ring-0 p-4 text-sm leading-relaxed font-body" placeholder="Start writing…" />
             </>
           )}
         </Card>

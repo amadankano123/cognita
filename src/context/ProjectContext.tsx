@@ -11,7 +11,7 @@ interface ProjectContextType {
   uploadDataset: () => void;
   addExport: (record: ExportRecord) => void;
   addAnalysisResult: (result: ResearchProject["analysisResults"][0]) => void;
-  insertCitation: (sectionId: string, citation: string) => void;
+  insertCitation: (sectionId: string, citation: string, cursorPosition?: number) => void;
 }
 
 const ProjectContext = createContext<ProjectContextType | null>(null);
@@ -41,8 +41,17 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({ child
     setProject(prev => ({ ...prev, analysisResults: [...prev.analysisResults, result], checklist: prev.checklist.map(c => c.id === "cl6" ? { ...c, checked: true } : c) }));
   }, []);
 
-  const insertCitation = useCallback((sectionId: string, citation: string) => {
-    setProject(prev => ({ ...prev, sections: prev.sections.map(s => s.id === sectionId ? { ...s, content: s.content + " " + citation } : s) }));
+  const insertCitation = useCallback((sectionId: string, citation: string, cursorPosition?: number) => {
+    setProject(prev => ({
+      ...prev,
+      sections: prev.sections.map(s => {
+        if (s.id !== sectionId) return s;
+        if (cursorPosition !== undefined && cursorPosition >= 0 && cursorPosition <= s.content.length) {
+          return { ...s, content: s.content.slice(0, cursorPosition) + " " + citation + s.content.slice(cursorPosition) };
+        }
+        return { ...s, content: s.content + " " + citation };
+      }),
+    }));
   }, []);
 
   return (
