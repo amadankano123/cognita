@@ -1,11 +1,12 @@
 import { useState } from "react";
 import PageHeader from "@/components/layout/PageHeader";
 import { useProject } from "@/context/ProjectContext";
+import { useInstitution } from "@/context/InstitutionContext";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { ShieldCheck, RefreshCw, ExternalLink, AlertTriangle, CheckCircle2, Bot, FileText, Info } from "lucide-react";
+import { ShieldCheck, RefreshCw, ExternalLink, AlertTriangle, CheckCircle2, Bot, FileText, Info, Download, Loader2 } from "lucide-react";
 
 /* ── Threshold helpers ── */
 type RiskLevel = "safe" | "borderline" | "critical";
@@ -21,6 +22,9 @@ const riskConfig: Record<RiskLevel, { label: string; bg: string; text: string; r
   borderline: { label: "Borderline", bg: "bg-warning/10", text: "text-warning", ring: "ring-warning/30", stroke: "stroke-warning" },
   critical: { label: "Unacceptable", bg: "bg-destructive/10", text: "text-destructive", ring: "ring-destructive/30", stroke: "stroke-destructive" },
 };
+
+const riskColor = (level: RiskLevel) =>
+  level === "safe" ? "#22c55e" : level === "borderline" ? "#f59e0b" : "#ef4444";
 
 /* ── Mock data ── */
 const mockSimilarityResults = [
@@ -92,14 +96,101 @@ const ThresholdLegend = ({ type }: { type: "similarity" | "ai" }) => {
   );
 };
 
+/* ── PDF Generation ── */
+function generateIntegrityPdf(
+  projectTitle: string,
+  overallSimilarity: number,
+  overallAi: number,
+  simResults: typeof mockSimilarityResults,
+  aiResults: typeof mockAiResults,
+) {
+  const simRisk = getSimilarityRisk(overallSimilarity);
+  const aiRisk = getAiRisk(overallAi);
+  const now = new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "long", year: "numeric" });
+
+  const simRows = simResults
+    .map(
+      (r) =>
+        `<tr><td style="padding:8px 12px;border-bottom:1px solid #e5e7eb">${r.section}</td>` +
+        `<td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;text-align:center;color:${riskColor(getSimilarityRisk(r.similarity))};font-weight:600">${r.similarity}%</td>` +
+        `<td style="padding:8px 12px;border-bottom:1px solid #e5e7eb">${riskConfig[getSimilarityRisk(r.similarity)].label}</td>` +
+        `<td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;font-size:11px">${r.sources.length ? r.sources.map(s => s.title).join("; ") : "—"}</td></tr>`,
+    )
+    .join("");
+
+  const aiRows = aiResults
+    .map(
+      (r) =>
+        `<tr><td style="padding:8px 12px;border-bottom:1px solid #e5e7eb">${r.section}</td>` +
+        `<td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;text-align:center;color:${riskColor(getAiRisk(r.aiPct))};font-weight:600">${r.aiPct}%</td>` +
+        `<td style="padding:8px 12px;border-bottom:1px solid #e5e7eb">${riskConfig[getAiRisk(r.aiPct)].label}</td>` +
+        `<td style="padding:8px 12px;border-bottom:1px solid #e5e7eb;font-size:11px">${r.detail}</td></tr>`,
+    )
+    .join("");
+
+  const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Integrity Report — ${projectTitle}</title>
+<style>
+  body{font-family:Arial,Helvetica,sans-serif;margin:40px;color:#1a1a2e;font-size:13px;line-height:1.6}
+  h1{font-size:22px;margin-bottom:4px}
+  h2{font-size:16px;margin-top:32px;margin-bottom:10px;border-bottom:2px solid #1a1a2e;padding-bottom:4px}
+  .meta{color:#666;font-size:12px;margin-bottom:24px}
+  .summary{display:flex;gap:32px;margin-bottom:8px}
+  .score-box{border:1px solid #e5e7eb;border-radius:8px;padding:16px 24px;text-align:center;min-width:180px}
+  .score-box .value{font-size:36px;font-weight:700}
+  .score-box .label{font-size:11px;text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+  table{width:100%;border-collapse:collapse;font-size:12px;margin-top:8px}
+  th{padding:8px 12px;text-align:left;background:#f3f4f6;font-weight:600;border-bottom:2px solid #d1d5db}
+  .legend{display:flex;gap:20px;font-size:11px;margin:8px 0 12px;color:#666}
+  .legend span::before{content:"●";margin-right:4px}
+  .safe::before{color:#22c55e} .borderline::before{color:#f59e0b} .critical::before{color:#ef4444}
+  .footer{margin-top:40px;border-top:1px solid #e5e7eb;padding-top:12px;font-size:10px;color:#999;text-align:center}
+</style></head><body>
+  <h1>Integrity Report</h1>
+  <p class="meta">${projectTitle}<br>${now} · Cognita Research Platform</p>
+
+  <div class="summary">
+    <div class="score-box">
+      <div class="value" style="color:${riskColor(simRisk)}">${overallSimilarity}%</div>
+      <div class="label">Similarity Index</div>
+      <div style="margin-top:6px;font-size:12px;color:${riskColor(simRisk)};font-weight:600">${riskConfig[simRisk].label}</div>
+    </div>
+    <div class="score-box">
+      <div class="value" style="color:${riskColor(aiRisk)}">${overallAi}%</div>
+      <div class="label">AI Detection</div>
+      <div style="margin-top:6px;font-size:12px;color:${riskColor(aiRisk)};font-weight:600">${riskConfig[aiRisk].label}</div>
+    </div>
+  </div>
+
+  <h2>1. Similarity Index — Section Breakdown</h2>
+  <div class="legend"><span class="safe">0–20% Acceptable</span><span class="borderline">21–35% Borderline</span><span class="critical">36%+ Unacceptable</span></div>
+  <table><thead><tr><th>Section</th><th style="text-align:center">Similarity</th><th>Status</th><th>Matching Sources</th></tr></thead><tbody>${simRows}</tbody></table>
+
+  <h2>2. AI Detection — Section Breakdown</h2>
+  <div class="legend"><span class="safe">0–20% Acceptable</span><span class="borderline">21–45% Borderline</span><span class="critical">46%+ Unacceptable</span></div>
+  <table><thead><tr><th>Section</th><th style="text-align:center">AI %</th><th>Status</th><th>Details</th></tr></thead><tbody>${aiRows}</tbody></table>
+
+  <div class="footer">Generated by Cognita Research Platform · This report is for institutional review purposes only.</div>
+</body></html>`;
+
+  const blob = new Blob([html], { type: "text/html" });
+  const printWindow = window.open("", "_blank");
+  if (printWindow) {
+    printWindow.document.write(html);
+    printWindow.document.close();
+    setTimeout(() => printWindow.print(), 500);
+  }
+}
+
 /* ── Main page ── */
 const PlagiarismChecker = () => {
   const { project } = useProject();
+  const { updateIntegrityMetrics } = useInstitution();
   const [scanning, setScanning] = useState(false);
   const [scanProgress, setScanProgress] = useState(0);
   const [hasResults, setHasResults] = useState(true);
   const [expandedSim, setExpandedSim] = useState<string | null>(null);
   const [expandedAi, setExpandedAi] = useState<string | null>(null);
+  const [downloadingPdf, setDownloadingPdf] = useState(false);
 
   const overallSimilarity = 8;
   const overallAi = 15;
@@ -117,11 +208,21 @@ const PlagiarismChecker = () => {
           clearInterval(interval);
           setScanning(false);
           setHasResults(true);
+          // Sync metrics to admin dashboard after scan completes
+          updateIntegrityMetrics(project.id, overallSimilarity, overallAi);
           return 100;
         }
         return p + Math.random() * 15;
       });
     }, 400);
+  };
+
+  const handleDownloadPdf = () => {
+    setDownloadingPdf(true);
+    setTimeout(() => {
+      generateIntegrityPdf(project.title, overallSimilarity, overallAi, mockSimilarityResults, mockAiResults);
+      setDownloadingPdf(false);
+    }, 800);
   };
 
   return (
@@ -171,13 +272,21 @@ const PlagiarismChecker = () => {
         </Card>
       </div>
 
-      {/* Scan button */}
+      {/* Action buttons */}
       <div className="flex items-center justify-between mb-4">
         <p className="text-xs text-muted-foreground">Last scanned 2 hours ago</p>
-        <Button onClick={handleScan} disabled={scanning} size="sm">
-          <RefreshCw className={`h-4 w-4 mr-2 ${scanning ? "animate-spin" : ""}`} />
-          {scanning ? "Scanning…" : "Run Full Scan"}
-        </Button>
+        <div className="flex items-center gap-2">
+          {hasResults && (
+            <Button variant="outline" size="sm" onClick={handleDownloadPdf} disabled={downloadingPdf}>
+              {downloadingPdf ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : <Download className="h-4 w-4 mr-2" />}
+              Download PDF
+            </Button>
+          )}
+          <Button onClick={handleScan} disabled={scanning} size="sm">
+            <RefreshCw className={`h-4 w-4 mr-2 ${scanning ? "animate-spin" : ""}`} />
+            {scanning ? "Scanning…" : "Run Full Scan"}
+          </Button>
+        </div>
       </div>
 
       {scanning && (

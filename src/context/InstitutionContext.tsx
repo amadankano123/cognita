@@ -7,6 +7,7 @@ interface InstitutionContextType {
   updateProjectIntegrity: (projectId: string, score: number) => void;
   updateProjectStatus: (projectId: string, status: string) => void;
   incrementAiUsage: (projectId: string) => void;
+  updateIntegrityMetrics: (projectId: string, similarityIndex: number, aiDetectionScore: number) => void;
 }
 
 const InstitutionContext = createContext<InstitutionContextType | null>(null);
@@ -40,8 +41,19 @@ export const InstitutionProvider: React.FC<{ children: React.ReactNode }> = ({ c
     }));
   }, []);
 
+  const updateIntegrityMetrics = useCallback((projectId: string, similarityIndex: number, aiDetectionScore: number) => {
+    setInstitution(prev => ({
+      ...prev,
+      projects: prev.projects.map(p =>
+        p.id === projectId
+          ? { ...p, similarityIndex, aiDetectionScore, lastUpdated: new Date().toISOString().split("T")[0] }
+          : p
+      ),
+    }));
+  }, []);
+
   return (
-    <InstitutionContext.Provider value={{ institution, updateProjectIntegrity, updateProjectStatus, incrementAiUsage }}>
+    <InstitutionContext.Provider value={{ institution, updateProjectIntegrity, updateProjectStatus, incrementAiUsage, updateIntegrityMetrics }}>
       {children}
     </InstitutionContext.Provider>
   );

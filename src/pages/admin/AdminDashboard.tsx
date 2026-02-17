@@ -27,6 +27,8 @@ const AdminDashboard = () => {
   const alertColors: Record<string, string> = { critical: "bg-destructive text-destructive-foreground", warning: "bg-warning text-warning-foreground", info: "bg-accent text-accent-foreground" };
 
   const integrityAlerts = institution.projects.filter(p => p.integrityScore < 75).length;
+  const simAlerts = institution.projects.filter(p => p.similarityIndex > 20).length;
+  const aiAlerts = institution.projects.filter(p => p.aiDetectionScore > 20).length;
 
   return (
     <div className="max-w-6xl animate-fade-in">
@@ -39,8 +41,8 @@ const AdminDashboard = () => {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {[
           { label: "Active Projects", value: institution.activeProjects, icon: FolderOpen, color: "text-primary" },
-          { label: "Integrity Alerts", value: integrityAlerts, icon: AlertTriangle, color: "text-destructive" },
-          { label: "AI Reviews This Month", value: institution.aiReviewsThisMonth, icon: Bot, color: "text-warning" },
+          { label: "Similarity Alerts", value: simAlerts, icon: FileText, color: "text-warning" },
+          { label: "AI Detection Alerts", value: aiAlerts, icon: Bot, color: "text-destructive" },
           { label: "Publications", value: institution.publicationsThisYear, icon: FileText, color: "text-success" },
         ].map(kpi => (
           <Card key={kpi.label} className="p-5 shadow-card">
