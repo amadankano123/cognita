@@ -7,10 +7,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { AppRole, ADMIN_ROLES, RESEARCHER_ROLES } from "@/types/research";
+import { AppRole, ADMIN_ROLES, ROLE_GROUPS } from "@/types/research";
 import ProjectContextDrawer from "./ProjectContextDrawer";
-
-const allRoles: AppRole[] = [...RESEARCHER_ROLES, ...ADMIN_ROLES];
 
 const TopNav = () => {
   const { user, logout, role, isAdmin, switchRole } = useAuth();
@@ -94,17 +92,22 @@ const TopNav = () => {
           <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuLabel>Switch Role (Demo)</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {allRoles.map(r => (
-              <DropdownMenuItem
-                key={r}
-                onClick={() => handleSwitchRole(r)}
-                className={role === r ? "bg-accent" : ""}
-              >
-                <span className="flex items-center gap-2">
-                  {ADMIN_ROLES.includes(r) && <Shield className="h-3 w-3 text-primary" />}
-                  {r}
-                </span>
-              </DropdownMenuItem>
+            {ROLE_GROUPS.map(group => (
+              <div key={group.label}>
+                <DropdownMenuLabel className="text-[10px] text-muted-foreground uppercase tracking-wider">{group.label}</DropdownMenuLabel>
+                {group.roles.map(r => (
+                  <DropdownMenuItem
+                    key={r.value}
+                    onClick={() => handleSwitchRole(r.value)}
+                    className={role === r.value ? "bg-accent" : ""}
+                  >
+                    <span className="flex items-center gap-2">
+                      {ADMIN_ROLES.includes(r.value) && <Shield className="h-3 w-3 text-primary" />}
+                      {r.label}
+                    </span>
+                  </DropdownMenuItem>
+                ))}
+              </div>
             ))}
           </DropdownMenuContent>
         </DropdownMenu>

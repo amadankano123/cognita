@@ -1,7 +1,38 @@
-export type AppRole = "Postgraduate Student" | "Researcher" | "Supervisor" | "Research Director" | "Compliance Officer";
+export type AppRole =
+  | "Undergraduate Student"
+  | "Master's Student"
+  | "PhD Student"
+  | "Researcher"
+  | "Supervisor"
+  | "Research Director"
+  | "Compliance Officer";
 
 export const ADMIN_ROLES: AppRole[] = ["Research Director", "Compliance Officer"];
-export const RESEARCHER_ROLES: AppRole[] = ["Postgraduate Student", "Researcher", "Supervisor"];
+export const RESEARCHER_ROLES: AppRole[] = ["Undergraduate Student", "Master's Student", "PhD Student", "Researcher", "Supervisor"];
+
+export interface RoleGroup {
+  label: string;
+  roles: { value: AppRole; label: string }[];
+}
+
+export const ROLE_GROUPS: RoleGroup[] = [
+  { label: "Undergraduate", roles: [{ value: "Undergraduate Student", label: "Undergraduate Student" }] },
+  {
+    label: "Postgraduate",
+    roles: [
+      { value: "Master's Student", label: "Master's Student" },
+      { value: "PhD Student", label: "PhD Student" },
+    ],
+  },
+  { label: "Faculty", roles: [
+    { value: "Researcher", label: "Researcher" },
+    { value: "Supervisor", label: "Supervisor" },
+  ]},
+  { label: "Administration", roles: [
+    { value: "Research Director", label: "Research Director (Admin)" },
+    { value: "Compliance Officer", label: "Compliance Officer (Admin)" },
+  ]},
+];
 
 export interface User {
   id: string;

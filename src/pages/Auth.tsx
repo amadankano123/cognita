@@ -4,17 +4,9 @@ import cognitaLogo from "@/assets/cognita-logo.jpeg";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/context/AuthContext";
-import { AppRole, ADMIN_ROLES } from "@/types/research";
-
-const roles: { value: AppRole; label: string }[] = [
-  { value: "Postgraduate Student", label: "Postgraduate Student" },
-  { value: "Researcher", label: "Researcher" },
-  { value: "Supervisor", label: "Supervisor" },
-  { value: "Research Director", label: "Research Director (Admin)" },
-  { value: "Compliance Officer", label: "Compliance Officer (Admin)" },
-];
+import { AppRole, ADMIN_ROLES, ROLE_GROUPS } from "@/types/research";
 
 const Auth = () => {
   const [mode, setMode] = useState<"login" | "signup">("login");
@@ -85,8 +77,13 @@ const Auth = () => {
                   <SelectValue placeholder="Select your role" />
                 </SelectTrigger>
                 <SelectContent>
-                  {roles.map((r) => (
-                    <SelectItem key={r.value} value={r.value}>{r.label}</SelectItem>
+                  {ROLE_GROUPS.map((group) => (
+                    <SelectGroup key={group.label}>
+                      <SelectLabel className="text-xs text-muted-foreground uppercase tracking-wide">{group.label}</SelectLabel>
+                      {group.roles.map((r) => (
+                        <SelectItem key={r.value} value={r.value}>{r.label}</SelectItem>
+                      ))}
+                    </SelectGroup>
                   ))}
                 </SelectContent>
               </Select>
