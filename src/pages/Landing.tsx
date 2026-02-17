@@ -44,27 +44,27 @@ const Landing = () => {
         </div>
       </nav>
 
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${heroBg})` }} />
-        <div className="absolute inset-0 bg-gradient-to-b from-[hsl(224,64%,20%/0.88)] via-[hsl(224,64%,25%/0.75)] to-background" />
+      <section className="relative overflow-hidden bg-primary">
+        <div className="absolute inset-0 bg-cover bg-center opacity-20" style={{ backgroundImage: `url(${heroBg})` }} />
+        <div className="absolute inset-0 bg-gradient-to-b from-[hsl(224,64%,15%)] via-[hsl(224,64%,20%/0.9)] to-[hsl(224,64%,25%/0.85)]" />
         <div className="relative max-w-4xl mx-auto text-center pt-24 pb-28 px-6">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/20 text-primary-foreground text-sm font-medium mb-6 animate-fade-in border border-primary/30">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 text-white text-sm font-medium mb-6 animate-fade-in border border-white/20">
             <Sparkles className="h-4 w-4" />
             Unified Research Intelligence Platform
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-tight mb-5 text-primary-foreground animate-fade-in" style={{ animationDelay: "0.1s", animationFillMode: "both" }}>
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-tight mb-5 text-white animate-fade-in" style={{ animationDelay: "0.1s", animationFillMode: "both" }}>
             Write. Analyze.{" "}
             <span className="bg-gradient-to-r from-[hsl(200,80%,70%)] to-[hsl(260,70%,75%)] bg-clip-text text-transparent">Publish.</span>
             {" "}In One Place.
           </h1>
-          <p className="text-lg md:text-xl text-[hsl(210,20%,80%)] max-w-2xl mx-auto mb-10 animate-fade-in" style={{ animationDelay: "0.2s", animationFillMode: "both" }}>
+          <p className="text-lg md:text-xl text-white/75 max-w-2xl mx-auto mb-10 animate-fade-in" style={{ animationDelay: "0.2s", animationFillMode: "both" }}>
             Cognita brings researcher workspaces and institutional oversight into one seamless platform. Write proposals, manage data, and ensure compliance — all in one place.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center animate-fade-in" style={{ animationDelay: "0.3s", animationFillMode: "both" }}>
-            <Button size="lg" className="text-base px-8" onClick={() => navigate(isAuthenticated ? dashPath : "/auth")}>
+            <Button size="lg" className="text-base px-8 bg-white text-primary hover:bg-white/90" onClick={() => navigate(isAuthenticated ? dashPath : "/auth")}>
               Start Free Project <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
-            <Button size="lg" variant="outline" className="text-base px-8 border-primary/40 text-primary-foreground hover:bg-primary/20 hover:text-primary-foreground" onClick={() => setDemoOpen(true)}>
+            <Button size="lg" variant="outline" className="text-base px-8 border-white/30 text-white hover:bg-white/10 hover:text-white" onClick={() => setDemoOpen(true)}>
               <Play className="h-4 w-4 mr-2" /> Watch Demo
             </Button>
           </div>
