@@ -1,33 +1,115 @@
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { useProject } from "@/context/ProjectContext";
-import { LogOut, User, HelpCircle, X } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { LogOut, User, HelpCircle, Bell, ArrowLeftRight, Shield } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel } from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { AppRole, ADMIN_ROLES, RESEARCHER_ROLES } from "@/types/research";
 import ProjectContextDrawer from "./ProjectContextDrawer";
 
+const allRoles: AppRole[] = [...RESEARCHER_ROLES, ...ADMIN_ROLES];
+
 const TopNav = () => {
-  const { user, logout } = useAuth();
-  const { project } = useProject();
+  const { user, logout, role, isAdmin, switchRole } = useAuth();
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith("/admin");
   const navigate = useNavigate();
+  const [notifOpen, setNotifOpen] = useState(false);
+
+  // Only use project context on researcher routes
+  let projectTitle = "";
+  try {
+    if (!isAdminRoute) {
+      const { project } = useProject();
+      projectTitle = project.title;
+    }
+  } catch { /* admin route, no project context */ }
 
   const handleLogout = () => {
     logout();
     navigate("/");
   };
 
+  const handleSwitchRole = (newRole: AppRole) => {
+    switchRole(newRole);
+    const isNewAdmin = ADMIN_ROLES.includes(newRole);
+    navigate(isNewAdmin ? "/admin/dashboard" : "/app/proj-001/dashboard");
+  };
+
+  const notifications = [
+    { id: 1, text: "AI review completed for your document", time: "2 min ago" },
+    { id: 2, text: "Prof. Mwangi commented on Methodology", time: "1 hour ago" },
+    { id: 3, text: "Export ready for download", time: "3 hours ago" },
+  ];
+
   return (
     <header className="h-14 border-b border-border bg-card flex items-center justify-between px-6 shrink-0">
-      {/* Left: project name */}
-      <div className="flex items-center gap-2 min-w-0">
-        <span className="text-sm font-medium text-foreground truncate max-w-xs">{project.title}</span>
-        <span className="text-xs px-2 py-0.5 bg-primary/10 text-primary rounded-full capitalize hidden sm:inline">{project.status}</span>
+      {/* Left */}
+      <div className="flex items-center gap-3 min-w-0">
+        {!isAdminRoute && projectTitle && (
+          <span className="text-sm font-medium text-foreground truncate max-w-xs">{projectTitle}</span>
+        )}
+        {isAdminRoute && (
+          <span className="text-sm font-medium text-foreground">Institutional Dashboard</span>
+        )}
+        <Badge variant="outline" className="text-xs capitalize shrink-0">
+          {role}
+        </Badge>
       </div>
 
-      {/* Right: user + help */}
+      {/* Right */}
       <div className="flex items-center gap-3">
-        <ProjectContextDrawer />
+        {!isAdminRoute && <ProjectContextDrawer />}
+
+        {/* Notifications */}
+        <DropdownMenu open={notifOpen} onOpenChange={setNotifOpen}>
+          <DropdownMenuTrigger asChild>
+            <button className="relative text-muted-foreground hover:text-foreground transition-colors" aria-label="Notifications">
+              <Bell className="h-4 w-4" />
+              <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-destructive border-2 border-card" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-72">
+            <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {notifications.map(n => (
+              <DropdownMenuItem key={n.id} className="flex flex-col items-start gap-0.5 py-2">
+                <span className="text-sm">{n.text}</span>
+                <span className="text-xs text-muted-foreground">{n.time}</span>
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        {/* Switch Role */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="text-muted-foreground hover:text-foreground transition-colors" aria-label="Switch role">
+              <ArrowLeftRight className="h-4 w-4" />
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuLabel>Switch Role (Demo)</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            {allRoles.map(r => (
+              <DropdownMenuItem
+                key={r}
+                onClick={() => handleSwitchRole(r)}
+                className={role === r ? "bg-accent" : ""}
+              >
+                <span className="flex items-center gap-2">
+                  {ADMIN_ROLES.includes(r) && <Shield className="h-3 w-3 text-primary" />}
+                  {r}
+                </span>
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        {/* Help */}
         <Dialog>
           <DialogTrigger asChild>
             <button className="text-muted-foreground hover:text-foreground transition-colors" aria-label="Help">
@@ -41,7 +123,7 @@ const TopNav = () => {
             <div className="space-y-4 text-sm">
               {[
                 { step: "1", title: "Create a Project", desc: "Set up your research project with metadata and choose a template." },
-                { step: "2", title: "Write & Organize", desc: "Use the structured editor to draft your proposal with sections." },
+                { step: "2", title: "Write & Organize", desc: "Use the structured editor to draft with sections." },
                 { step: "3", title: "Manage References", desc: "Import references via DOI or BibTeX. Cite them inline." },
                 { step: "4", title: "Upload & Analyze Data", desc: "Upload datasets and run statistical analyses directly." },
                 { step: "5", title: "AI Review", desc: "Get automated feedback on clarity, rigor, and completeness." },
@@ -61,6 +143,7 @@ const TopNav = () => {
           </DialogContent>
         </Dialog>
 
+        {/* Profile */}
         <div className="flex items-center gap-2 text-sm">
           <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
             <User className="h-4 w-4 text-primary" />

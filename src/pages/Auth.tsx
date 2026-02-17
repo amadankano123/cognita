@@ -6,24 +6,34 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/context/AuthContext";
+import { AppRole, ADMIN_ROLES } from "@/types/research";
+
+const roles: { value: AppRole; label: string }[] = [
+  { value: "Postgraduate Student", label: "Postgraduate Student" },
+  { value: "Researcher", label: "Researcher" },
+  { value: "Supervisor", label: "Supervisor" },
+  { value: "Research Director", label: "Research Director (Admin)" },
+  { value: "Compliance Officer", label: "Compliance Officer (Admin)" },
+];
 
 const Auth = () => {
   const [mode, setMode] = useState<"login" | "signup">("login");
-  const [email, setEmail] = useState("amara.osei@university.edu");
+  const [email, setEmail] = useState("f.hassan@greenfield.edu");
   const [password, setPassword] = useState("password");
   const [name, setName] = useState("");
-  const [role, setRole] = useState("Researcher");
+  const [role, setRole] = useState<AppRole>("Researcher");
   const { login, signup } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const isAdmin = ADMIN_ROLES.includes(role);
     if (mode === "login") {
-      const success = login(email, password);
-      if (success) navigate("/app/dashboard");
+      const success = login(email, password, role);
+      if (success) navigate(isAdmin ? "/admin/dashboard" : "/app/proj-001/dashboard");
     } else {
       const success = signup(name, email, password, role);
-      if (success) navigate("/onboarding");
+      if (success) navigate(isAdmin ? "/admin/dashboard" : "/onboarding");
     }
   };
 
@@ -70,16 +80,19 @@ const Auth = () => {
             </div>
             <div>
               <Label htmlFor="role">Role</Label>
-              <Select value={role} onValueChange={setRole}>
+              <Select value={role} onValueChange={(v) => setRole(v as AppRole)}>
                 <SelectTrigger id="role" className="w-full">
                   <SelectValue placeholder="Select your role" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Student">Student</SelectItem>
-                  <SelectItem value="Researcher">Researcher</SelectItem>
-                  <SelectItem value="Supervisor">Supervisor</SelectItem>
+                  {roles.map((r) => (
+                    <SelectItem key={r.value} value={r.value}>{r.label}</SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
+              {ADMIN_ROLES.includes(role) && (
+                <p className="text-xs text-primary mt-1">🏛️ You'll be directed to the Institutional Dashboard</p>
+              )}
             </div>
             <Button type="submit" className="w-full">
               {mode === "login" ? "Login" : "Create Account"}
@@ -87,7 +100,7 @@ const Auth = () => {
           </form>
 
           <p className="text-xs text-muted-foreground text-center mt-4">
-            Demo credentials are pre-filled. Just click Login.
+            Demo credentials pre-filled. Select a role and click Login.
           </p>
         </div>
       </div>
