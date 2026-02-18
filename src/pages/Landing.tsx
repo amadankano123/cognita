@@ -4,6 +4,7 @@ import { FileEdit, BookOpen, Bot, BarChart3, Download, ArrowRight, ShieldCheck, 
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useAuth } from "@/context/AuthContext";
+import PricingSection from "@/components/landing/PricingSection";
 import heroBg from "@/assets/hero-bg.jpg";
 import cognitaLogo from "@/assets/cognita-logo.png";
 
@@ -98,6 +99,8 @@ const Landing = () => {
           ))}
         </div>
       </section>
+
+      <PricingSection />
 
       <section className="max-w-3xl mx-auto px-6 py-20 text-center">
         <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to elevate your research?</h2>
