@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ArrowLeft, ArrowRight, Check, BookOpen, FileText, GraduationCap, ScrollText, BookMarked, FlaskConical } from "lucide-react";
-import cognitaLogo from "@/assets/cognita-logo.jpeg";
+import cognitaLogo from "@/assets/cognita-logo.png";
 
 const Onboarding = () => {
   const navigate = useNavigate();
