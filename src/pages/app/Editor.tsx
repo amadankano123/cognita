@@ -18,7 +18,7 @@ import {
   BookOpen, Search, Save, Download, AlertTriangle, CheckCircle2, Quote, ShieldCheck,
   Sparkles, Wand2, Loader2, ChevronDown, ChevronRight, Target, HelpCircle, Scale,
   Crosshair, FlaskConical, Lightbulb, PanelLeftClose, PanelLeftOpen,
-  PanelRightClose, PanelRightOpen, Maximize2, Minimize2, FileText, Bot,
+  PanelRightClose, PanelRightOpen, Maximize2, Minimize2, FileText, Bot, X,
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import ContextAwareIndicator from "@/components/layout/ContextAwareIndicator";
@@ -93,7 +93,7 @@ const Editor = () => {
 
   // Panel state
   const [leftOpen, setLeftOpen] = useState(true);
-  const [rightOpen, setRightOpen] = useState(true);
+  const [rightOpen, setRightOpen] = useState(false);
   const [focusMode, setFocusMode] = useState(false);
   const [pageMode, setPageMode] = useState(false);
 
@@ -103,9 +103,6 @@ const Editor = () => {
       const w = window.innerWidth;
       if (w < 900) {
         setLeftOpen(false);
-        setRightOpen(false);
-      } else if (w < 1200) {
-        setRightOpen(false);
       }
     };
     handleResize();
@@ -202,8 +199,7 @@ const Editor = () => {
       setFocusMode(true);
     } else {
       setFocusMode(false);
-      if (window.innerWidth >= 1200) { setLeftOpen(true); setRightOpen(true); }
-      else if (window.innerWidth >= 900) { setLeftOpen(true); }
+      if (window.innerWidth >= 900) { setLeftOpen(true); }
     }
   };
 
@@ -245,32 +241,29 @@ const Editor = () => {
     </div>
   );
 
-  // ===== RIGHT PANEL CONTENT =====
+  // ===== RIGHT PANEL CONTENT (floating overlay) =====
   const rightPanelContent = (
-    <div className="h-full flex flex-col bg-card">
-      <div className="flex items-center justify-between px-3 py-2 border-b border-border">
-        <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Tools</span>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setRightOpen(false)}>
-                <PanelRightClose className="h-3.5 w-3.5" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="left"><p className="text-xs">Collapse panel</p></TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      </div>
-      <Tabs value={rightTab} onValueChange={setRightTab} className="flex-1 flex flex-col overflow-hidden">
-        <TabsList className="w-full rounded-none border-b border-border h-auto p-0 bg-transparent shrink-0">
-          <TabsTrigger value="ai-assist" className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-2.5 text-xs">
-            <Sparkles className="h-3 w-3 mr-1" /> AI Assist
-          </TabsTrigger>
-          <TabsTrigger value="reviewer" className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-2.5 text-xs">Reviewer</TabsTrigger>
-          <TabsTrigger value="citations" className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-2.5 text-xs">Citations</TabsTrigger>
-        </TabsList>
+    <>
+      {/* Backdrop */}
+      <div className="fixed inset-0 z-40 bg-black/20 animate-fade-in" onClick={() => setRightOpen(false)} />
+      {/* Floating panel */}
+      <div className="fixed right-4 top-20 bottom-4 z-50 w-[380px] max-w-[90vw] bg-card border border-border rounded-xl shadow-elevated flex flex-col overflow-hidden animate-in slide-in-from-right duration-200">
+        <div className="flex items-center justify-between px-3 py-2 border-b border-border">
+          <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Tools</span>
+          <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setRightOpen(false)}>
+            <X className="h-3.5 w-3.5" />
+          </Button>
+        </div>
+        <Tabs value={rightTab} onValueChange={setRightTab} className="flex-1 flex flex-col overflow-hidden">
+          <TabsList className="w-full rounded-none border-b border-border h-auto p-0 bg-transparent shrink-0">
+            <TabsTrigger value="ai-assist" className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-2.5 text-xs">
+              <Sparkles className="h-3 w-3 mr-1" /> AI Assist
+            </TabsTrigger>
+            <TabsTrigger value="reviewer" className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-2.5 text-xs">Reviewer</TabsTrigger>
+            <TabsTrigger value="citations" className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-2.5 text-xs">Citations</TabsTrigger>
+          </TabsList>
 
-        <div className="flex-1 overflow-y-auto">
+          <div className="flex-1 overflow-y-auto">
           <TabsContent value="ai-assist" className="p-3 space-y-4 mt-0">
             <div className="space-y-2">
               <Label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Research Topic</Label>
@@ -397,8 +390,9 @@ const Editor = () => {
             </div>
           </TabsContent>
         </div>
-      </Tabs>
-    </div>
+        </Tabs>
+      </div>
+    </>
   );
 
   // ===== COLLAPSED LEFT BAR =====
@@ -428,47 +422,19 @@ const Editor = () => {
     </div>
   );
 
-  // ===== COLLAPSED RIGHT BAR =====
-  const collapsedRightBar = (
-    <div className="w-10 shrink-0 border-l border-border bg-card flex flex-col items-center py-2 gap-2">
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => setRightOpen(true)}>
-              <PanelRightOpen className="h-4 w-4" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent side="left"><p className="text-xs">Open tools</p></TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-      <div className="w-5 h-px bg-border" />
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button onClick={() => { setRightOpen(true); setRightTab("ai-assist"); }} className="h-6 w-6 flex items-center justify-center rounded text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
-              <Sparkles className="h-3.5 w-3.5" />
-            </button>
-          </TooltipTrigger>
-          <TooltipContent side="left"><p className="text-xs">AI Assist</p></TooltipContent>
-        </Tooltip>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button onClick={() => { setRightOpen(true); setRightTab("reviewer"); }} className="h-6 w-6 flex items-center justify-center rounded text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
-              <ShieldCheck className="h-3.5 w-3.5" />
-            </button>
-          </TooltipTrigger>
-          <TooltipContent side="left"><p className="text-xs">Reviewer</p></TooltipContent>
-        </Tooltip>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button onClick={() => { setRightOpen(true); setRightTab("citations"); }} className="h-6 w-6 flex items-center justify-center rounded text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
-              <Quote className="h-3.5 w-3.5" />
-            </button>
-          </TooltipTrigger>
-          <TooltipContent side="left"><p className="text-xs">Citations</p></TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-    </div>
+  // ===== RIGHT TOOLBAR BUTTONS (in main toolbar) =====
+  const rightToolbarButtons = (
+    <>
+      <Button variant="outline" size="sm" className="h-7 text-xs gap-1" onClick={() => { setRightOpen(true); setRightTab("ai-assist"); }}>
+        <Sparkles className="h-3.5 w-3.5" /> AI Assist
+      </Button>
+      <Button variant="outline" size="sm" className="h-7 text-xs gap-1" onClick={() => { setRightOpen(true); setRightTab("reviewer"); }}>
+        <ShieldCheck className="h-3.5 w-3.5" /> Review
+      </Button>
+      <Button variant="outline" size="sm" className="h-7 text-xs gap-1" onClick={() => { setRightOpen(true); setRightTab("citations"); }}>
+        <Quote className="h-3.5 w-3.5" /> Citations
+      </Button>
+    </>
   );
 
   // ===== MAIN EDITOR CONTENT =====
@@ -712,6 +678,7 @@ const Editor = () => {
         <Button variant="outline" size="sm" className="h-7 text-xs" onClick={handleSaveVersion}><Save className="h-3.5 w-3.5 mr-1" /> Save</Button>
         <Button variant="outline" size="sm" className="h-7 text-xs" onClick={() => nav("export")}><Download className="h-3.5 w-3.5 mr-1" /> Export</Button>
         <div className="h-4 w-px bg-border mx-1" />
+        {rightToolbarButtons}
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -730,21 +697,7 @@ const Editor = () => {
         {/* Left collapsed bar or panel */}
         {!leftOpen && !focusMode && collapsedLeftBar}
 
-        {leftOpen && rightOpen ? (
-          <ResizablePanelGroup direction="horizontal" className="flex-1">
-            <ResizablePanel defaultSize={18} minSize={15} maxSize={30}>
-              {leftPanelContent}
-            </ResizablePanel>
-            <ResizableHandle withHandle />
-            <ResizablePanel defaultSize={52} minSize={35}>
-              {editorContent}
-            </ResizablePanel>
-            <ResizableHandle withHandle />
-            <ResizablePanel defaultSize={30} minSize={18} maxSize={40}>
-              {rightPanelContent}
-            </ResizablePanel>
-          </ResizablePanelGroup>
-        ) : leftOpen && !rightOpen ? (
+        {leftOpen ? (
           <ResizablePanelGroup direction="horizontal" className="flex-1">
             <ResizablePanel defaultSize={20} minSize={15} maxSize={35}>
               {leftPanelContent}
@@ -754,25 +707,15 @@ const Editor = () => {
               {editorContent}
             </ResizablePanel>
           </ResizablePanelGroup>
-        ) : !leftOpen && rightOpen ? (
-          <ResizablePanelGroup direction="horizontal" className="flex-1">
-            <ResizablePanel defaultSize={70} minSize={50}>
-              {editorContent}
-            </ResizablePanel>
-            <ResizableHandle withHandle />
-            <ResizablePanel defaultSize={30} minSize={18} maxSize={45}>
-              {rightPanelContent}
-            </ResizablePanel>
-          </ResizablePanelGroup>
         ) : (
           <div className="flex-1">{editorContent}</div>
         )}
-
-        {/* Right collapsed bar */}
-        {!rightOpen && !focusMode && collapsedRightBar}
       </div>
 
-      {/* Floating AI button when right panel collapsed */}
+      {/* Right panel as floating overlay */}
+      {rightOpen && !focusMode && rightPanelContent}
+
+      {/* Floating AI button */}
       {!rightOpen && !focusMode && (
         <TooltipProvider>
           <Tooltip>
