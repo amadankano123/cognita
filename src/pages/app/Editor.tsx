@@ -566,8 +566,78 @@ const Editor = () => {
     </div>
   );
 
-  // Focus mode: full screen editor (portal to body)
+  // Focus mode: full screen editor with collapsible side panels (portal to body)
+  const [focusLeftOpen, setFocusLeftOpen] = useState(false);
+  const [focusRightOpen, setFocusRightOpen] = useState(false);
+
   if (focusMode) {
+    const focusLeftBar = (
+      <div className="w-10 border-r border-border bg-muted/30 flex flex-col items-center py-3 gap-2 shrink-0">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setFocusLeftOpen(true)}>
+                <PanelLeftOpen className="h-3.5 w-3.5" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="right"><p className="text-xs">Open Sections</p></TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <BookOpen className="h-3.5 w-3.5 text-muted-foreground" />
+      </div>
+    );
+
+    const focusRightBar = (
+      <div className="w-10 border-l border-border bg-muted/30 flex flex-col items-center py-3 gap-2 shrink-0">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setFocusRightOpen(true)}>
+                <PanelRightOpen className="h-3.5 w-3.5" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="left"><p className="text-xs">Open AI Tools</p></TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        <Bot className="h-3.5 w-3.5 text-muted-foreground" />
+      </div>
+    );
+
+    const focusLeftPanel = (
+      <div className="h-full flex flex-col bg-card border-r border-border" style={{ width: 280 }}>
+        <div className="flex items-center justify-between px-3 py-2 border-b border-border">
+          <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Sections</span>
+          <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setFocusLeftOpen(false)}>
+            <PanelLeftClose className="h-3.5 w-3.5" />
+          </Button>
+        </div>
+        <SectionBuilder activeSectionId={activeSectionId} onSelectSection={setActiveSectionId} />
+      </div>
+    );
+
+    const focusRightPanel = (
+      <div className="h-full flex flex-col bg-card border-l border-border" style={{ width: 320 }}>
+        <div className="flex items-center justify-between px-3 py-2 border-b border-border">
+          <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Tools</span>
+          <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setFocusRightOpen(false)}>
+            <PanelRightClose className="h-3.5 w-3.5" />
+          </Button>
+        </div>
+        <Tabs value={rightTab} onValueChange={setRightTab} className="flex-1 flex flex-col overflow-hidden">
+          <TabsList className="w-full rounded-none border-b border-border h-auto p-0 bg-transparent shrink-0">
+            <TabsTrigger value="ai-assist" className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-2.5 text-xs">
+              <Sparkles className="h-3 w-3 mr-1" /> AI Assist
+            </TabsTrigger>
+            <TabsTrigger value="reviewer" className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-2.5 text-xs">Reviewer</TabsTrigger>
+            <TabsTrigger value="citations" className="flex-1 rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent py-2.5 text-xs">Citations</TabsTrigger>
+          </TabsList>
+          <div className="flex-1 overflow-y-auto p-3">
+            <p className="text-xs text-muted-foreground">AI tools available here.</p>
+          </div>
+        </Tabs>
+      </div>
+    );
+
     return createPortal(
       <div className="animate-fade-in h-screen flex flex-col bg-background fixed inset-0 z-[9999]">
         {/* Focus mode toolbar */}
@@ -591,22 +661,15 @@ const Editor = () => {
             {savedToast && <span className="text-xs text-success flex items-center gap-1 animate-fade-in"><CheckCircle2 className="h-3 w-3" /> Saved</span>}
           </div>
         </div>
-        {editorContent}
 
-        {/* Floating AI button */}
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button
-                onClick={() => { setFocusMode(false); setRightOpen(true); }}
-                className="fixed bottom-6 right-6 h-12 w-12 rounded-full bg-primary text-primary-foreground shadow-elevated flex items-center justify-center hover:scale-105 transition-transform z-[10000]"
-              >
-                <Bot className="h-5 w-5" />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent side="left"><p className="text-xs">Open AI Reviewer</p></TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        {/* Focus mode body with collapsible panels */}
+        <div className="flex-1 flex overflow-hidden">
+          {focusLeftOpen ? focusLeftPanel : focusLeftBar}
+          <div className="flex-1 overflow-y-auto">
+            {editorContent}
+          </div>
+          {focusRightOpen ? focusRightPanel : focusRightBar}
+        </div>
       </div>,
       document.body
     );
