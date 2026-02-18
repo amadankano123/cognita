@@ -5,7 +5,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
-import cognitaLogo from "@/assets/cognita-logo.jpeg";
+import cognitaLogo from "@/assets/cognita-logo.png";
 
 const AppSidebar = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -30,7 +30,7 @@ const AppSidebar = () => {
   return (
     <aside className={cn("sticky top-0 h-screen border-r border-sidebar-border bg-sidebar flex flex-col transition-all duration-200", collapsed ? "w-16" : "w-60")}>
       <div className="h-14 flex items-center gap-2 px-4 border-b border-sidebar-border shrink-0">
-        <img src={cognitaLogo} alt="Cognita" className="h-7 w-7 rounded-md object-cover shrink-0" />
+        <img src={cognitaLogo} alt="Cognita Logo – Academic cap on book" className="h-8 w-8 object-contain shrink-0" />
         {!collapsed && <span className="font-display text-lg font-semibold text-foreground tracking-tight">Cognita</span>}
       </div>
       <nav className="flex-1 overflow-y-auto py-3 px-2 space-y-0.5">
