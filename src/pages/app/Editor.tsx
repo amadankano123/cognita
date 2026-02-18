@@ -20,6 +20,7 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import ContextAwareIndicator from "@/components/layout/ContextAwareIndicator";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import SectionBuilder from "@/components/editor/SectionBuilder";
 
 // --- AI Content Templates ---
 interface AiSubSection {
@@ -257,16 +258,9 @@ const Editor = () => {
       </div>
 
       <div className="flex gap-4 h-[calc(100vh-15rem)]">
-        {/* Section Navigator */}
-        <Card className="w-48 shrink-0 shadow-card overflow-y-auto">
-          <div className="p-3 border-b border-border"><h3 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Sections</h3></div>
-          <div className="py-1">
-            {project.sections.map(s => (
-              <button key={s.id} onClick={() => setActiveSectionId(s.id)} className={cn("w-full text-left px-3 py-2 text-sm transition-colors", activeSectionId === s.id ? "bg-accent text-accent-foreground font-medium" : "text-muted-foreground hover:bg-muted")}>
-                {s.order}. {s.title}
-              </button>
-            ))}
-          </div>
+        {/* Section Builder */}
+        <Card className="w-56 shrink-0 shadow-card overflow-hidden flex flex-col">
+          <SectionBuilder activeSectionId={activeSectionId} onSelectSection={setActiveSectionId} />
         </Card>
 
         {/* Main editor */}

@@ -142,6 +142,15 @@ export interface ActivityItem {
   timestamp: string;
 }
 
+export interface SectionMeta {
+  key: string;
+  mandatory: boolean;
+  enabled: boolean;
+  parentKey?: string;
+  approved?: boolean;
+  supervisorComment?: string;
+}
+
 export interface ResearchProject {
   id: string;
   title: string;
@@ -150,11 +159,13 @@ export interface ResearchProject {
   targetOutput: string;
   methodologyType: string;
   targetJournal: string;
+  projectType: string;
   status: "draft" | "in-progress" | "review" | "submitted" | "exported";
   createdAt: string;
   updatedAt: string;
   deadline?: string;
   sections: Section[];
+  sectionMeta: SectionMeta[];
   references: Reference[];
   dataFiles: DataFile[];
   dataset: Dataset;

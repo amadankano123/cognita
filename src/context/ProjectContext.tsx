@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
-import { ResearchProject, ExportRecord } from "@/types/research";
+import { ResearchProject, ExportRecord, SectionMeta, Section } from "@/types/research";
 import { defaultProject } from "@/data/mockProject";
+import { ProjectType, SECTION_TEMPLATES, templateToSections, mapSectionsToTemplate, TemplateSectionDef } from "@/data/sectionTemplates";
 
 interface ProjectContextType {
   project: ResearchProject;
@@ -12,9 +13,27 @@ interface ProjectContextType {
   addExport: (record: ExportRecord) => void;
   addAnalysisResult: (result: ResearchProject["analysisResults"][0]) => void;
   insertCitation: (sectionId: string, citation: string, cursorPosition?: number) => void;
+  switchProjectType: (newType: ProjectType) => void;
+  toggleSectionEnabled: (key: string) => void;
+  addCustomSection: (title: string, afterKey?: string) => void;
+  reorderSections: (fromIndex: number, toIndex: number) => void;
+  approveSection: (key: string) => void;
+  commentOnSection: (key: string, comment: string) => void;
+  getComplianceStats: () => { total: number; missing: number; empty: number; approved: number };
 }
 
 const ProjectContext = createContext<ProjectContextType | null>(null);
+
+function buildMetaFromTemplate(defs: TemplateSectionDef[], parentKey?: string): SectionMeta[] {
+  const result: SectionMeta[] = [];
+  for (const d of defs) {
+    result.push({ key: d.key, mandatory: d.mandatory, enabled: true, parentKey });
+    if (d.children) {
+      result.push(...buildMetaFromTemplate(d.children, d.key));
+    }
+  }
+  return result;
+}
 
 export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [project, setProject] = useState<ResearchProject>({ ...defaultProject });
@@ -54,8 +73,84 @@ export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }));
   }, []);
 
+  const switchProjectType = useCallback((newType: ProjectType) => {
+    setProject(prev => {
+      const template = SECTION_TEMPLATES[newType];
+      const newSections = templateToSections(newType);
+      const mappedSections = mapSectionsToTemplate(prev.sections, newSections);
+      const newMeta = buildMetaFromTemplate(template);
+      // Recalculate integrity
+      const mandatoryCount = newMeta.filter(m => m.mandatory).length;
+      const filledMandatory = newMeta.filter(m => m.mandatory && mappedSections.find(s => s.id === `tmpl-${m.key}`)?.content?.trim()).length;
+      const completeness = mandatoryCount > 0 ? Math.round((filledMandatory / mandatoryCount) * 100) : 100;
+      const integrityScore = Math.max(0, Math.min(100, Math.round(completeness * 0.4 + prev.integrityScore * 0.6)));
+      return { ...prev, projectType: newType, sections: mappedSections, sectionMeta: newMeta, integrityScore, updatedAt: new Date().toISOString().split("T")[0] };
+    });
+  }, []);
+
+  const toggleSectionEnabled = useCallback((key: string) => {
+    setProject(prev => ({
+      ...prev,
+      sectionMeta: prev.sectionMeta.map(m => m.key === key ? { ...m, enabled: !m.enabled } : m),
+    }));
+  }, []);
+
+  const addCustomSection = useCallback((title: string, afterKey?: string) => {
+    setProject(prev => {
+      const customKey = `custom-${Date.now()}`;
+      const customId = `tmpl-${customKey}`;
+      const newMeta: SectionMeta = { key: customKey, mandatory: false, enabled: true };
+      let insertIdx = prev.sections.length;
+      if (afterKey) {
+        const afterIdx = prev.sections.findIndex(s => s.id === `tmpl-${afterKey}`);
+        if (afterIdx >= 0) insertIdx = afterIdx + 1;
+      }
+      const newSection: Section = { id: customId, title, order: insertIdx + 1, content: "" };
+      const newSections = [...prev.sections];
+      newSections.splice(insertIdx, 0, newSection);
+      // Re-order
+      const reordered = newSections.map((s, i) => ({ ...s, order: i + 1 }));
+      return { ...prev, sections: reordered, sectionMeta: [...prev.sectionMeta, newMeta] };
+    });
+  }, []);
+
+  const reorderSections = useCallback((fromIndex: number, toIndex: number) => {
+    setProject(prev => {
+      const newSections = [...prev.sections];
+      const [moved] = newSections.splice(fromIndex, 1);
+      newSections.splice(toIndex, 0, moved);
+      return { ...prev, sections: newSections.map((s, i) => ({ ...s, order: i + 1 })) };
+    });
+  }, []);
+
+  const approveSection = useCallback((key: string) => {
+    setProject(prev => ({
+      ...prev,
+      sectionMeta: prev.sectionMeta.map(m => m.key === key ? { ...m, approved: !m.approved } : m),
+    }));
+  }, []);
+
+  const commentOnSection = useCallback((key: string, comment: string) => {
+    setProject(prev => ({
+      ...prev,
+      sectionMeta: prev.sectionMeta.map(m => m.key === key ? { ...m, supervisorComment: comment } : m),
+    }));
+  }, []);
+
+  const getComplianceStats = useCallback(() => {
+    const enabledMandatory = project.sectionMeta.filter(m => m.mandatory && m.enabled);
+    const total = enabledMandatory.length;
+    const missing = enabledMandatory.filter(m => !project.sections.find(s => s.id === `tmpl-${m.key}`)).length;
+    const empty = enabledMandatory.filter(m => {
+      const sec = project.sections.find(s => s.id === `tmpl-${m.key}`);
+      return sec && !sec.content.trim();
+    }).length;
+    const approved = project.sectionMeta.filter(m => m.approved).length;
+    return { total, missing, empty, approved };
+  }, [project.sectionMeta, project.sections]);
+
   return (
-    <ProjectContext.Provider value={{ project, setProject, resetProject, updateSection, toggleChecklist, uploadDataset, addExport, addAnalysisResult, insertCitation }}>
+    <ProjectContext.Provider value={{ project, setProject, resetProject, updateSection, toggleChecklist, uploadDataset, addExport, addAnalysisResult, insertCitation, switchProjectType, toggleSectionEnabled, addCustomSection, reorderSections, approveSection, commentOnSection, getComplianceStats }}>
       {children}
     </ProjectContext.Provider>
   );
