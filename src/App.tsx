@@ -10,6 +10,7 @@ import { InstitutionProvider } from "@/context/InstitutionContext";
 import Landing from "./pages/Landing";
 import Auth from "./pages/Auth";
 import Onboarding from "./pages/Onboarding";
+import SupervisorOnboarding from "./pages/SupervisorOnboarding";
 import NotFound from "./pages/NotFound";
 
 import AppLayout from "@/components/layout/AppLayout";
@@ -54,6 +55,7 @@ const App = () => (
                 <Route path="/" element={<Landing />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/onboarding" element={<Onboarding />} />
+                <Route path="/supervisor-onboarding" element={<SupervisorOnboarding />} />
 
                 {/* Researcher Workspace */}
                 <Route path="/app/:projectId" element={<AppLayout />}>
