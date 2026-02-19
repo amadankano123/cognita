@@ -33,6 +33,12 @@ import AdminCompliance from "./pages/admin/AdminCompliance";
 import AdminAnalytics from "./pages/admin/AdminAnalytics";
 import AdminSettings from "./pages/admin/AdminSettings";
 
+import SupervisorLayout from "@/components/layout/SupervisorLayout";
+import SupervisorStudents from "./pages/supervisor/SupervisorStudents";
+import SupervisorOverview from "./pages/supervisor/SupervisorOverview";
+import SupervisorNotifications from "./pages/supervisor/SupervisorNotifications";
+import StudentDetail from "./pages/supervisor/StudentDetail";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -78,6 +84,15 @@ const App = () => (
                   <Route path="compliance" element={<AdminCompliance />} />
                   <Route path="analytics" element={<AdminAnalytics />} />
                   <Route path="settings" element={<AdminSettings />} />
+                </Route>
+
+                {/* Supervisor Dashboard */}
+                <Route path="/supervisor" element={<SupervisorLayout />}>
+                  <Route index element={<Navigate to="students" replace />} />
+                  <Route path="students" element={<SupervisorStudents />} />
+                  <Route path="students/:studentId" element={<StudentDetail />} />
+                  <Route path="overview" element={<SupervisorOverview />} />
+                  <Route path="notifications" element={<SupervisorNotifications />} />
                 </Route>
 
                 <Route path="*" element={<NotFound />} />
