@@ -11,6 +11,7 @@ import Landing from "./pages/Landing";
 import Auth from "./pages/Auth";
 import Onboarding from "./pages/Onboarding";
 import SupervisorOnboarding from "./pages/SupervisorOnboarding";
+import AdminOnboarding from "./pages/AdminOnboarding";
 import NotFound from "./pages/NotFound";
 
 import AppLayout from "@/components/layout/AppLayout";
@@ -56,6 +57,7 @@ const App = () => (
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/onboarding" element={<Onboarding />} />
                 <Route path="/supervisor-onboarding" element={<SupervisorOnboarding />} />
+                <Route path="/admin-onboarding" element={<AdminOnboarding />} />
 
                 {/* Researcher Workspace */}
                 <Route path="/app/:projectId" element={<AppLayout />}>
