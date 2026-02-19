@@ -17,15 +17,20 @@ const Auth = () => {
   const { login, signup } = useAuth();
   const navigate = useNavigate();
 
+  const getPostAuthRoute = (selectedRole: AppRole, isSignup: boolean) => {
+    if (ADMIN_ROLES.includes(selectedRole)) return "/admin/dashboard";
+    if (selectedRole === "Supervisor") return "/supervisor/students";
+    return isSignup ? "/onboarding" : "/app/proj-001/dashboard";
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const isAdmin = ADMIN_ROLES.includes(role);
     if (mode === "login") {
       const success = login(email, password, role);
-      if (success) navigate(isAdmin ? "/admin/dashboard" : "/app/proj-001/dashboard");
+      if (success) navigate(getPostAuthRoute(role, false));
     } else {
       const success = signup(name, email, password, role);
-      if (success) navigate(isAdmin ? "/admin/dashboard" : "/onboarding");
+      if (success) navigate(getPostAuthRoute(role, true));
     }
   };
 
