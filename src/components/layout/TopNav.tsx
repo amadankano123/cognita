@@ -19,12 +19,13 @@ const TopNav = () => {
 
   // Only use project context on researcher routes
   let projectTitle = "";
+  const isSupervisorRoute = location.pathname.startsWith("/supervisor");
   try {
-    if (!isAdminRoute) {
+    if (!isAdminRoute && !isSupervisorRoute) {
       const { project } = useProject();
       projectTitle = project.title;
     }
-  } catch { /* admin route, no project context */ }
+  } catch { /* admin/supervisor route, no project context */ }
 
   const handleLogout = () => {
     logout();
@@ -52,8 +53,11 @@ const TopNav = () => {
     <header className="h-14 border-b border-border bg-card flex items-center justify-between px-6 shrink-0">
       {/* Left */}
       <div className="flex items-center gap-3 min-w-0">
-        {!isAdminRoute && projectTitle && (
+        {!isAdminRoute && !isSupervisorRoute && projectTitle && (
           <span className="text-sm font-medium text-foreground truncate max-w-xs">{projectTitle}</span>
+        )}
+        {isSupervisorRoute && (
+          <span className="text-sm font-medium text-foreground">Supervisor Dashboard</span>
         )}
         {isAdminRoute && (
           <span className="text-sm font-medium text-foreground">Institutional Dashboard</span>
@@ -65,7 +69,7 @@ const TopNav = () => {
 
       {/* Right */}
       <div className="flex items-center gap-3">
-        {!isAdminRoute && <ProjectContextDrawer />}
+        <ProjectContextDrawer />
 
         {/* Notifications */}
         <DropdownMenu open={notifOpen} onOpenChange={setNotifOpen}>

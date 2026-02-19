@@ -18,7 +18,7 @@ const Auth = () => {
   const navigate = useNavigate();
 
   const getPostAuthRoute = (selectedRole: AppRole, isSignup: boolean) => {
-    if (ADMIN_ROLES.includes(selectedRole)) return "/admin/dashboard";
+    if (ADMIN_ROLES.includes(selectedRole)) return isSignup ? "/admin-onboarding" : "/admin/dashboard";
     if (selectedRole === "Supervisor") return isSignup ? "/supervisor-onboarding" : "/supervisor/students";
     return isSignup ? "/onboarding" : "/app/proj-001/dashboard";
   };
