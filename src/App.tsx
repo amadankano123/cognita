@@ -9,6 +9,7 @@ import { InstitutionProvider } from "@/context/InstitutionContext";
 
 import Landing from "./pages/Landing";
 import Auth from "./pages/Auth";
+import ArchitectureDoc from "./pages/ArchitectureDoc";
 import Onboarding from "./pages/Onboarding";
 import SupervisorOnboarding from "./pages/SupervisorOnboarding";
 import AdminOnboarding from "./pages/AdminOnboarding";
@@ -54,6 +55,7 @@ const App = () => (
             <BrowserRouter>
               <Routes>
                 <Route path="/" element={<Landing />} />
+                <Route path="/architecture" element={<ArchitectureDoc />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/onboarding" element={<Onboarding />} />
                 <Route path="/supervisor-onboarding" element={<SupervisorOnboarding />} />
