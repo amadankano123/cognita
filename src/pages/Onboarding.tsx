@@ -19,7 +19,7 @@ const Onboarding = () => {
   const [targetJournal, setTargetJournal] = useState("Computers and Electronics in Agriculture");
   const [template, setTemplate] = useState("journal");
 
-  const handleCreate = () => navigate("/app/proj-001/dashboard");
+  const handleCreate = () => navigate("/app/student/dashboard");
 
   const templates = [
     { id: "proposal", label: "Research Proposal", desc: "Standard academic proposal structure", icon: FileText },
