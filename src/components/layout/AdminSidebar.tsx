@@ -1,6 +1,6 @@
 import { NavLink, useLocation } from "react-router-dom";
 import {
-  LayoutDashboard, FolderOpen, Users, Shield, BarChart3, Settings, ChevronLeft,
+  LayoutDashboard, FolderOpen, Users, Shield, Settings, ChevronLeft, Building2, Layers,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -8,10 +8,11 @@ import cognitaLogo from "@/assets/cognita-logo.png";
 
 const navItems = [
   { title: "Dashboard", path: "/admin/dashboard", icon: LayoutDashboard },
+  { title: "Faculties", path: "/admin/faculties", icon: Building2 },
+  { title: "Departments", path: "/admin/departments", icon: Layers },
+  { title: "Users", path: "/admin/users", icon: Users },
   { title: "Projects", path: "/admin/projects", icon: FolderOpen },
-  { title: "Researchers", path: "/admin/researchers", icon: Users },
   { title: "Compliance", path: "/admin/compliance", icon: Shield },
-  { title: "Analytics", path: "/admin/analytics", icon: BarChart3 },
   { title: "Settings", path: "/admin/settings", icon: Settings },
 ];
 
@@ -22,7 +23,7 @@ const AdminSidebar = () => {
   return (
     <aside className={cn("sticky top-0 h-screen border-r border-sidebar-border bg-sidebar flex flex-col transition-all duration-200", collapsed ? "w-16" : "w-60")}>
       <div className="h-14 flex items-center gap-2 px-4 border-b border-sidebar-border shrink-0">
-        <img src={cognitaLogo} alt="Cognita Logo – Academic cap on book" className="h-8 w-8 object-contain shrink-0" />
+        <img src={cognitaLogo} alt="Cognita Logo" className="h-8 w-8 object-contain shrink-0" />
         {!collapsed && (
           <div className="min-w-0">
             <span className="font-display text-lg font-semibold text-foreground tracking-tight block">Cognita</span>

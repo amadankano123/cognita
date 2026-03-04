@@ -1,48 +1,99 @@
-export type AppRole =
-  | "Undergraduate Student"
-  | "Master's Student"
-  | "PhD Student"
-  | "Researcher"
-  | "Supervisor"
-  | "Research Director"
-  | "Compliance Officer";
+// ========================
+// ROLES
+// ========================
+export type AppRole = "Student" | "Supervisor" | "Head of Department" | "Research Director";
+export type StudentCategory = "Undergraduate" | "Masters" | "PhD";
+export type AcademicTitle =
+  | "Graduate Assistant (GA)"
+  | "Assistant Lecturer"
+  | "Lecturer III"
+  | "Lecturer II"
+  | "Lecturer I"
+  | "Senior Lecturer"
+  | "Associate Professor"
+  | "Professor";
 
-export const ADMIN_ROLES: AppRole[] = ["Research Director", "Compliance Officer"];
-export const RESEARCHER_ROLES: AppRole[] = ["Undergraduate Student", "Master's Student", "PhD Student", "Researcher", "Supervisor"];
+export type ProjectType =
+  | "Thesis"
+  | "Dissertation"
+  | "Proposal"
+  | "Seminar"
+  | "Progress Report"
+  | "Final Report"
+  | "Journal Article"
+  | "Review Article"
+  | "Conference Paper"
+  | "Grant Proposal";
 
-export interface RoleGroup {
-  label: string;
-  roles: { value: AppRole; label: string }[];
-}
+export const ADMIN_ROLES: AppRole[] = ["Research Director"];
+export const HOD_ROLES: AppRole[] = ["Head of Department"];
+export const ALL_ROLES: AppRole[] = ["Student", "Supervisor", "Head of Department", "Research Director"];
 
-export const ROLE_GROUPS: RoleGroup[] = [
-  { label: "Undergraduate", roles: [{ value: "Undergraduate Student", label: "Undergraduate Student" }] },
-  {
-    label: "Postgraduate",
-    roles: [
-      { value: "Master's Student", label: "Master's Student" },
-      { value: "PhD Student", label: "PhD Student" },
-    ],
-  },
-  { label: "Faculty", roles: [
-    { value: "Researcher", label: "Researcher" },
-    { value: "Supervisor", label: "Supervisor" },
-  ]},
-  { label: "Administration", roles: [
-    { value: "Research Director", label: "Research Director (Admin)" },
-    { value: "Compliance Officer", label: "Compliance Officer (Admin)" },
-  ]},
+export const ACADEMIC_TITLES: AcademicTitle[] = [
+  "Graduate Assistant (GA)",
+  "Assistant Lecturer",
+  "Lecturer III",
+  "Lecturer II",
+  "Lecturer I",
+  "Senior Lecturer",
+  "Associate Professor",
+  "Professor",
 ];
 
+export const PROJECT_TYPES: ProjectType[] = [
+  "Thesis", "Dissertation", "Proposal", "Seminar", "Progress Report",
+  "Final Report", "Journal Article", "Review Article", "Conference Paper", "Grant Proposal",
+];
+
+export const STUDENT_CATEGORIES: StudentCategory[] = ["Undergraduate", "Masters", "PhD"];
+
+// ========================
+// USER
+// ========================
 export interface User {
   id: string;
   name: string;
   email: string;
   avatar?: string;
-  role: string;
+  role: AppRole;
   institution: string;
+  // Student-specific
+  studentCategory?: StudentCategory;
+  matricId?: string;
+  faculty?: string;
+  department?: string;
+  programme?: string;
+  projectType?: ProjectType;
+  supervisorId?: string;
+  // Supervisor-specific
+  academicTitle?: AcademicTitle;
+  // HOD-specific (uses faculty + department)
 }
 
+// ========================
+// INSTITUTION SHARED DATA
+// ========================
+export interface Faculty {
+  id: string;
+  name: string;
+}
+
+export interface Department {
+  id: string;
+  name: string;
+  facultyId: string;
+}
+
+export interface SupervisorAssignment {
+  studentId: string;
+  supervisorId: string;
+  assignedBy: string;
+  assignedAt: string;
+}
+
+// ========================
+// RESEARCH PROJECT & RELATED
+// ========================
 export interface Reference {
   id: string;
   title: string;
@@ -184,8 +235,9 @@ export interface ResearchProject {
   aiMode: string;
 }
 
-// --- Institution Layer Types ---
-
+// ========================
+// INSTITUTION LAYER
+// ========================
 export interface InstitutionalProject {
   id: string;
   title: string;
@@ -227,6 +279,7 @@ export interface ResearcherProfile {
 
 export interface InstitutionData {
   name: string;
+  country: string;
   totalResearchers: number;
   activeProjects: number;
   publicationsThisYear: number;
@@ -235,4 +288,13 @@ export interface InstitutionData {
   researchers: ResearcherProfile[];
   aiReviewsThisMonth: number;
   departments: string[];
+  faculties: Faculty[];
+  departmentList: Department[];
+  users: User[];
+  assignments: SupervisorAssignment[];
+  aiPolicy: {
+    reviewerOnly: boolean;
+    rewriteSuggestions: boolean;
+    fullGeneration: boolean;
+  };
 }

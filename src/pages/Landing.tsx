@@ -17,10 +17,10 @@ import cognitaLogo from "@/assets/cognita-logo.png";
 
 const Landing = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, isAdmin } = useAuth();
+  const { isAuthenticated, isAdmin, role } = useAuth();
   const [demoOpen, setDemoOpen] = useState(false);
 
-  const dashPath = isAdmin ? "/admin/dashboard" : "/app/proj-001/dashboard";
+  const dashPath = isAdmin ? "/admin/dashboard" : role === "Head of Department" ? "/hod/dashboard" : role === "Supervisor" ? "/supervisor/dashboard" : "/app/student/dashboard";
 
   return (
     <div className="min-h-screen bg-background">
