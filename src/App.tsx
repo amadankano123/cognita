@@ -10,6 +10,9 @@ import { InstitutionProvider } from "@/context/InstitutionContext";
 import Landing from "./pages/Landing";
 import Auth from "./pages/Auth";
 import ArchitectureDoc from "./pages/ArchitectureDoc";
+import Onboarding from "./pages/Onboarding";
+import SupervisorOnboarding from "./pages/SupervisorOnboarding";
+import AdminOnboarding from "./pages/AdminOnboarding";
 import NotFound from "./pages/NotFound";
 
 import AppLayout from "@/components/layout/AppLayout";
@@ -21,32 +24,23 @@ import DataPage from "./pages/app/DataPage";
 import Analysis from "./pages/app/Analysis";
 import Results from "./pages/app/Results";
 import Export from "./pages/app/Export";
+import Collaboration from "./pages/app/Collaboration";
 import Settings from "./pages/app/Settings";
 import PlagiarismChecker from "./pages/app/PlagiarismChecker";
 
 import AdminLayout from "@/components/layout/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
-import AdminFaculties from "./pages/admin/AdminFaculties";
-import AdminDepartments from "./pages/admin/AdminDepartments";
-import AdminUsers from "./pages/admin/AdminUsers";
 import AdminProjects from "./pages/admin/AdminProjects";
+import AdminResearchers from "./pages/admin/AdminResearchers";
 import AdminCompliance from "./pages/admin/AdminCompliance";
+import AdminAnalytics from "./pages/admin/AdminAnalytics";
 import AdminSettings from "./pages/admin/AdminSettings";
 
 import SupervisorLayout from "@/components/layout/SupervisorLayout";
-import SupervisorDashboard from "./pages/supervisor/SupervisorDashboard";
 import SupervisorStudents from "./pages/supervisor/SupervisorStudents";
-import SupervisorReviews from "./pages/supervisor/SupervisorReviews";
-import SupervisorProfile from "./pages/supervisor/SupervisorProfile";
+import SupervisorOverview from "./pages/supervisor/SupervisorOverview";
+import SupervisorNotifications from "./pages/supervisor/SupervisorNotifications";
 import StudentDetail from "./pages/supervisor/StudentDetail";
-
-import HodLayout from "@/components/layout/HodLayout";
-import HodDashboard from "./pages/hod/HodDashboard";
-import HodStudents from "./pages/hod/HodStudents";
-import HodSupervisors from "./pages/hod/HodSupervisors";
-import HodAssignments from "./pages/hod/HodAssignments";
-import HodProjects from "./pages/hod/HodProjects";
-import HodSettings from "./pages/hod/HodSettings";
 
 const queryClient = new QueryClient();
 
@@ -63,9 +57,12 @@ const App = () => (
                 <Route path="/" element={<Landing />} />
                 <Route path="/architecture" element={<ArchitectureDoc />} />
                 <Route path="/auth" element={<Auth />} />
+                <Route path="/onboarding" element={<Onboarding />} />
+                <Route path="/supervisor-onboarding" element={<SupervisorOnboarding />} />
+                <Route path="/admin-onboarding" element={<AdminOnboarding />} />
 
-                {/* Student Workspace */}
-                <Route path="/app/student" element={<AppLayout />}>
+                {/* Researcher Workspace */}
+                <Route path="/app/:projectId" element={<AppLayout />}>
                   <Route index element={<Navigate to="dashboard" replace />} />
                   <Route path="dashboard" element={<Dashboard />} />
                   <Route path="editor" element={<Editor />} />
@@ -76,45 +73,32 @@ const App = () => (
                   <Route path="results" element={<Results />} />
                   <Route path="export" element={<Export />} />
                   <Route path="plagiarism" element={<PlagiarismChecker />} />
+                  <Route path="collaboration" element={<Collaboration />} />
                   <Route path="settings" element={<Settings />} />
                 </Route>
 
-                {/* Legacy redirects */}
-                <Route path="/app" element={<Navigate to="/app/student/dashboard" replace />} />
-                <Route path="/app/dashboard" element={<Navigate to="/app/student/dashboard" replace />} />
-                <Route path="/app/:projectId/*" element={<Navigate to="/app/student/dashboard" replace />} />
+                {/* Legacy redirect */}
+                <Route path="/app" element={<Navigate to="/app/proj-001/dashboard" replace />} />
+                <Route path="/app/dashboard" element={<Navigate to="/app/proj-001/dashboard" replace />} />
 
-                {/* Institution Admin */}
+                {/* Institution Dashboard */}
                 <Route path="/admin" element={<AdminLayout />}>
                   <Route index element={<Navigate to="dashboard" replace />} />
                   <Route path="dashboard" element={<AdminDashboard />} />
-                  <Route path="faculties" element={<AdminFaculties />} />
-                  <Route path="departments" element={<AdminDepartments />} />
-                  <Route path="users" element={<AdminUsers />} />
                   <Route path="projects" element={<AdminProjects />} />
+                  <Route path="researchers" element={<AdminResearchers />} />
                   <Route path="compliance" element={<AdminCompliance />} />
+                  <Route path="analytics" element={<AdminAnalytics />} />
                   <Route path="settings" element={<AdminSettings />} />
-                </Route>
-
-                {/* HOD Dashboard */}
-                <Route path="/hod" element={<HodLayout />}>
-                  <Route index element={<Navigate to="dashboard" replace />} />
-                  <Route path="dashboard" element={<HodDashboard />} />
-                  <Route path="students" element={<HodStudents />} />
-                  <Route path="supervisors" element={<HodSupervisors />} />
-                  <Route path="assignments" element={<HodAssignments />} />
-                  <Route path="projects" element={<HodProjects />} />
-                  <Route path="settings" element={<HodSettings />} />
                 </Route>
 
                 {/* Supervisor Dashboard */}
                 <Route path="/supervisor" element={<SupervisorLayout />}>
-                  <Route index element={<Navigate to="dashboard" replace />} />
-                  <Route path="dashboard" element={<SupervisorDashboard />} />
+                  <Route index element={<Navigate to="students" replace />} />
                   <Route path="students" element={<SupervisorStudents />} />
                   <Route path="students/:studentId" element={<StudentDetail />} />
-                  <Route path="reviews" element={<SupervisorReviews />} />
-                  <Route path="profile" element={<SupervisorProfile />} />
+                  <Route path="overview" element={<SupervisorOverview />} />
+                  <Route path="notifications" element={<SupervisorNotifications />} />
                 </Route>
 
                 <Route path="*" element={<NotFound />} />

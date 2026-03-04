@@ -37,11 +37,12 @@ const SectionBuilder = ({ activeSectionId, onSelectSection }: SectionBuilderProp
   const [commentKey, setCommentKey] = useState<string | null>(null);
   const [commentText, setCommentText] = useState("");
 
-  const isStudent = role === "Student";
+  const isStudent = role === "Undergraduate Student" || role === "Master's Student" || role === "PhD Student";
   const isSupervisor = role === "Supervisor";
-  const isAdmin = role === "Research Director" || role === "Head of Department";
+  const isAdmin = role === "Research Director" || role === "Compliance Officer";
+  const isResearcher = role === "Researcher";
   const canEdit = !isAdmin;
-  const canDelete = isStudent || isSupervisor;
+  const canDelete = isResearcher || isSupervisor;
 
   const currentType = project.projectType as ProjectType;
   const template = SECTION_TEMPLATES[currentType] || SECTION_TEMPLATES["Journal Article"];

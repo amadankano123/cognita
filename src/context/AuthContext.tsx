@@ -1,15 +1,14 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
-import { User, AppRole } from "@/types/research";
-import { mockUsers } from "@/data/mockInstitution";
+import { User, AppRole, ADMIN_ROLES } from "@/types/research";
+import { mockUser, mockAdminUser } from "@/data/mockProject";
 
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   role: AppRole;
   isAdmin: boolean;
-  isHod: boolean;
   login: (email: string, password: string, role: AppRole) => boolean;
-  signup: (userData: Partial<User> & { role: AppRole }) => boolean;
+  signup: (name: string, email: string, password: string, role?: AppRole) => boolean;
   logout: () => void;
   switchRole: (role: AppRole) => void;
 }
@@ -17,53 +16,40 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [role, setRole] = useState<AppRole>("Student");
+  const [user, setUser] = useState<User | null>(mockUser);
+  const [role, setRole] = useState<AppRole>("Researcher");
 
-  const isAdmin = role === "Research Director";
-  const isHod = role === "Head of Department";
+  const isAdmin = ADMIN_ROLES.includes(role);
 
   const login = useCallback((_email: string, _password: string, selectedRole: AppRole) => {
-    // Find a mock user with the matching role
-    const found = mockUsers.find(u => u.role === selectedRole) || mockUsers[0];
-    setUser({ ...found, role: selectedRole });
+    const isAdminRole = ADMIN_ROLES.includes(selectedRole);
+    setUser(isAdminRole ? { ...mockAdminUser, role: selectedRole } : { ...mockUser, role: selectedRole });
     setRole(selectedRole);
     return true;
   }, []);
 
-  const signup = useCallback((userData: Partial<User> & { role: AppRole }) => {
-    const newUser: User = {
-      id: `u-${Date.now()}`,
-      name: userData.name || "New User",
-      email: userData.email || "",
-      role: userData.role,
-      institution: "Greenfield University",
-      studentCategory: userData.studentCategory,
-      matricId: userData.matricId,
-      faculty: userData.faculty,
-      department: userData.department,
-      programme: userData.programme,
-      projectType: userData.projectType,
-      academicTitle: userData.academicTitle,
-    };
-    setUser(newUser);
-    setRole(userData.role);
+  const signup = useCallback((name: string, email: string, _password: string, selectedRole?: AppRole) => {
+    const r = selectedRole || "Researcher";
+    const isAdminRole = ADMIN_ROLES.includes(r);
+    const base = isAdminRole ? mockAdminUser : mockUser;
+    setUser({ ...base, name: name || base.name, email: email || base.email, role: r });
+    setRole(r);
     return true;
   }, []);
 
   const logout = useCallback(() => {
     setUser(null);
-    setRole("Student");
+    setRole("Researcher");
   }, []);
 
   const switchRole = useCallback((newRole: AppRole) => {
-    const found = mockUsers.find(u => u.role === newRole) || mockUsers[0];
-    setUser(prev => prev ? { ...found, name: prev.name, email: prev.email } : null);
+    const isAdminRole = ADMIN_ROLES.includes(newRole);
+    setUser(prev => prev ? { ...(isAdminRole ? mockAdminUser : mockUser), name: prev.name, email: prev.email, role: newRole } : null);
     setRole(newRole);
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, role, isAdmin, isHod, login, signup, logout, switchRole }}>
+    <AuthContext.Provider value={{ user, isAuthenticated: !!user, role, isAdmin, login, signup, logout, switchRole }}>
       {children}
     </AuthContext.Provider>
   );
@@ -75,9 +61,8 @@ export const useAuth = () => {
     return {
       user: null,
       isAuthenticated: false,
-      role: "Student" as AppRole,
+      role: "Researcher" as AppRole,
       isAdmin: false,
-      isHod: false,
       login: () => false,
       signup: () => false,
       logout: () => {},

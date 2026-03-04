@@ -7,7 +7,7 @@ import {
   Info, BookOpen, Database, Download, FlaskConical, FileText, Target,
   GraduationCap, Calendar, Users, Shield, BarChart3, Building2, Bell,
 } from "lucide-react";
-import { AppRole } from "@/types/research";
+import { ADMIN_ROLES } from "@/types/research";
 import { mockSupervisedStudents } from "@/data/mockSupervisor";
 import { mockInstitution } from "@/data/mockInstitution";
 
@@ -159,8 +159,7 @@ const AdminDrawerContent = () => {
 /* ── Main Drawer Component ── */
 const ProjectContextDrawer = () => {
   const { role } = useAuth();
-  const isAdmin = role === "Research Director";
-  const isHod = role === "Head of Department";
+  const isAdmin = ADMIN_ROLES.includes(role);
   const isSupervisor = role === "Supervisor";
 
   const drawerTitle = isAdmin

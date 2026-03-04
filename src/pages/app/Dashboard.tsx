@@ -1,28 +1,19 @@
 import { useState } from "react";
 import PageHeader from "@/components/layout/PageHeader";
 import { useProject } from "@/context/ProjectContext";
-import { useAuth } from "@/context/AuthContext";
-import { useInstitution } from "@/context/InstitutionContext";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
-import { FileEdit, BookOpen, BarChart3, Clock, ShieldCheck, Database, Download, Bot, ArrowRight, User, AlertCircle } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { FileEdit, BookOpen, BarChart3, Clock, Users, ShieldCheck, Database, Download, Bot, ArrowRight } from "lucide-react";
+import { useNavigate, useParams } from "react-router-dom";
 
 const Dashboard = () => {
   const { project, toggleChecklist } = useProject();
-  const { user } = useAuth();
-  const { institution } = useInstitution();
   const navigate = useNavigate();
-  const nav = (path: string) => navigate(`/app/student/${path}`);
-
-  // Supervisor assignment
-  const assignment = institution.assignments.find(a => a.studentId === user?.id);
-  const supervisor = assignment ? institution.users.find(u => u.id === assignment.supervisorId) : null;
-  const isAssigned = !!supervisor;
+  const { projectId } = useParams();
+  const pid = projectId || project.id;
+  const nav = (path: string) => navigate(`/app/${pid}/${path}`);
 
   const daysToDeadline = project.deadline
     ? Math.max(0, Math.ceil((new Date(project.deadline).getTime() - Date.now()) / 86400000))
@@ -39,31 +30,7 @@ const Dashboard = () => {
 
   return (
     <div className="max-w-5xl animate-fade-in">
-      <PageHeader title="Student Dashboard" subtitle="Overview of your research project" breadcrumb={project.title} />
-
-      {/* Supervisor Status Card */}
-      <Card className="p-4 mb-4 shadow-card">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-              <User className="h-5 w-5 text-primary" />
-            </div>
-            <div>
-              <p className="text-sm font-medium">Supervisor</p>
-              {isAssigned ? (
-                <p className="text-xs text-muted-foreground">{supervisor?.name} · {supervisor?.academicTitle}</p>
-              ) : (
-                <p className="text-xs text-destructive flex items-center gap-1">
-                  <AlertCircle className="h-3 w-3" /> Awaiting Supervisor Assignment
-                </p>
-              )}
-            </div>
-          </div>
-          {user?.studentCategory && (
-            <Badge variant="secondary">{user.studentCategory}</Badge>
-          )}
-        </div>
-      </Card>
+      <PageHeader title="Dashboard" subtitle="Overview of your research project" breadcrumb={project.title} />
 
       <Card className="p-5 mb-6 shadow-card">
         <div className="flex flex-col sm:flex-row sm:items-center gap-4">
@@ -76,7 +43,7 @@ const Dashboard = () => {
               )}
             </div>
             <h2 className="font-display text-lg font-semibold truncate">{project.title}</h2>
-            <p className="text-sm text-muted-foreground">{project.discipline} · {project.targetOutput}</p>
+            <p className="text-sm text-muted-foreground">{project.discipline} · {project.targetOutput} · {project.targetJournal}</p>
           </div>
           <div className="sm:w-48">
             <div className="flex justify-between text-xs text-muted-foreground mb-1"><span>Progress</span><span>{project.progress}%</span></div>
@@ -114,21 +81,9 @@ const Dashboard = () => {
             </div>
           </Card>
 
-          {/* Request Review button (disabled if unassigned) */}
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <div>
-                <Button className="w-full" size="lg" disabled={!isAssigned} onClick={() => nav("ai-reviewer")}>
-                  <Bot className="h-4 w-4 mr-2" /> Send for Supervisor Review
-                </Button>
-              </div>
-            </TooltipTrigger>
-            {!isAssigned && (
-              <TooltipContent>
-                <p>You must be assigned a supervisor before requesting review</p>
-              </TooltipContent>
-            )}
-          </Tooltip>
+          <Button className="w-full" size="lg" onClick={() => nav("ai-reviewer")}>
+            <Bot className="h-4 w-4 mr-2" /> Run Full Review
+          </Button>
         </div>
 
         <div className="space-y-4">
@@ -141,6 +96,20 @@ const Dashboard = () => {
                   <div className="min-w-0"><p className="text-sm font-medium">{a.label}</p><p className="text-xs text-muted-foreground">{a.desc}</p></div>
                   <ArrowRight className="h-3 w-3 text-muted-foreground ml-auto shrink-0" />
                 </button>
+              ))}
+            </div>
+          </Card>
+
+          <Card className="shadow-card p-4">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-display font-semibold flex items-center gap-2"><Users className="h-4 w-4 text-muted-foreground" /> Team</h3>
+              <button onClick={() => nav("collaboration")} className="text-sm text-primary hover:underline">Manage →</button>
+            </div>
+            <div className="flex -space-x-2">
+              {project.collaborators.map(c => (
+                <div key={c.id} className="h-8 w-8 rounded-full bg-primary/10 border-2 border-card flex items-center justify-center text-xs font-medium text-primary" title={c.name}>
+                  {c.name.split(" ").map(n => n[0]).join("")}
+                </div>
               ))}
             </div>
           </Card>
