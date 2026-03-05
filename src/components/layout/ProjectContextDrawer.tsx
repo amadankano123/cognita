@@ -5,11 +5,12 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import {
   Info, BookOpen, Database, Download, FlaskConical, FileText, Target,
-  GraduationCap, Calendar, Users, Shield, BarChart3, Building2, Bell,
+  GraduationCap, Calendar, Users, UserCheck, Shield, BarChart3, Building2, Bell,
 } from "lucide-react";
-import { ADMIN_ROLES } from "@/types/research";
+import { ADMIN_ROLES, HOD_ROLES } from "@/types/research";
 import { mockSupervisedStudents } from "@/data/mockSupervisor";
 import { mockInstitution } from "@/data/mockInstitution";
+import { mockHodDepartment, mockDepartmentSupervisors, mockDepartmentStudents } from "@/data/mockHod";
 
 /* ── Shared item row ── */
 const InfoRow = ({ icon: Icon, label, value }: { icon: any; label: string; value: string }) => (
@@ -156,17 +157,48 @@ const AdminDrawerContent = () => {
   );
 };
 
+/* ── HOD drawer ── */
+const HodDrawerContent = () => {
+  const { user } = useAuth();
+  const dept = mockHodDepartment;
+  const supervisors = mockDepartmentSupervisors;
+  const students = mockDepartmentStudents;
+  const criticalCount = students.filter(s => s.complianceStatus === "Critical").length;
+
+  return (
+    <>
+      <div className="flex items-center gap-2 mb-3">
+        <Badge variant="outline" className="text-xs border-primary/30 text-primary">Head of Department</Badge>
+        <span className="text-xs text-muted-foreground">{user?.name}</span>
+      </div>
+      <Separator />
+      <div className="space-y-4 pt-4">
+        <InfoRow icon={Building2} label="Department" value={dept.departmentName} />
+        <InfoRow icon={Building2} label="Faculty" value={dept.faculty} />
+        <InfoRow icon={Users} label="Total Students" value={`${dept.totalStudents}`} />
+        <InfoRow icon={UserCheck} label="Supervisors" value={`${dept.totalSupervisors}`} />
+        <InfoRow icon={BarChart3} label="Avg Progress" value={`${dept.avgProgress}%`} />
+        <InfoRow icon={Shield} label="Avg Integrity" value={`${dept.avgIntegrity}%`} />
+        <InfoRow icon={Bell} label="Critical Alerts" value={`${criticalCount}`} />
+      </div>
+    </>
+  );
+};
+
 /* ── Main Drawer Component ── */
 const ProjectContextDrawer = () => {
   const { role } = useAuth();
   const isAdmin = ADMIN_ROLES.includes(role);
+  const isHod = HOD_ROLES.includes(role);
   const isSupervisor = role === "Supervisor";
 
   const drawerTitle = isAdmin
     ? "Institution Overview"
-    : isSupervisor
-      ? "Supervision Summary"
-      : "Project Context";
+    : isHod
+      ? "Department Summary"
+      : isSupervisor
+        ? "Supervision Summary"
+        : "Project Context";
 
   return (
     <Sheet>
@@ -182,6 +214,8 @@ const ProjectContextDrawer = () => {
         <div className="mt-4 space-y-1">
           {isAdmin ? (
             <AdminDrawerContent />
+          ) : isHod ? (
+            <HodDrawerContent />
           ) : isSupervisor ? (
             <SupervisorDrawerContent />
           ) : (
