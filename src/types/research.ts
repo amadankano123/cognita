@@ -4,10 +4,12 @@ export type AppRole =
   | "PhD Student"
   | "Researcher"
   | "Supervisor"
+  | "Head of Department"
   | "Research Director"
   | "Compliance Officer";
 
 export const ADMIN_ROLES: AppRole[] = ["Research Director", "Compliance Officer"];
+export const HOD_ROLES: AppRole[] = ["Head of Department"];
 export const RESEARCHER_ROLES: AppRole[] = ["Undergraduate Student", "Master's Student", "PhD Student", "Researcher", "Supervisor"];
 
 export interface RoleGroup {
@@ -27,6 +29,7 @@ export const ROLE_GROUPS: RoleGroup[] = [
   { label: "Faculty", roles: [
     { value: "Researcher", label: "Researcher" },
     { value: "Supervisor", label: "Supervisor" },
+    { value: "Head of Department", label: "Head of Department" },
   ]},
   { label: "Administration", roles: [
     { value: "Research Director", label: "Research Director (Admin)" },
