@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import {
   Info, BookOpen, Database, Download, FlaskConical, FileText, Target,
-  GraduationCap, Calendar, Users, Shield, BarChart3, Building2, Bell,
+  GraduationCap, Calendar, Users, UserCheck, Shield, BarChart3, Building2, Bell,
 } from "lucide-react";
 import { ADMIN_ROLES, HOD_ROLES } from "@/types/research";
 import { mockSupervisedStudents } from "@/data/mockSupervisor";
