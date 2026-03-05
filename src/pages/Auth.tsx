@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/context/AuthContext";
-import { AppRole, ADMIN_ROLES, ROLE_GROUPS } from "@/types/research";
+import { AppRole, ADMIN_ROLES, HOD_ROLES, ROLE_GROUPS } from "@/types/research";
 
 const Auth = () => {
   const [mode, setMode] = useState<"login" | "signup">("login");
@@ -19,6 +19,7 @@ const Auth = () => {
 
   const getPostAuthRoute = (selectedRole: AppRole, isSignup: boolean) => {
     if (ADMIN_ROLES.includes(selectedRole)) return isSignup ? "/admin-onboarding" : "/admin/dashboard";
+    if (HOD_ROLES.includes(selectedRole)) return isSignup ? "/hod-onboarding" : "/hod/overview";
     if (selectedRole === "Supervisor") return isSignup ? "/supervisor-onboarding" : "/supervisor/students";
     return isSignup ? "/onboarding" : "/app/proj-001/dashboard";
   };
@@ -94,6 +95,9 @@ const Auth = () => {
               </Select>
               {ADMIN_ROLES.includes(role) && (
                 <p className="text-xs text-primary mt-1">🏛️ You'll be directed to the Institutional Dashboard</p>
+              )}
+              {HOD_ROLES.includes(role) && (
+                <p className="text-xs text-primary mt-1">🏢 You'll be directed to the Department Dashboard</p>
               )}
             </div>
             <Button type="submit" className="w-full">

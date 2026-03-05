@@ -7,13 +7,14 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator, DropdownMenuLabel } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { AppRole, ADMIN_ROLES, ROLE_GROUPS } from "@/types/research";
+import { AppRole, ADMIN_ROLES, HOD_ROLES, ROLE_GROUPS } from "@/types/research";
 import ProjectContextDrawer from "./ProjectContextDrawer";
 
 const TopNav = () => {
   const { user, logout, role, isAdmin, switchRole } = useAuth();
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith("/admin");
+  const isHodRoute = location.pathname.startsWith("/hod");
   const navigate = useNavigate();
   const [notifOpen, setNotifOpen] = useState(false);
 
@@ -21,11 +22,11 @@ const TopNav = () => {
   let projectTitle = "";
   const isSupervisorRoute = location.pathname.startsWith("/supervisor");
   try {
-    if (!isAdminRoute && !isSupervisorRoute) {
+    if (!isAdminRoute && !isSupervisorRoute && !isHodRoute) {
       const { project } = useProject();
       projectTitle = project.title;
     }
-  } catch { /* admin/supervisor route, no project context */ }
+  } catch { /* admin/supervisor/hod route, no project context */ }
 
   const handleLogout = () => {
     logout();
@@ -34,7 +35,9 @@ const TopNav = () => {
 
   const handleSwitchRole = (newRole: AppRole) => {
     switchRole(newRole);
-    if (newRole === "Supervisor") {
+    if (HOD_ROLES.includes(newRole)) {
+      navigate("/hod/overview");
+    } else if (newRole === "Supervisor") {
       navigate("/supervisor/students");
     } else if (ADMIN_ROLES.includes(newRole)) {
       navigate("/admin/dashboard");
@@ -53,11 +56,14 @@ const TopNav = () => {
     <header className="h-14 border-b border-border bg-card flex items-center justify-between px-6 shrink-0">
       {/* Left */}
       <div className="flex items-center gap-3 min-w-0">
-        {!isAdminRoute && !isSupervisorRoute && projectTitle && (
+        {!isAdminRoute && !isSupervisorRoute && !isHodRoute && projectTitle && (
           <span className="text-sm font-medium text-foreground truncate max-w-xs">{projectTitle}</span>
         )}
         {isSupervisorRoute && (
           <span className="text-sm font-medium text-foreground">Supervisor Dashboard</span>
+        )}
+        {isHodRoute && (
+          <span className="text-sm font-medium text-foreground">Department Dashboard</span>
         )}
         {isAdminRoute && (
           <span className="text-sm font-medium text-foreground">Institutional Dashboard</span>
