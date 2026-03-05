@@ -11,10 +11,14 @@ const SupervisorOverview = () => {
   const avgProgress = Math.round(students.reduce((a, s) => a + s.progress, 0) / students.length);
   const critical = students.filter(s => s.complianceStatus === "Critical");
   const warning = students.filter(s => s.complianceStatus === "Warning");
+
+  const undergradStudents = students.filter(s => s.degreeLevel === "Undergraduate");
+  const postgradStudents = students.filter(s => ["Master's", "PhD"].includes(s.degreeLevel));
+
   const byDegree = {
-    PhD: students.filter(s => s.degreeLevel === "PhD"),
+    Undergraduate: undergradStudents,
     "Master's": students.filter(s => s.degreeLevel === "Master's"),
-    Undergraduate: students.filter(s => s.degreeLevel === "Undergraduate"),
+    PhD: students.filter(s => s.degreeLevel === "PhD"),
   };
 
   const needsAttention = students
@@ -26,11 +30,19 @@ const SupervisorOverview = () => {
       <PageHeader title="Supervisor Overview" subtitle="Summary of research supervision across all degree levels" />
 
       {/* KPI row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-6">
         <Card className="p-4 shadow-card text-center">
           <Users className="h-5 w-5 text-primary mx-auto mb-1" />
           <p className="text-2xl font-bold">{students.length}</p>
           <p className="text-xs text-muted-foreground">Total Students</p>
+        </Card>
+        <Card className="p-4 shadow-card text-center">
+          <p className="text-2xl font-bold">{undergradStudents.length}</p>
+          <p className="text-xs text-muted-foreground">Undergraduate</p>
+        </Card>
+        <Card className="p-4 shadow-card text-center">
+          <p className="text-2xl font-bold">{postgradStudents.length}</p>
+          <p className="text-xs text-muted-foreground">Postgraduate</p>
         </Card>
         <Card className="p-4 shadow-card text-center">
           <GraduationCap className="h-5 w-5 text-primary mx-auto mb-1" />
