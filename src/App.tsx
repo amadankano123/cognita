@@ -68,7 +68,6 @@ const App = () => (
                 <Route path="/supervisor-onboarding" element={<SupervisorOnboarding />} />
                 <Route path="/hod-onboarding" element={<HodOnboarding />} />
                 <Route path="/admin-onboarding" element={<AdminOnboarding />} />
-                <Route path="/admin-onboarding" element={<AdminOnboarding />} />
 
                 {/* Researcher Workspace */}
                 <Route path="/app/:projectId" element={<AppLayout />}>
