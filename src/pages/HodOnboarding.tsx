@@ -35,6 +35,7 @@ const HodOnboarding = () => {
   const [title, setTitle] = useState("Professor");
   const [maxPerSupervisor, setMaxPerSupervisor] = useState("5");
   const [similarityThreshold, setSimilarityThreshold] = useState("25");
+  const [aiDetectionThreshold, setAiDetectionThreshold] = useState("30");
 
   const steps = [
     { num: 1, label: "Department Info" },
@@ -123,6 +124,11 @@ const HodOnboarding = () => {
                 <Input type="number" value={similarityThreshold} onChange={e => setSimilarityThreshold(e.target.value)} />
                 <p className="text-xs text-muted-foreground mt-1">Students exceeding this will be flagged as Warning</p>
               </div>
+              <div>
+                <Label>AI Detection Threshold (%)</Label>
+                <Input type="number" value={aiDetectionThreshold} onChange={e => setAiDetectionThreshold(e.target.value)} />
+                <p className="text-xs text-muted-foreground mt-1">Maximum acceptable AI-generated content percentage</p>
+              </div>
             </div>
           )}
 
@@ -140,6 +146,7 @@ const HodOnboarding = () => {
                   <span className="text-muted-foreground">Department</span><span className="font-medium">{department || "—"}</span>
                   <span className="text-muted-foreground">Max Students/Supervisor</span><span className="font-medium">{maxPerSupervisor}</span>
                   <span className="text-muted-foreground">Similarity Threshold</span><span className="font-medium">{similarityThreshold}%</span>
+                  <span className="text-muted-foreground">AI Detection Threshold</span><span className="font-medium">{aiDetectionThreshold}%</span>
                 </div>
               </div>
             </div>
