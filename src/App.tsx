@@ -12,6 +12,7 @@ import Auth from "./pages/Auth";
 import ArchitectureDoc from "./pages/ArchitectureDoc";
 import Onboarding from "./pages/Onboarding";
 import SupervisorOnboarding from "./pages/SupervisorOnboarding";
+import HodOnboarding from "./pages/HodOnboarding";
 import AdminOnboarding from "./pages/AdminOnboarding";
 import NotFound from "./pages/NotFound";
 
@@ -42,6 +43,12 @@ import SupervisorOverview from "./pages/supervisor/SupervisorOverview";
 import SupervisorNotifications from "./pages/supervisor/SupervisorNotifications";
 import StudentDetail from "./pages/supervisor/StudentDetail";
 
+import HodLayout from "@/components/layout/HodLayout";
+import HodOverview from "./pages/hod/HodOverview";
+import HodSupervisors from "./pages/hod/HodSupervisors";
+import HodStudents from "./pages/hod/HodStudents";
+import HodSettings from "./pages/hod/HodSettings";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -59,6 +66,8 @@ const App = () => (
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/onboarding" element={<Onboarding />} />
                 <Route path="/supervisor-onboarding" element={<SupervisorOnboarding />} />
+                <Route path="/hod-onboarding" element={<HodOnboarding />} />
+                <Route path="/admin-onboarding" element={<AdminOnboarding />} />
                 <Route path="/admin-onboarding" element={<AdminOnboarding />} />
 
                 {/* Researcher Workspace */}
@@ -99,6 +108,15 @@ const App = () => (
                   <Route path="students/:studentId" element={<StudentDetail />} />
                   <Route path="overview" element={<SupervisorOverview />} />
                   <Route path="notifications" element={<SupervisorNotifications />} />
+                </Route>
+
+                {/* HOD Dashboard */}
+                <Route path="/hod" element={<HodLayout />}>
+                  <Route index element={<Navigate to="overview" replace />} />
+                  <Route path="overview" element={<HodOverview />} />
+                  <Route path="supervisors" element={<HodSupervisors />} />
+                  <Route path="students" element={<HodStudents />} />
+                  <Route path="settings" element={<HodSettings />} />
                 </Route>
 
                 <Route path="*" element={<NotFound />} />
