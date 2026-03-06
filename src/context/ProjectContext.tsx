@@ -58,9 +58,17 @@ function buildMetaFromTemplate(defs: TemplateSectionDef[], parentKey?: string): 
 }
 
 export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [project, setProject] = useState<ResearchProject>({ ...defaultProject });
+  const [project, setProject] = useState<ResearchProject>(loadSavedProject);
 
-  const resetProject = useCallback(() => setProject({ ...defaultProject }), []);
+  // Auto-save to localStorage whenever project changes
+  useEffect(() => {
+    saveProjectToStorage(project);
+  }, [project]);
+
+  const resetProject = useCallback(() => {
+    localStorage.removeItem(STORAGE_KEY);
+    setProject({ ...defaultProject });
+  }, []);
 
   const updateSection = useCallback((sectionId: string, content: string) => {
     setProject(prev => ({ ...prev, sections: prev.sections.map(s => s.id === sectionId ? { ...s, content } : s), updatedAt: new Date().toISOString().split("T")[0] }));
