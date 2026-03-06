@@ -1,7 +1,29 @@
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
 import { ResearchProject, ExportRecord, SectionMeta, Section } from "@/types/research";
 import { defaultProject } from "@/data/mockProject";
 import { ProjectType, SECTION_TEMPLATES, templateToSections, mapSectionsToTemplate, TemplateSectionDef } from "@/data/sectionTemplates";
+
+const STORAGE_KEY = "cognita-project-data";
+
+function loadSavedProject(): ResearchProject {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      return JSON.parse(saved) as ResearchProject;
+    }
+  } catch (e) {
+    console.warn("Failed to load saved project data:", e);
+  }
+  return { ...defaultProject };
+}
+
+function saveProjectToStorage(project: ResearchProject) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(project));
+  } catch (e) {
+    console.warn("Failed to save project data:", e);
+  }
+}
 
 interface ProjectContextType {
   project: ResearchProject;
