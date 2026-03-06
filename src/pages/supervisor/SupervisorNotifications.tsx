@@ -51,9 +51,10 @@ const SupervisorNotifications = () => {
             <SelectItem value="all">All Alerts</SelectItem>
             <SelectItem value="plagiarism-risk">Plagiarism Risk</SelectItem>
             <SelectItem value="analysis-issue">Analysis Issues</SelectItem>
+            <SelectItem value="milestone">Submissions & Approvals</SelectItem>
             <SelectItem value="overdue">Overdue</SelectItem>
+            <SelectItem value="missing-data">Missing Data</SelectItem>
             <SelectItem value="deadline">Deadlines</SelectItem>
-            <SelectItem value="milestone">Milestones</SelectItem>
           </SelectContent>
         </Select>
         <span className="text-sm text-muted-foreground">{filtered.length} alert{filtered.length !== 1 ? "s" : ""}</span>

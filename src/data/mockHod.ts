@@ -1,4 +1,4 @@
-import { SupervisedStudent, mockSupervisedStudents } from "./mockSupervisor";
+import { SupervisedStudent, mockDepartmentStudents as allDeptStudents } from "./mockSupervisor";
 
 export interface DepartmentSupervisor {
   id: string;
@@ -82,7 +82,7 @@ export const mockDepartmentSupervisors: DepartmentSupervisor[] = [
   },
 ];
 
-export const mockDepartmentStudents: SupervisedStudent[] = mockSupervisedStudents;
+export const mockDepartmentStudents: SupervisedStudent[] = allDeptStudents;
 
 export interface HodDepartmentData {
   departmentName: string;

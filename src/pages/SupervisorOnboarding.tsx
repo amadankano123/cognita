@@ -6,23 +6,23 @@ import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, ArrowRight, Check, UserPlus, Users, X, GraduationCap, Building2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Users, GraduationCap, Building2, Eye, Pencil, Search } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import cognitaLogo from "@/assets/cognita-logo.png";
-import { DegreeLevel } from "@/data/mockSupervisor";
-
-interface StudentEntry {
-  id: string;
-  name: string;
-  email: string;
-  degreeLevel: DegreeLevel;
-  projectTitle: string;
-}
+import { mockSupervisedStudents, type SupervisedStudent, type DegreeLevel } from "@/data/mockSupervisor";
+import { toast } from "sonner";
 
 const DEPARTMENTS = [
   "Computer Science", "Biology", "Psychology", "Economics", "Education",
   "Engineering", "Medicine", "Chemistry", "Environmental Science",
   "Social Sciences", "Mathematics", "Physics", "Law", "Business",
 ];
+
+const degreeColor: Record<DegreeLevel, string> = {
+  Undergraduate: "bg-accent text-accent-foreground",
+  "Master's": "bg-primary/10 text-primary",
+  PhD: "bg-primary/20 text-primary",
+};
 
 const SupervisorOnboarding = () => {
   const navigate = useNavigate();
@@ -33,37 +33,41 @@ const SupervisorOnboarding = () => {
   const [specialization, setSpecialization] = useState("");
   const [title, setTitle] = useState("Professor");
 
-  // Step 2 — Add students
-  const [students, setStudents] = useState<StudentEntry[]>([]);
-  const [newName, setNewName] = useState("");
-  const [newEmail, setNewEmail] = useState("");
-  const [newDegree, setNewDegree] = useState<DegreeLevel>("PhD");
-  const [newProject, setNewProject] = useState("");
+  // Step 2 — View & verify students (assigned by HOD)
+  const [students, setStudents] = useState<SupervisedStudent[]>(mockSupervisedStudents);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [editingStudent, setEditingStudent] = useState<SupervisedStudent | null>(null);
+  const [editForm, setEditForm] = useState({ name: "", email: "", degreeLevel: "" as DegreeLevel, projectTitle: "" });
 
-  const addStudent = () => {
-    if (!newName.trim() || !newEmail.trim()) return;
-    setStudents(prev => [
-      ...prev,
-      { id: crypto.randomUUID(), name: newName, email: newEmail, degreeLevel: newDegree, projectTitle: newProject },
-    ]);
-    setNewName("");
-    setNewEmail("");
-    setNewProject("");
+  const openEdit = (student: SupervisedStudent) => {
+    setEditingStudent(student);
+    setEditForm({ name: student.name, email: student.email, degreeLevel: student.degreeLevel, projectTitle: student.projectTitle });
+    setEditDialogOpen(true);
   };
 
-  const removeStudent = (id: string) => setStudents(prev => prev.filter(s => s.id !== id));
+  const saveEdit = () => {
+    if (!editingStudent) return;
+    setStudents(prev => prev.map(s => s.id === editingStudent.id ? { ...s, ...editForm } : s));
+    setEditDialogOpen(false);
+    toast.success(`Updated ${editForm.name}'s information`);
+  };
+
+  const filteredStudents = students.filter(s => {
+    if (!searchQuery) return true;
+    const q = searchQuery.toLowerCase();
+    return s.name.toLowerCase().includes(q) || s.projectTitle.toLowerCase().includes(q) || s.email.toLowerCase().includes(q);
+  });
+
+  const ugCount = students.filter(s => s.degreeLevel === "Undergraduate").length;
+  const mastersCount = students.filter(s => s.degreeLevel === "Master's").length;
+  const phdCount = students.filter(s => s.degreeLevel === "PhD").length;
 
   const handleFinish = () => navigate("/supervisor/students");
 
-  const degreeColor: Record<DegreeLevel, string> = {
-    Undergraduate: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300",
-    "Master's": "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300",
-    PhD: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300",
-  };
-
   const steps = [
     { num: 1, label: "Your Profile" },
-    { num: 2, label: "Add Students" },
+    { num: 2, label: "Verify Students" },
     { num: 3, label: "Review & Start" },
   ];
 
@@ -133,67 +137,56 @@ const SupervisorOnboarding = () => {
             </div>
           )}
 
-          {/* ── Step 2: Add Students ── */}
+          {/* ── Step 2: View, Verify & Edit Assigned Students ── */}
           {step === 2 && (
             <div className="space-y-5 animate-fade-in">
-              <div className="flex items-center gap-2 mb-4">
-                <Users className="h-5 w-5 text-primary" />
-                <h2 className="font-display text-xl font-semibold">Add Your Students</h2>
+              <div className="flex items-center gap-2 mb-2">
+                <Eye className="h-5 w-5 text-primary" />
+                <h2 className="font-display text-xl font-semibold">Verify Assigned Students</h2>
               </div>
-              <p className="text-sm text-muted-foreground -mt-2">Add students you currently supervise. You can always add more later.</p>
+              <p className="text-sm text-muted-foreground -mt-2">
+                The following students have been assigned to you by the Head of Department. Please verify their information and edit if needed.
+              </p>
 
-              {/* Added students list */}
-              {students.length > 0 && (
-                <div className="space-y-2">
-                  {students.map(s => (
-                    <div key={s.id} className="flex items-center justify-between p-3 rounded-lg border border-border bg-muted/30">
-                      <div className="flex items-center gap-3 min-w-0">
-                        <GraduationCap className="h-4 w-4 text-muted-foreground shrink-0" />
-                        <div className="min-w-0">
-                          <p className="font-medium text-sm truncate">{s.name}</p>
-                          <p className="text-xs text-muted-foreground truncate">{s.email}</p>
-                        </div>
-                        <Badge className={`text-[10px] shrink-0 ${degreeColor[s.degreeLevel]}`}>{s.degreeLevel}</Badge>
+              {/* Summary badges */}
+              <div className="flex flex-wrap gap-2">
+                <Badge variant="secondary" className="text-xs">{ugCount} Undergraduate</Badge>
+                <Badge variant="secondary" className="text-xs">{mastersCount} Master's</Badge>
+                <Badge variant="secondary" className="text-xs">{phdCount} PhD</Badge>
+                <Badge variant="outline" className="text-xs">{students.length} Total</Badge>
+              </div>
+
+              {/* Search */}
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input placeholder="Search by name, email, or project..." className="pl-9" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
+              </div>
+
+              {/* Student list */}
+              <div className="space-y-2 max-h-[360px] overflow-y-auto pr-1">
+                {filteredStudents.map(s => (
+                  <div key={s.id} className="flex items-center justify-between p-3 rounded-lg border border-border bg-muted/30 hover:bg-muted/50 transition-colors">
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
+                      <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center text-xs font-semibold text-primary shrink-0">
+                        {s.name.split(" ").map(n => n[0]).join("")}
                       </div>
-                      <Button variant="ghost" size="icon" className="h-7 w-7 shrink-0" onClick={() => removeStudent(s.id)}>
-                        <X className="h-3.5 w-3.5" />
-                      </Button>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <p className="font-medium text-sm truncate">{s.name}</p>
+                          <Badge className={`text-[10px] shrink-0 ${degreeColor[s.degreeLevel]}`}>{s.degreeLevel}</Badge>
+                        </div>
+                        <p className="text-xs text-muted-foreground truncate">{s.projectTitle}</p>
+                        <p className="text-xs text-muted-foreground/70 truncate">{s.email}</p>
+                      </div>
                     </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Add student form */}
-              <div className="border border-dashed border-border rounded-lg p-4 space-y-3 bg-card">
-                <p className="text-sm font-medium flex items-center gap-2"><UserPlus className="h-4 w-4 text-primary" /> New Student</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  <div>
-                    <Label className="text-xs">Full Name</Label>
-                    <Input value={newName} onChange={e => setNewName(e.target.value)} placeholder="Student name" />
+                    <Button variant="ghost" size="sm" className="shrink-0 gap-1 text-xs" onClick={() => openEdit(s)}>
+                      <Pencil className="h-3 w-3" /> Edit
+                    </Button>
                   </div>
-                  <div>
-                    <Label className="text-xs">Email</Label>
-                    <Input type="email" value={newEmail} onChange={e => setNewEmail(e.target.value)} placeholder="student@university.ac" />
-                  </div>
-                  <div>
-                    <Label className="text-xs">Degree Level</Label>
-                    <Select value={newDegree} onValueChange={v => setNewDegree(v as DegreeLevel)}>
-                      <SelectTrigger><SelectValue /></SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Undergraduate">Undergraduate</SelectItem>
-                        <SelectItem value="Master's">Master's</SelectItem>
-                        <SelectItem value="PhD">PhD</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label className="text-xs">Project Title (optional)</Label>
-                    <Input value={newProject} onChange={e => setNewProject(e.target.value)} placeholder="Research project title" />
-                  </div>
-                </div>
-                <Button variant="outline" size="sm" onClick={addStudent} disabled={!newName.trim() || !newEmail.trim()}>
-                  <UserPlus className="h-3.5 w-3.5 mr-2" /> Add Student
-                </Button>
+                ))}
+                {filteredStudents.length === 0 && (
+                  <p className="text-sm text-muted-foreground text-center py-6">No students match your search.</p>
+                )}
               </div>
             </div>
           )}
@@ -216,21 +209,22 @@ const SupervisorOnboarding = () => {
               </div>
 
               <div className="rounded-lg border border-border p-4 space-y-3">
-                <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Students ({students.length})</h3>
-                {students.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">No students added yet. You can add them later from your dashboard.</p>
-                ) : (
-                  <div className="space-y-2">
-                    {students.map(s => (
-                      <div key={s.id} className="flex items-center gap-3 text-sm">
-                        <GraduationCap className="h-4 w-4 text-muted-foreground" />
-                        <span className="font-medium">{s.name}</span>
-                        <Badge className={`text-[10px] ${degreeColor[s.degreeLevel]}`}>{s.degreeLevel}</Badge>
-                        {s.projectTitle && <span className="text-muted-foreground truncate hidden sm:inline">— {s.projectTitle}</span>}
-                      </div>
-                    ))}
-                  </div>
-                )}
+                <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">Assigned Students ({students.length})</h3>
+                <div className="flex flex-wrap gap-2 mb-2">
+                  <Badge variant="secondary" className="text-xs">{ugCount} UG</Badge>
+                  <Badge variant="secondary" className="text-xs">{mastersCount} Master's</Badge>
+                  <Badge variant="secondary" className="text-xs">{phdCount} PhD</Badge>
+                </div>
+                <div className="space-y-2 max-h-[240px] overflow-y-auto">
+                  {students.map(s => (
+                    <div key={s.id} className="flex items-center gap-3 text-sm">
+                      <GraduationCap className="h-4 w-4 text-muted-foreground shrink-0" />
+                      <span className="font-medium">{s.name}</span>
+                      <Badge className={`text-[10px] ${degreeColor[s.degreeLevel]}`}>{s.degreeLevel}</Badge>
+                      <span className="text-muted-foreground truncate hidden sm:inline text-xs">— {s.projectTitle}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           )}
@@ -252,6 +246,44 @@ const SupervisorOnboarding = () => {
           </div>
         </Card>
       </div>
+
+      {/* Edit Student Dialog */}
+      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Student Information</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
+            <div>
+              <Label>Full Name</Label>
+              <Input value={editForm.name} onChange={e => setEditForm(f => ({ ...f, name: e.target.value }))} />
+            </div>
+            <div>
+              <Label>Email</Label>
+              <Input type="email" value={editForm.email} onChange={e => setEditForm(f => ({ ...f, email: e.target.value }))} />
+            </div>
+            <div>
+              <Label>Degree Level</Label>
+              <Select value={editForm.degreeLevel} onValueChange={v => setEditForm(f => ({ ...f, degreeLevel: v as DegreeLevel }))}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Undergraduate">Undergraduate</SelectItem>
+                  <SelectItem value="Master's">Master's</SelectItem>
+                  <SelectItem value="PhD">PhD</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label>Project Title</Label>
+              <Input value={editForm.projectTitle} onChange={e => setEditForm(f => ({ ...f, projectTitle: e.target.value }))} />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEditDialogOpen(false)}>Cancel</Button>
+            <Button onClick={saveEdit} disabled={!editForm.name.trim()}>Save Changes</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
