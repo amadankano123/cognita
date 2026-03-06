@@ -1,7 +1,29 @@
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, { createContext, useContext, useState, useCallback, useEffect } from "react";
 import { ResearchProject, ExportRecord, SectionMeta, Section } from "@/types/research";
 import { defaultProject } from "@/data/mockProject";
 import { ProjectType, SECTION_TEMPLATES, templateToSections, mapSectionsToTemplate, TemplateSectionDef } from "@/data/sectionTemplates";
+
+const STORAGE_KEY = "cognita-project-data";
+
+function loadSavedProject(): ResearchProject {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      return JSON.parse(saved) as ResearchProject;
+    }
+  } catch (e) {
+    console.warn("Failed to load saved project data:", e);
+  }
+  return { ...defaultProject };
+}
+
+function saveProjectToStorage(project: ResearchProject) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(project));
+  } catch (e) {
+    console.warn("Failed to save project data:", e);
+  }
+}
 
 interface ProjectContextType {
   project: ResearchProject;
@@ -36,9 +58,17 @@ function buildMetaFromTemplate(defs: TemplateSectionDef[], parentKey?: string): 
 }
 
 export const ProjectProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [project, setProject] = useState<ResearchProject>({ ...defaultProject });
+  const [project, setProject] = useState<ResearchProject>(loadSavedProject);
 
-  const resetProject = useCallback(() => setProject({ ...defaultProject }), []);
+  // Auto-save to localStorage whenever project changes
+  useEffect(() => {
+    saveProjectToStorage(project);
+  }, [project]);
+
+  const resetProject = useCallback(() => {
+    localStorage.removeItem(STORAGE_KEY);
+    setProject({ ...defaultProject });
+  }, []);
 
   const updateSection = useCallback((sectionId: string, content: string) => {
     setProject(prev => ({ ...prev, sections: prev.sections.map(s => s.id === sectionId ? { ...s, content } : s), updatedAt: new Date().toISOString().split("T")[0] }));
