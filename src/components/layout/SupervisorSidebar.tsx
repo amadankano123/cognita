@@ -1,15 +1,21 @@
 import { NavLink, useLocation } from "react-router-dom";
 import {
   LayoutDashboard, Users, Bell, ChevronLeft, GraduationCap,
+  FileSearch, CheckSquare, BarChart3, MessageSquare, Settings,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import cognitaLogo from "@/assets/cognita-logo.png";
 
 const navItems = [
-  { title: "My Students", path: "/supervisor/students", icon: Users },
   { title: "Overview", path: "/supervisor/overview", icon: LayoutDashboard },
+  { title: "My Students", path: "/supervisor/students", icon: Users },
+  { title: "Reviews", path: "/supervisor/reviews", icon: FileSearch },
+  { title: "Approvals", path: "/supervisor/approvals", icon: CheckSquare },
+  { title: "Analytics", path: "/supervisor/analytics", icon: BarChart3 },
   { title: "Notifications", path: "/supervisor/notifications", icon: Bell },
+  { title: "Messages", path: "/supervisor/messages", icon: MessageSquare },
+  { title: "Settings", path: "/supervisor/settings", icon: Settings },
 ];
 
 const SupervisorSidebar = () => {

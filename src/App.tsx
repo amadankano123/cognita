@@ -107,11 +107,16 @@ const App = () => (
 
                 {/* Supervisor Dashboard */}
                 <Route path="/supervisor" element={<SupervisorLayout />}>
-                  <Route index element={<Navigate to="students" replace />} />
+                  <Route index element={<Navigate to="overview" replace />} />
+                  <Route path="overview" element={<SupervisorOverview />} />
                   <Route path="students" element={<SupervisorStudents />} />
                   <Route path="students/:studentId" element={<StudentDetail />} />
-                  <Route path="overview" element={<SupervisorOverview />} />
+                  <Route path="reviews" element={<SupervisorReviews />} />
+                  <Route path="approvals" element={<SupervisorApprovals />} />
+                  <Route path="analytics" element={<SupervisorAnalytics />} />
                   <Route path="notifications" element={<SupervisorNotifications />} />
+                  <Route path="messages" element={<SupervisorMessages />} />
+                  <Route path="settings" element={<SupervisorSettings />} />
                 </Route>
 
                 {/* HOD Dashboard */}
