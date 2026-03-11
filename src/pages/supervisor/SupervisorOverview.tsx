@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Sparkles, Users, AlertTriangle, CheckCircle, GraduationCap } from "lucide-react";
 import { mockSupervisedStudents } from "@/data/mockSupervisor";
+import { useAuth } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
 
 const SupervisorOverview = () => {
