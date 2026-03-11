@@ -9,14 +9,18 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Separator } from "@/components/ui/separator";
 import { Save, User, Bell, Shield } from "lucide-react";
 import { toast } from "@/components/ui/sonner";
+import { useAuth } from "@/context/AuthContext";
 
 const SupervisorSettings = () => {
+  const { user } = useAuth();
+
   const [profile, setProfile] = useState({
-    name: "Dr. Sarah Johnson",
-    email: "s.johnson@university.ac.za",
+    name: user?.name || "Prof. Kwame Mwangi",
+    email: user?.email || "k.mwangi@university.ac",
     department: "Computer Science",
-    title: "Senior Lecturer",
-    phone: "+27 12 345 6789",
+    title: "Professor",
+    phone: "+234 80 123 4567",
+    specialization: "Machine Learning & Data Privacy",
   });
 
   const [notifications, setNotifications] = useState({
@@ -52,6 +56,7 @@ const SupervisorSettings = () => {
             <div><Label>Email</Label><Input value={profile.email} onChange={e => setProfile(p => ({ ...p, email: e.target.value }))} /></div>
             <div><Label>Department</Label><Input value={profile.department} onChange={e => setProfile(p => ({ ...p, department: e.target.value }))} /></div>
             <div><Label>Title</Label><Input value={profile.title} onChange={e => setProfile(p => ({ ...p, title: e.target.value }))} /></div>
+            <div><Label>Specialization</Label><Input value={profile.specialization} onChange={e => setProfile(p => ({ ...p, specialization: e.target.value }))} /></div>
             <div><Label>Phone</Label><Input value={profile.phone} onChange={e => setProfile(p => ({ ...p, phone: e.target.value }))} /></div>
           </div>
         </div>

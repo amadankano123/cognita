@@ -4,9 +4,11 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Sparkles, Users, AlertTriangle, CheckCircle, GraduationCap } from "lucide-react";
 import { mockSupervisedStudents } from "@/data/mockSupervisor";
+import { useAuth } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
 
 const SupervisorOverview = () => {
+  const { user } = useAuth();
   const students = mockSupervisedStudents;
   const avgProgress = Math.round(students.reduce((a, s) => a + s.progress, 0) / students.length);
   const critical = students.filter(s => s.complianceStatus === "Critical");
@@ -27,7 +29,7 @@ const SupervisorOverview = () => {
 
   return (
     <div className="max-w-5xl animate-fade-in">
-      <PageHeader title="Supervisor Overview" subtitle="Summary of research supervision across all degree levels" />
+      <PageHeader title="Supervisor Overview" subtitle={`${user?.name || "Supervisor"} — Summary of research supervision across all degree levels`} />
 
       {/* KPI row */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-6">

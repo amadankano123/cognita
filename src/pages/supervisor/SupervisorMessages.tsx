@@ -3,37 +3,50 @@ import PageHeader from "@/components/layout/PageHeader";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Search, Send, MessageSquare } from "lucide-react";
 import { mockSupervisedStudents } from "@/data/mockSupervisor";
+import { useAuth } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
 
 interface Message {
   id: string;
   from: "supervisor" | "student";
+  authorName: string;
   text: string;
   time: string;
 }
 
-const mockConversations: Record<string, Message[]> = {
-  "stu-001": [
-    { id: "m1", from: "student", text: "Good morning Prof. I've submitted my literature review for your review.", time: "9:15 AM" },
-    { id: "m2", from: "supervisor", text: "Thank you. I'll review it by end of day and provide feedback.", time: "10:30 AM" },
-    { id: "m3", from: "student", text: "Appreciated. Should I proceed with the methodology draft in the meantime?", time: "10:45 AM" },
-  ],
-  "stu-002": [
-    { id: "m4", from: "student", text: "I'm having trouble accessing the dataset for my analysis.", time: "Yesterday" },
-    { id: "m5", from: "supervisor", text: "Let me check with the data custodian. I'll get back to you.", time: "Yesterday" },
-  ],
-};
-
 const SupervisorMessages = () => {
+  const { user } = useAuth();
+  const supervisorName = user?.name || "Supervisor";
+
+  // Use actual student IDs from mockSupervisedStudents
+  const initialConversations: Record<string, Message[]> = {
+    "stu-ug-001": [
+      { id: "m1", from: "student", authorName: "Fatima Al-Hassan", text: "Good morning Prof. I've submitted my literature review for your review.", time: "9:15 AM" },
+      { id: "m2", from: "supervisor", authorName: supervisorName, text: "Thank you Fatima. I'll review it by end of day and provide feedback.", time: "10:30 AM" },
+      { id: "m3", from: "student", authorName: "Fatima Al-Hassan", text: "Appreciated. Should I proceed with the methodology draft in the meantime?", time: "10:45 AM" },
+    ],
+    "stu-ug-002": [
+      { id: "m4", from: "student", authorName: "Daniel Mensah", text: "I'm having trouble with the BLE beacon calibration data for my analysis.", time: "Yesterday" },
+      { id: "m5", from: "supervisor", authorName: supervisorName, text: "Let me check with the lab coordinator. I'll get back to you.", time: "Yesterday" },
+    ],
+    "stu-ug-011": [
+      { id: "m6", from: "supervisor", authorName: supervisorName, text: "Chiamaka, your similarity index is at 32% which is critical. We need to discuss your literature review sections.", time: "2 hours ago" },
+      { id: "m7", from: "student", authorName: "Chiamaka Eze", text: "I understand Prof. I've started rewriting the flagged sections. Can we meet tomorrow?", time: "1 hour ago" },
+    ],
+    "stu-pg-001": [
+      { id: "m8", from: "student", authorName: "Amara Okafor", text: "Prof, I've submitted my preliminary findings paper draft for co-author review.", time: "5 hours ago" },
+      { id: "m9", from: "supervisor", authorName: supervisorName, text: "Excellent work Amara. I'll review and add comments by Friday. Also, let's discuss the ε parameter selection for the differential privacy experiment.", time: "4 hours ago" },
+    ],
+  };
+
   const [search, setSearch] = useState("");
   const [selectedStudent, setSelectedStudent] = useState<string | null>(null);
   const [newMessage, setNewMessage] = useState("");
-  const [conversations, setConversations] = useState(mockConversations);
+  const [conversations, setConversations] = useState(initialConversations);
 
   const students = mockSupervisedStudents.filter(s =>
     !search || s.name.toLowerCase().includes(search.toLowerCase())
@@ -44,7 +57,13 @@ const SupervisorMessages = () => {
 
   const handleSend = () => {
     if (!newMessage.trim() || !selectedStudent) return;
-    const msg: Message = { id: `m-${Date.now()}`, from: "supervisor", text: newMessage.trim(), time: "Just now" };
+    const msg: Message = {
+      id: `m-${Date.now()}`,
+      from: "supervisor",
+      authorName: supervisorName,
+      text: newMessage.trim(),
+      time: "Just now",
+    };
     setConversations(prev => ({
       ...prev,
       [selectedStudent]: [...(prev[selectedStudent] || []), msg],
@@ -120,6 +139,7 @@ const SupervisorMessages = () => {
                           "max-w-[75%] rounded-lg p-3 text-sm",
                           m.from === "supervisor" ? "bg-primary text-primary-foreground" : "bg-muted"
                         )}>
+                          <p className={cn("text-xs font-medium mb-1", m.from === "supervisor" ? "text-primary-foreground/70" : "text-muted-foreground")}>{m.authorName}</p>
                           <p>{m.text}</p>
                           <p className={cn("text-xs mt-1", m.from === "supervisor" ? "text-primary-foreground/70" : "text-muted-foreground")}>{m.time}</p>
                         </div>

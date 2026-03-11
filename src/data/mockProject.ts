@@ -1,4 +1,4 @@
-import { ResearchProject, User, SectionMeta } from "@/types/research";
+import { ResearchProject, User, SectionMeta, AppRole } from "@/types/research";
 
 export const mockUser: User = {
   id: "u1",
@@ -14,6 +14,66 @@ export const mockAdminUser: User = {
   email: "d.okoro@greenfield.edu",
   role: "Research Director",
   institution: "Greenfield University",
+};
+
+export const mockComplianceUser: User = {
+  id: "u3",
+  name: "Dr. Ngozi Amadi",
+  email: "n.amadi@greenfield.edu",
+  role: "Compliance Officer",
+  institution: "Greenfield University",
+};
+
+export const mockSupervisorUser: User = {
+  id: "sup-001",
+  name: "Prof. Kwame Mwangi",
+  email: "k.mwangi@university.ac",
+  role: "Supervisor",
+  institution: "Greenfield University",
+};
+
+export const mockHodUser: User = {
+  id: "hod-001",
+  name: "Prof. Adaeze Okonkwo",
+  email: "a.okonkwo@university.ac",
+  role: "Head of Department",
+  institution: "Greenfield University",
+};
+
+export const mockUndergradUser: User = {
+  id: "stu-ug-001",
+  name: "Fatima Al-Hassan",
+  email: "fatima@university.ac",
+  role: "Undergraduate Student",
+  institution: "Greenfield University",
+};
+
+export const mockMastersUser: User = {
+  id: "stu-pg-002",
+  name: "James Thornton",
+  email: "james.thornton@university.ac",
+  role: "Master's Student",
+  institution: "Greenfield University",
+};
+
+export const mockPhdUser: User = {
+  id: "stu-pg-001",
+  name: "Amara Okafor",
+  email: "amara.okafor@university.ac",
+  role: "PhD Student",
+  institution: "Greenfield University",
+};
+
+/** Map each role to its canonical mock user */
+export const roleUserMap: Record<AppRole, User> = {
+  "Researcher": mockUser,
+  "Undergraduate Student": mockUndergradUser,
+  "Master's Student": mockMastersUser,
+  "PhD Student": mockPhdUser,
+  "Supervisor": mockSupervisorUser,
+  "Head of Department": mockHodUser,
+  "Research Director": mockAdminUser,
+  "Compliance Officer": mockComplianceUser,
 };
 
 export const defaultProject: ResearchProject = {

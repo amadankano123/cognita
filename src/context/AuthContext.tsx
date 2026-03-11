@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
 import { User, AppRole, ADMIN_ROLES } from "@/types/research";
-import { mockUser, mockAdminUser } from "@/data/mockProject";
+import { mockUser, roleUserMap } from "@/data/mockProject";
 
 interface AuthContextType {
   user: User | null;
@@ -22,17 +22,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const isAdmin = ADMIN_ROLES.includes(role);
 
   const login = useCallback((_email: string, _password: string, selectedRole: AppRole) => {
-    const isAdminRole = ADMIN_ROLES.includes(selectedRole);
-    setUser(isAdminRole ? { ...mockAdminUser, role: selectedRole } : { ...mockUser, role: selectedRole });
+    const baseUser = roleUserMap[selectedRole];
+    setUser({ ...baseUser, role: selectedRole });
     setRole(selectedRole);
     return true;
   }, []);
 
   const signup = useCallback((name: string, email: string, _password: string, selectedRole?: AppRole) => {
     const r = selectedRole || "Researcher";
-    const isAdminRole = ADMIN_ROLES.includes(r);
-    const base = isAdminRole ? mockAdminUser : mockUser;
-    setUser({ ...base, name: name || base.name, email: email || base.email, role: r });
+    const baseUser = roleUserMap[r];
+    setUser({ ...baseUser, name: name || baseUser.name, email: email || baseUser.email, role: r });
     setRole(r);
     return true;
   }, []);
@@ -43,8 +42,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const switchRole = useCallback((newRole: AppRole) => {
-    const isAdminRole = ADMIN_ROLES.includes(newRole);
-    setUser(prev => prev ? { ...(isAdminRole ? mockAdminUser : mockUser), name: prev.name, email: prev.email, role: newRole } : null);
+    const baseUser = roleUserMap[newRole];
+    setUser({ ...baseUser, role: newRole });
     setRole(newRole);
   }, []);
 
