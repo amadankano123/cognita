@@ -29,7 +29,7 @@ const SupervisorOverview = () => {
 
   return (
     <div className="max-w-5xl animate-fade-in">
-      <PageHeader title="Supervisor Overview" subtitle="Summary of research supervision across all degree levels" />
+      <PageHeader title="Supervisor Overview" subtitle={`${user?.name || "Supervisor"} — Summary of research supervision across all degree levels`} />
 
       {/* KPI row */}
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-6">
