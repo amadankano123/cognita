@@ -41,6 +41,11 @@ import SupervisorLayout from "@/components/layout/SupervisorLayout";
 import SupervisorStudents from "./pages/supervisor/SupervisorStudents";
 import SupervisorOverview from "./pages/supervisor/SupervisorOverview";
 import SupervisorNotifications from "./pages/supervisor/SupervisorNotifications";
+import SupervisorReviews from "./pages/supervisor/SupervisorReviews";
+import SupervisorApprovals from "./pages/supervisor/SupervisorApprovals";
+import SupervisorAnalytics from "./pages/supervisor/SupervisorAnalytics";
+import SupervisorMessages from "./pages/supervisor/SupervisorMessages";
+import SupervisorSettings from "./pages/supervisor/SupervisorSettings";
 import StudentDetail from "./pages/supervisor/StudentDetail";
 
 import HodLayout from "@/components/layout/HodLayout";
