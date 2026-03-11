@@ -8,6 +8,7 @@ import { useAuth } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
 
 const SupervisorOverview = () => {
+  const { user } = useAuth();
   const students = mockSupervisedStudents;
   const avgProgress = Math.round(students.reduce((a, s) => a + s.progress, 0) / students.length);
   const critical = students.filter(s => s.complianceStatus === "Critical");
