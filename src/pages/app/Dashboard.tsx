@@ -1,19 +1,33 @@
 import { useState } from "react";
 import PageHeader from "@/components/layout/PageHeader";
 import { useProject } from "@/context/ProjectContext";
+import { useAuth } from "@/context/AuthContext";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { FileEdit, BookOpen, BarChart3, Clock, Users, ShieldCheck, Database, Download, Bot, ArrowRight } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { FileEdit, BookOpen, BarChart3, Clock, Users, ShieldCheck, Database, Download, Bot, ArrowRight, UserCheck, AlertTriangle } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
+import { RESEARCHER_ROLES } from "@/types/research";
 
 const Dashboard = () => {
   const { project, toggleChecklist } = useProject();
+  const { user, role } = useAuth();
   const navigate = useNavigate();
   const { projectId } = useParams();
   const pid = projectId || project.id;
   const nav = (path: string) => navigate(`/app/${pid}/${path}`);
+
+  const isStudent = ["Undergraduate Student", "Master's Student", "PhD Student"].includes(role);
+
+  // Supervisor info for students (linked to mockSupervisor data)
+  const supervisorInfo = isStudent ? {
+    name: "Prof. Kwame Mwangi",
+    email: "k.mwangi@university.ac",
+    department: "Computer Science",
+    specialization: "Machine Learning & Data Privacy",
+  } : null;
 
   const daysToDeadline = project.deadline
     ? Math.max(0, Math.ceil((new Date(project.deadline).getTime() - Date.now()) / 86400000))
@@ -30,14 +44,15 @@ const Dashboard = () => {
 
   return (
     <div className="max-w-5xl animate-fade-in">
-      <PageHeader title="Dashboard" subtitle="Overview of your research project" breadcrumb={project.title} />
+      <PageHeader title="Dashboard" subtitle={`Welcome back, ${user?.name || "Researcher"}`} breadcrumb={project.title} />
 
       <Card className="p-5 mb-6 shadow-card">
         <div className="flex flex-col sm:flex-row sm:items-center gap-4">
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex items-center gap-2 mb-1 flex-wrap">
               <span className="inline-block px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary capitalize">{project.status}</span>
               <span className="text-xs px-2 py-0.5 rounded-full bg-accent text-accent-foreground">Integrity: {project.integrityScore}</span>
+              {isStudent && <Badge variant="outline" className="text-xs">{role}</Badge>}
               {daysToDeadline !== null && (
                 <span className="flex items-center gap-1 text-xs text-muted-foreground"><Clock className="h-3 w-3" /> {daysToDeadline} days</span>
               )}
@@ -51,6 +66,27 @@ const Dashboard = () => {
           </div>
         </div>
       </Card>
+
+      {/* Supervisor Card for students */}
+      {isStudent && supervisorInfo && (
+        <Card className="p-4 mb-6 shadow-card border-l-4 border-l-primary">
+          <div className="flex items-start gap-3">
+            <UserCheck className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <p className="text-sm font-semibold mb-1">Assigned Supervisor</p>
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-xs font-bold text-primary">
+                  {supervisorInfo.name.split(" ").map(n => n[0]).join("")}
+                </div>
+                <div>
+                  <p className="text-sm font-medium">{supervisorInfo.name}</p>
+                  <p className="text-xs text-muted-foreground">{supervisorInfo.specialization} · {supervisorInfo.email}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Card>
+      )}
 
       <div className="grid lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-4">
