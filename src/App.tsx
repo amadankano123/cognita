@@ -87,6 +87,7 @@ const App = () => (
                   <Route path="results" element={<Results />} />
                   <Route path="export" element={<Export />} />
                   <Route path="plagiarism" element={<PlagiarismChecker />} />
+                  <Route path="messages" element={<Messages />} />
                   <Route path="collaboration" element={<Collaboration />} />
                   <Route path="settings" element={<Settings />} />
                 </Route>

@@ -23,6 +23,7 @@ const AppSidebar = () => {
     { title: "AI Reviewer", path: `/app/${pid}/ai-reviewer`, icon: Bot },
     { title: "Plagiarism Checker", path: `/app/${pid}/plagiarism`, icon: ShieldCheck },
     { title: "Export", path: `/app/${pid}/export`, icon: Download },
+    { title: "Messages", path: `/app/${pid}/messages`, icon: MessageSquare },
     { title: "Collaboration", path: `/app/${pid}/collaboration`, icon: Users },
     { title: "Settings", path: `/app/${pid}/settings`, icon: Settings },
   ];

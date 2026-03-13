@@ -42,7 +42,9 @@ const DataInputHub = ({ onDataReady }: Props) => {
     onDataReady();
   };
 
-  if (project.dataset.uploaded) {
+  const [showImportTabs, setShowImportTabs] = useState(false);
+
+  if (project.dataset.uploaded && !showImportTabs) {
     return (
       <Card className="shadow-card">
         <div className="p-5 border-b border-border flex items-center justify-between">
@@ -57,9 +59,14 @@ const DataInputHub = ({ onDataReady }: Props) => {
               </p>
             </div>
           </div>
-          <Button size="sm" onClick={onDataReady}>
-            Proceed to Analysis <ArrowRight className="h-4 w-4 ml-1" />
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={() => setShowImportTabs(true)}>
+              <Plus className="h-4 w-4 mr-1" /> Add More Data
+            </Button>
+            <Button size="sm" onClick={onDataReady}>
+              Proceed to Analysis <ArrowRight className="h-4 w-4 ml-1" />
+            </Button>
+          </div>
         </div>
 
         {/* Column summary */}
