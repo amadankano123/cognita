@@ -64,7 +64,7 @@ const Landing = () => {
             <Button size="lg" className="text-base px-8 bg-primary-foreground text-primary hover:bg-primary-foreground/90" onClick={() => navigate(isAuthenticated ? dashPath : "/auth")}>
               Get Started <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
-            <Button size="lg" variant="outline" className="text-base px-8 border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 hover:text-primary-foreground" onClick={() => setDemoOpen(true)}>
+            <Button size="lg" className="text-base px-8 bg-primary-foreground text-primary hover:bg-primary-foreground/90" onClick={() => setDemoOpen(true)}>
               <Play className="h-4 w-4 mr-2" /> See How It Works
             </Button>
           </div>
