@@ -28,6 +28,7 @@ import Export from "./pages/app/Export";
 import Collaboration from "./pages/app/Collaboration";
 import Settings from "./pages/app/Settings";
 import PlagiarismChecker from "./pages/app/PlagiarismChecker";
+import Messages from "./pages/app/Messages";
 
 import AdminLayout from "@/components/layout/AdminLayout";
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -86,6 +87,7 @@ const App = () => (
                   <Route path="results" element={<Results />} />
                   <Route path="export" element={<Export />} />
                   <Route path="plagiarism" element={<PlagiarismChecker />} />
+                  <Route path="messages" element={<Messages />} />
                   <Route path="collaboration" element={<Collaboration />} />
                   <Route path="settings" element={<Settings />} />
                 </Route>
