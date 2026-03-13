@@ -1,7 +1,7 @@
 import { NavLink, useLocation, useParams } from "react-router-dom";
 import {
   LayoutDashboard, FileEdit, BookOpen, Bot, Database, BarChart3,
-  ClipboardCheck, Download, Users, Settings, ChevronLeft, ShieldCheck,
+  ClipboardCheck, Download, Users, Settings, ChevronLeft, ShieldCheck, MessageSquare,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
