@@ -35,8 +35,8 @@ import {
 const individualPlans = [
   {
     name: "Cognita Basic",
-    monthly: 0,
-    annual: 0,
+    monthly: 7500,
+    annual: 75000, // 7500 * 10 (2 months free with annual)
     tagline: "For students exploring research tools",
     features: [
       "1 active project",
@@ -52,8 +52,8 @@ const individualPlans = [
   },
   {
     name: "Cognita Pro",
-    monthly: 24,
-    annual: 199,
+    monthly: 22000,
+    annual: 220000, // 22000 * 10 (2 months free with annual)
     tagline: "For serious researchers & postgraduate students",
     features: [
       "Unlimited projects",
@@ -71,8 +71,8 @@ const individualPlans = [
   },
   {
     name: "Cognita Premium",
-    monthly: 49,
-    annual: 399,
+    monthly: 45000,
+    annual: 450000, // 45000 * 10 (2 months free with annual)
     tagline: "For advanced research & grant applications",
     features: [
       "Everything in Pro",
@@ -92,9 +92,9 @@ const individualPlans = [
 const institutionalPlans = [
   {
     name: "Department Plan",
-    price: "Starting at $6",
-    priceSuffix: "per user/month",
-    note: "Minimum 25 users",
+    price: "₦50,000",
+    priceSuffix: "per user/year",
+    note: "Minimum 25 users • Billed annually",
     features: [
       "Pro access for all users",
       "Institutional dashboard",
@@ -109,8 +109,8 @@ const institutionalPlans = [
   {
     name: "University Plan",
     price: "Custom Pricing",
-    priceSuffix: "",
-    note: "",
+    priceSuffix: "On demand",
+    note: "Agreement with Platinum Edu-Tech Sales Team",
     features: [
       "Premium access for all users",
       "University-wide dashboard",
@@ -261,7 +261,7 @@ const PricingSection = () => {
                 <p className="text-sm text-muted-foreground mb-5">{plan.tagline}</p>
                 <div className="mb-6">
                   <span className="text-4xl font-bold tracking-tight">
-                    ${price}
+                    ₦{price.toLocaleString()}
                   </span>
                   {price > 0 && (
                     <span className="text-muted-foreground text-sm ml-1">{period}</span>
