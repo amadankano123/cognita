@@ -9,13 +9,18 @@ const features = [
 ];
 
 const PlagiarismSection = () => (
-  <section className="max-w-5xl mx-auto px-6 py-24">
-    <div className="text-center mb-14">
-      <p className="text-sm font-semibold uppercase tracking-widest text-primary mb-3">Academic Integrity</p>
-      <h2 className="text-3xl md:text-4xl font-bold mb-4">
-        Build Originality Into Your Writing
+  <section className="relative max-w-5xl mx-auto px-6 py-28">
+    <div className="text-center mb-16">
+      <p className="inline-flex items-center gap-2 text-sm font-semibold uppercase tracking-widest text-primary mb-3">
+        <span className="h-px w-8 bg-primary/40" /> Academic Integrity <span className="h-px w-8 bg-primary/40" />
+      </p>
+      <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-primary shadow-glow mb-5">
+        <ShieldCheck className="h-8 w-8 text-primary-foreground" />
+      </div>
+      <h2 className="text-3xl md:text-5xl font-bold mb-5 tracking-tight">
+        Build <span className="text-gradient-primary">Originality</span> Into Your Writing
       </h2>
-      <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+      <p className="text-muted-foreground max-w-2xl mx-auto text-lg leading-relaxed">
         Cognita doesn't just check for plagiarism after the fact — it helps you write with integrity from the start.
       </p>
     </div>
@@ -24,13 +29,13 @@ const PlagiarismSection = () => (
       {features.map((f) => (
         <div
           key={f.title}
-          className="rounded-xl border border-border bg-card p-6 shadow-card"
+          className="group relative rounded-2xl border border-border bg-card p-7 shadow-card hover:shadow-soft hover:-translate-y-1 transition-all duration-300"
         >
-          <div className="h-10 w-10 rounded-lg bg-accent flex items-center justify-center mb-4">
+          <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-accent to-accent/50 flex items-center justify-center mb-5 ring-1 ring-primary/10 group-hover:scale-110 transition-transform">
             <f.icon className="h-5 w-5 text-primary" />
           </div>
-          <h3 className="font-display font-semibold text-lg mb-1">{f.title}</h3>
-          <p className="text-sm text-muted-foreground">{f.desc}</p>
+          <h3 className="font-display font-semibold text-lg mb-2">{f.title}</h3>
+          <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
         </div>
       ))}
     </div>
