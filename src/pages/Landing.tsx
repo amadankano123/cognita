@@ -45,28 +45,47 @@ const Landing = () => {
       </nav>
 
       {/* ── Hero ── */}
-      <section className="relative overflow-hidden bg-primary">
-        <div className="absolute inset-0 bg-cover bg-center opacity-20" style={{ backgroundImage: `url(${heroBg})` }} />
-        <div className="absolute inset-0 bg-gradient-to-b from-[hsl(224,64%,15%)] via-[hsl(224,64%,20%/0.9)] to-[hsl(224,64%,25%/0.85)]" />
-        <div className="relative max-w-4xl mx-auto text-center pt-28 pb-32 px-6">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-foreground/10 text-primary-foreground text-sm font-medium mb-6 animate-fade-in border border-primary-foreground/20">
-            <Sparkles className="h-4 w-4" />
+      <section className="relative overflow-hidden bg-gradient-hero">
+        <div className="absolute inset-0 bg-cover bg-center opacity-15" style={{ backgroundImage: `url(${heroBg})` }} />
+        <div className="absolute inset-0 bg-grid-pattern opacity-[0.08]" />
+        {/* Decorative glow orbs */}
+        <div className="absolute top-20 -left-32 h-96 w-96 rounded-full bg-[hsl(200,80%,60%)]/20 blur-3xl animate-float" />
+        <div className="absolute bottom-10 -right-32 h-[500px] w-[500px] rounded-full bg-[hsl(260,70%,55%)]/25 blur-3xl animate-float" style={{ animationDelay: "2s" }} />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[hsl(224,64%,15%)]/40" />
+
+        <div className="relative max-w-4xl mx-auto text-center pt-32 pb-36 px-6">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary-foreground/10 text-primary-foreground text-sm font-medium mb-6 animate-fade-in border border-primary-foreground/20 backdrop-blur-md shadow-glow">
+            <Sparkles className="h-4 w-4 text-[hsl(200,90%,75%)]" />
             The Research Operating System
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight leading-tight mb-5 text-primary-foreground animate-fade-in" style={{ animationDelay: "0.1s", animationFillMode: "both" }}>
+          <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.05] mb-6 text-primary-foreground animate-fade-in" style={{ animationDelay: "0.1s", animationFillMode: "both" }}>
             The Complete Research{" "}
-            <span className="bg-gradient-to-r from-[hsl(200,80%,70%)] to-[hsl(260,70%,75%)] bg-clip-text text-transparent">Operating System</span>
+            <span className="block mt-2 bg-gradient-to-r from-[hsl(200,90%,75%)] via-[hsl(220,85%,80%)] to-[hsl(260,80%,80%)] bg-clip-text text-transparent">Operating System</span>
           </h1>
-          <p className="text-lg md:text-xl text-primary-foreground/75 max-w-2xl mx-auto mb-10 animate-fade-in" style={{ animationDelay: "0.2s", animationFillMode: "both" }}>
+          <p className="text-lg md:text-xl text-primary-foreground/80 max-w-2xl mx-auto mb-10 leading-relaxed animate-fade-in" style={{ animationDelay: "0.2s", animationFillMode: "both" }}>
             Cognita unifies research intelligence, statistical analysis, and plagiarism checking into one academic-grade system — from idea to publication.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center animate-fade-in" style={{ animationDelay: "0.3s", animationFillMode: "both" }}>
-            <Button size="lg" className="text-base px-8 bg-primary-foreground text-primary hover:bg-primary-foreground/90" onClick={() => navigate(isAuthenticated ? dashPath : "/auth")}>
+            <Button size="lg" className="text-base px-8 h-12 bg-primary-foreground text-primary hover:bg-primary-foreground/90 shadow-glow font-semibold" onClick={() => navigate(isAuthenticated ? dashPath : "/auth")}>
               Get Started <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
-            <Button size="lg" className="text-base px-8 bg-primary-foreground text-primary hover:bg-primary-foreground/90" onClick={() => setDemoOpen(true)}>
+            <Button size="lg" className="text-base px-8 h-12 bg-primary-foreground text-primary hover:bg-primary-foreground/90 font-semibold" onClick={() => setDemoOpen(true)}>
               <Play className="h-4 w-4 mr-2" /> See How It Works
             </Button>
+          </div>
+
+          {/* Trust badges */}
+          <div className="mt-14 pt-8 border-t border-primary-foreground/10 animate-fade-in" style={{ animationDelay: "0.4s", animationFillMode: "both" }}>
+            <p className="text-xs uppercase tracking-widest text-primary-foreground/50 mb-4">Trusted by researchers across</p>
+            <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 text-primary-foreground/70 text-sm font-medium">
+              <span>Universities</span>
+              <span className="text-primary-foreground/30">·</span>
+              <span>Research Institutes</span>
+              <span className="text-primary-foreground/30">·</span>
+              <span>Postgraduate Programs</span>
+              <span className="text-primary-foreground/30">·</span>
+              <span>Academic Journals</span>
+            </div>
           </div>
         </div>
       </section>

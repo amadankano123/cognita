@@ -52,6 +52,17 @@
 
     --shadow-card: 0 1px 3px 0 hsl(215 25% 15% / 0.06), 0 1px 2px -1px hsl(215 25% 15% / 0.06);
     --shadow-elevated: 0 4px 12px -2px hsl(215 25% 15% / 0.08), 0 2px 6px -2px hsl(215 25% 15% / 0.04);
+    --shadow-glow: 0 10px 40px -10px hsl(224 64% 33% / 0.35);
+    --shadow-soft: 0 8px 24px -8px hsl(215 25% 15% / 0.10), 0 2px 6px -2px hsl(215 25% 15% / 0.05);
+
+    /* Brand gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(224 64% 33%) 0%, hsl(224 70% 45%) 50%, hsl(260 60% 50%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(224 64% 18%) 0%, hsl(224 70% 28%) 60%, hsl(260 50% 35%) 100%);
+    --gradient-subtle: linear-gradient(180deg, hsl(210 30% 99%) 0%, hsl(210 20% 96%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(200 70% 55%) 0%, hsl(224 64% 45%) 100%);
+    --gradient-success: linear-gradient(135deg, hsl(142 60% 40%) 0%, hsl(160 55% 45%) 100%);
+    --gradient-warning: linear-gradient(135deg, hsl(38 92% 55%) 0%, hsl(20 85% 55%) 100%);
+    --gradient-mesh: radial-gradient(at 20% 20%, hsl(224 64% 33% / 0.12) 0px, transparent 50%), radial-gradient(at 80% 30%, hsl(260 60% 50% / 0.10) 0px, transparent 50%), radial-gradient(at 50% 80%, hsl(200 70% 55% / 0.08) 0px, transparent 50%);
 
     --font-display: 'Playfair Display', Georgia, serif;
     --font-body: 'DM Sans', system-ui, sans-serif;
@@ -64,9 +75,62 @@
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3 {
     font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer utilities {
+  .bg-gradient-primary { background-image: var(--gradient-primary); }
+  .bg-gradient-hero { background-image: var(--gradient-hero); }
+  .bg-gradient-subtle { background-image: var(--gradient-subtle); }
+  .bg-gradient-accent { background-image: var(--gradient-accent); }
+  .bg-gradient-mesh { background-image: var(--gradient-mesh); }
+  .text-gradient-primary {
+    background-image: var(--gradient-primary);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .text-gradient-hero {
+    background-image: linear-gradient(135deg, hsl(200 90% 75%) 0%, hsl(260 80% 80%) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .shadow-glow { box-shadow: var(--shadow-glow); }
+  .shadow-soft { box-shadow: var(--shadow-soft); }
+
+  /* Subtle grid background pattern for hero/sections */
+  .bg-grid-pattern {
+    background-image:
+      linear-gradient(to right, hsl(var(--border) / 0.4) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--border) / 0.4) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+  .bg-dot-pattern {
+    background-image: radial-gradient(hsl(var(--border)) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  @keyframes float-slow {
+    0%, 100% { transform: translateY(0px) }
+    50% { transform: translateY(-12px) }
+  }
+  .animate-float { animation: float-slow 6s ease-in-out infinite; }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0 }
+    100% { background-position: 200% 0 }
+  }
+  .animate-shimmer {
+    background: linear-gradient(90deg, transparent, hsl(var(--primary) / 0.1), transparent);
+    background-size: 200% 100%;
+    animation: shimmer 3s linear infinite;
   }
 }
