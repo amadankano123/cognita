@@ -99,7 +99,7 @@ const institutionalPlans = [
     note: "Minimum 25 users • Billed annually",
     features: [
       "Pro access for all users",
-      "130 AI credits per user/month (100 base + 30 daily bonus)",
+      "1,000 AI credits per user/year (400 base + 600 daily bonus)",
       "Institutional dashboard",
       "Integrity monitoring",
       "AI usage tracking",
