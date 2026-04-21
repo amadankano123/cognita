@@ -52,6 +52,17 @@
 
     --shadow-card: 0 1px 3px 0 hsl(215 25% 15% / 0.06), 0 1px 2px -1px hsl(215 25% 15% / 0.06);
     --shadow-elevated: 0 4px 12px -2px hsl(215 25% 15% / 0.08), 0 2px 6px -2px hsl(215 25% 15% / 0.04);
+    --shadow-glow: 0 10px 40px -10px hsl(224 64% 33% / 0.35);
+    --shadow-soft: 0 8px 24px -8px hsl(215 25% 15% / 0.10), 0 2px 6px -2px hsl(215 25% 15% / 0.05);
+
+    /* Brand gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(224 64% 33%) 0%, hsl(224 70% 45%) 50%, hsl(260 60% 50%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(224 64% 18%) 0%, hsl(224 70% 28%) 60%, hsl(260 50% 35%) 100%);
+    --gradient-subtle: linear-gradient(180deg, hsl(210 30% 99%) 0%, hsl(210 20% 96%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(200 70% 55%) 0%, hsl(224 64% 45%) 100%);
+    --gradient-success: linear-gradient(135deg, hsl(142 60% 40%) 0%, hsl(160 55% 45%) 100%);
+    --gradient-warning: linear-gradient(135deg, hsl(38 92% 55%) 0%, hsl(20 85% 55%) 100%);
+    --gradient-mesh: radial-gradient(at 20% 20%, hsl(224 64% 33% / 0.12) 0px, transparent 50%), radial-gradient(at 80% 30%, hsl(260 60% 50% / 0.10) 0px, transparent 50%), radial-gradient(at 50% 80%, hsl(200 70% 55% / 0.08) 0px, transparent 50%);
 
     --font-display: 'Playfair Display', Georgia, serif;
     --font-body: 'DM Sans', system-ui, sans-serif;
