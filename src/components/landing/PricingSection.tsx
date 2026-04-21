@@ -40,10 +40,9 @@ const individualPlans = [
     tagline: "For students exploring research tools",
     features: [
       "1 active project",
-      "10 AI credits per month",
+      "30 AI credits per month (10 base + 20 daily bonus)",
       "Structured academic editor",
       "Manual reference manager",
-      "5 AI reviews per month",
       "Basic DOCX export",
       "Descriptive statistics",
       "5MB dataset limit",
@@ -58,7 +57,7 @@ const individualPlans = [
     tagline: "For serious researchers & postgraduate students",
     features: [
       "Unlimited projects",
-      "50 AI credits per month",
+      "80 AI credits per month (50 base + 30 daily bonus)",
       "Full section builder",
       "Unlimited AI reviewer mode",
       "Rewrite suggestions",
@@ -78,7 +77,7 @@ const individualPlans = [
     tagline: "For advanced research & grant applications",
     features: [
       "Everything in Pro",
-      "150 AI credits per month",
+      "180 AI credits per month (150 base + 30 daily bonus)",
       "Plagiarism similarity checks (monthly credits)",
       "AI coherence scoring",
       "Grant proposal templates",
@@ -100,7 +99,7 @@ const institutionalPlans = [
     note: "Minimum 25 users • Billed annually",
     features: [
       "Pro access for all users",
-      "100 AI credits per user/month",
+      "130 AI credits per user/month (100 base + 30 daily bonus)",
       "Institutional dashboard",
       "Integrity monitoring",
       "AI usage tracking",
