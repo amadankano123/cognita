@@ -151,14 +151,18 @@ const Dashboard = () => {
         </div>
 
         <div className="space-y-4">
-          <Card className="shadow-card p-4">
-            <h3 className="font-display font-semibold mb-3">Quick Actions</h3>
-            <div className="space-y-2">
+          <Card className="shadow-card p-5">
+            <h3 className="font-display font-semibold mb-4 flex items-center gap-2">
+              <span className="h-1 w-6 bg-primary rounded-full" /> Quick Actions
+            </h3>
+            <div className="space-y-1.5">
               {quickActions.map(a => (
-                <button key={a.label} onClick={() => nav(a.path)} className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-muted transition-colors text-left">
-                  <div className="h-9 w-9 rounded-md bg-primary/10 flex items-center justify-center shrink-0"><a.icon className="h-4 w-4 text-primary" /></div>
-                  <div className="min-w-0"><p className="text-sm font-medium">{a.label}</p><p className="text-xs text-muted-foreground">{a.desc}</p></div>
-                  <ArrowRight className="h-3 w-3 text-muted-foreground ml-auto shrink-0" />
+                <button key={a.label} onClick={() => nav(a.path)} className="group w-full flex items-center gap-3 p-2.5 rounded-xl hover:bg-accent/50 transition-all text-left">
+                  <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-accent to-accent/30 flex items-center justify-center shrink-0 ring-1 ring-primary/10 group-hover:scale-105 transition-transform">
+                    <a.icon className="h-4 w-4 text-primary" />
+                  </div>
+                  <div className="min-w-0 flex-1"><p className="text-sm font-semibold">{a.label}</p><p className="text-xs text-muted-foreground">{a.desc}</p></div>
+                  <ArrowRight className="h-3.5 w-3.5 text-muted-foreground ml-auto shrink-0 group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
                 </button>
               ))}
             </div>
