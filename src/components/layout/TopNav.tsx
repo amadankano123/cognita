@@ -8,7 +8,9 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AppRole, ADMIN_ROLES, HOD_ROLES, ROLE_GROUPS } from "@/types/research";
+import { ROLE_HOME_ROUTE } from "@/lib/permissions";
 import ProjectContextDrawer from "./ProjectContextDrawer";
+import NotificationBell from "./NotificationBell";
 
 const TopNav = () => {
   const { user, logout, role, isAdmin, switchRole } = useAuth();
@@ -35,15 +37,7 @@ const TopNav = () => {
 
   const handleSwitchRole = (newRole: AppRole) => {
     switchRole(newRole);
-    if (HOD_ROLES.includes(newRole)) {
-      navigate("/hod/overview");
-    } else if (newRole === "Supervisor") {
-      navigate("/supervisor/students");
-    } else if (ADMIN_ROLES.includes(newRole)) {
-      navigate("/admin/dashboard");
-    } else {
-      navigate("/app/proj-001/dashboard");
-    }
+    navigate(ROLE_HOME_ROUTE[newRole] ?? "/app/proj-001/dashboard");
   };
 
   const notifications = [
@@ -77,25 +71,8 @@ const TopNav = () => {
       <div className="flex items-center gap-3">
         <ProjectContextDrawer />
 
-        {/* Notifications */}
-        <DropdownMenu open={notifOpen} onOpenChange={setNotifOpen}>
-          <DropdownMenuTrigger asChild>
-            <button className="relative text-muted-foreground hover:text-foreground transition-colors" aria-label="Notifications">
-              <Bell className="h-4 w-4" />
-              <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-destructive border-2 border-card" />
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-72">
-            <DropdownMenuLabel>Notifications</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            {notifications.map(n => (
-              <DropdownMenuItem key={n.id} className="flex flex-col items-start gap-0.5 py-2">
-                <span className="text-sm">{n.text}</span>
-                <span className="text-xs text-muted-foreground">{n.time}</span>
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {/* Notifications (event-driven) */}
+        <NotificationBell />
 
         {/* Switch Role */}
         <DropdownMenu>

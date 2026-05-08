@@ -6,6 +6,17 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
 import { ProjectProvider } from "@/context/ProjectContext";
 import { InstitutionProvider } from "@/context/InstitutionContext";
+import { InstitutionConfigProvider } from "@/context/InstitutionConfigContext";
+import { AuditProvider } from "@/context/AuditContext";
+import { NotificationProvider } from "@/context/NotificationContext";
+import { Building2, Crown, GraduationCap, Gavel, ShieldAlert, LayoutDashboard, Users, FolderKanban, ScrollText } from "lucide-react";
+import RoleShell from "@/components/layout/RoleShell";
+import DeanOverview from "./pages/dean/DeanOverview";
+import PgCoordinatorOverview from "./pages/pg-coordinator/PgCoordinatorOverview";
+import VcOverview from "./pages/vc/VcOverview";
+import ExaminerQueue from "./pages/examiner/ExaminerQueue";
+import EthicsQueue from "./pages/ethics/EthicsQueue";
+import AuditLogPage from "./pages/admin/AuditLogPage";
 
 import Landing from "./pages/Landing";
 import Auth from "./pages/Auth";
@@ -62,6 +73,9 @@ const App = () => (
     <AuthProvider>
       <ProjectProvider>
         <InstitutionProvider>
+          <InstitutionConfigProvider>
+            <AuditProvider>
+              <NotificationProvider>
           <TooltipProvider>
             <Toaster />
             <Sonner />
@@ -104,6 +118,7 @@ const App = () => (
                   <Route path="researchers" element={<AdminResearchers />} />
                   <Route path="compliance" element={<AdminCompliance />} />
                   <Route path="analytics" element={<AdminAnalytics />} />
+                  <Route path="audit" element={<AuditLogPage />} />
                   <Route path="settings" element={<AdminSettings />} />
                 </Route>
 
@@ -130,10 +145,59 @@ const App = () => (
                   <Route path="settings" element={<HodSettings />} />
                 </Route>
 
+                {/* Dean of Faculty */}
+                <Route path="/dean" element={<RoleShell roleLabel="Dean" roleIcon={Building2} items={[
+                  { title: "Overview", path: "/dean/overview", icon: LayoutDashboard },
+                  { title: "Departments", path: "/dean/overview", icon: Building2 },
+                  { title: "Audit Trail", path: "/dean/audit", icon: ScrollText },
+                ]} />}>
+                  <Route index element={<Navigate to="overview" replace />} />
+                  <Route path="overview" element={<DeanOverview />} />
+                  <Route path="audit" element={<AuditLogPage />} />
+                </Route>
+
+                {/* PG Coordinator */}
+                <Route path="/pg-coordinator" element={<RoleShell roleLabel="PG Coordinator" roleIcon={GraduationCap} items={[
+                  { title: "Overview", path: "/pg-coordinator/overview", icon: LayoutDashboard },
+                  { title: "Cohort", path: "/pg-coordinator/overview", icon: Users },
+                ]} />}>
+                  <Route index element={<Navigate to="overview" replace />} />
+                  <Route path="overview" element={<PgCoordinatorOverview />} />
+                </Route>
+
+                {/* Vice Chancellor */}
+                <Route path="/vc" element={<RoleShell roleLabel="Vice Chancellor" roleIcon={Crown} items={[
+                  { title: "Executive View", path: "/vc/overview", icon: LayoutDashboard },
+                  { title: "Audit Trail", path: "/vc/audit", icon: ScrollText },
+                ]} />}>
+                  <Route index element={<Navigate to="overview" replace />} />
+                  <Route path="overview" element={<VcOverview />} />
+                  <Route path="audit" element={<AuditLogPage />} />
+                </Route>
+
+                {/* External Examiner */}
+                <Route path="/examiner" element={<RoleShell roleLabel="External Examiner" roleIcon={Gavel} items={[
+                  { title: "Examination Queue", path: "/examiner/queue", icon: FolderKanban },
+                ]} />}>
+                  <Route index element={<Navigate to="queue" replace />} />
+                  <Route path="queue" element={<ExaminerQueue />} />
+                </Route>
+
+                {/* Ethics Committee */}
+                <Route path="/ethics" element={<RoleShell roleLabel="Ethics Committee" roleIcon={ShieldAlert} items={[
+                  { title: "Application Queue", path: "/ethics/queue", icon: FolderKanban },
+                ]} />}>
+                  <Route index element={<Navigate to="queue" replace />} />
+                  <Route path="queue" element={<EthicsQueue />} />
+                </Route>
+
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </BrowserRouter>
           </TooltipProvider>
+              </NotificationProvider>
+            </AuditProvider>
+          </InstitutionConfigProvider>
         </InstitutionProvider>
       </ProjectProvider>
     </AuthProvider>
