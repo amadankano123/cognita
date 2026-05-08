@@ -9,7 +9,7 @@ import { InstitutionProvider } from "@/context/InstitutionContext";
 import { InstitutionConfigProvider } from "@/context/InstitutionConfigContext";
 import { AuditProvider } from "@/context/AuditContext";
 import { NotificationProvider } from "@/context/NotificationContext";
-import { Building2, Crown, GraduationCap, Gavel, ShieldAlert, LayoutDashboard, Users, FolderKanban, Settings, ScrollText } from "lucide-react";
+import { Building2, Crown, GraduationCap, Gavel, ShieldAlert, LayoutDashboard, Users, FolderKanban, ScrollText } from "lucide-react";
 import RoleShell from "@/components/layout/RoleShell";
 import DeanOverview from "./pages/dean/DeanOverview";
 import PgCoordinatorOverview from "./pages/pg-coordinator/PgCoordinatorOverview";
