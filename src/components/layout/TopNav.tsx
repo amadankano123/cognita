@@ -8,6 +8,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AppRole, ADMIN_ROLES, HOD_ROLES, ROLE_GROUPS } from "@/types/research";
+import { ROLE_HOME_ROUTE } from "@/lib/permissions";
 import ProjectContextDrawer from "./ProjectContextDrawer";
 
 const TopNav = () => {
