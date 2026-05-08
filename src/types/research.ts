@@ -4,13 +4,25 @@ export type AppRole =
   | "PhD Student"
   | "Researcher"
   | "Supervisor"
+  | "Co-Supervisor"
   | "Head of Department"
+  | "PG Coordinator"
+  | "Dean"
+  | "Director of Research"
+  | "Vice Chancellor"
+  | "External Examiner"
+  | "Ethics Committee Member"
   | "Research Director"
-  | "Compliance Officer";
+  | "Compliance Officer"
+  | "Central Admin";
 
-export const ADMIN_ROLES: AppRole[] = ["Research Director", "Compliance Officer"];
+export const ADMIN_ROLES: AppRole[] = ["Research Director", "Compliance Officer", "Central Admin", "Director of Research"];
 export const HOD_ROLES: AppRole[] = ["Head of Department"];
-export const RESEARCHER_ROLES: AppRole[] = ["Undergraduate Student", "Master's Student", "PhD Student", "Researcher", "Supervisor"];
+export const FACULTY_LEADERSHIP_ROLES: AppRole[] = ["Dean", "PG Coordinator"];
+export const EXECUTIVE_ROLES: AppRole[] = ["Vice Chancellor", "Director of Research", "Central Admin"];
+export const REVIEW_ROLES: AppRole[] = ["External Examiner", "Ethics Committee Member"];
+export const STUDENT_ROLES: AppRole[] = ["Undergraduate Student", "Master's Student", "PhD Student"];
+export const RESEARCHER_ROLES: AppRole[] = ["Undergraduate Student", "Master's Student", "PhD Student", "Researcher", "Supervisor", "Co-Supervisor"];
 
 export interface RoleGroup {
   label: string;
