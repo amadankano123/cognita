@@ -1,6 +1,6 @@
 import { NavLink, useLocation } from "react-router-dom";
 import {
-  LayoutDashboard, FolderOpen, Users, Shield, BarChart3, Settings, ChevronLeft,
+  LayoutDashboard, FolderOpen, Users, Shield, BarChart3, Settings, ChevronLeft, ScrollText,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -12,6 +12,7 @@ const navItems = [
   { title: "Researchers", path: "/admin/researchers", icon: Users },
   { title: "Compliance", path: "/admin/compliance", icon: Shield },
   { title: "Analytics", path: "/admin/analytics", icon: BarChart3 },
+  { title: "Audit Trail", path: "/admin/audit", icon: ScrollText },
   { title: "Settings", path: "/admin/settings", icon: Settings },
 ];
 
