@@ -36,15 +36,7 @@ const TopNav = () => {
 
   const handleSwitchRole = (newRole: AppRole) => {
     switchRole(newRole);
-    if (HOD_ROLES.includes(newRole)) {
-      navigate("/hod/overview");
-    } else if (newRole === "Supervisor") {
-      navigate("/supervisor/students");
-    } else if (ADMIN_ROLES.includes(newRole)) {
-      navigate("/admin/dashboard");
-    } else {
-      navigate("/app/proj-001/dashboard");
-    }
+    navigate(ROLE_HOME_ROUTE[newRole] ?? "/app/proj-001/dashboard");
   };
 
   const notifications = [
