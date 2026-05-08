@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { AppRole, ADMIN_ROLES, HOD_ROLES, ROLE_GROUPS } from "@/types/research";
 import { ROLE_HOME_ROUTE } from "@/lib/permissions";
 import ProjectContextDrawer from "./ProjectContextDrawer";
+import NotificationBell from "./NotificationBell";
 
 const TopNav = () => {
   const { user, logout, role, isAdmin, switchRole } = useAuth();
