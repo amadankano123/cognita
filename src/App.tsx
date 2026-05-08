@@ -6,6 +6,17 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthContext";
 import { ProjectProvider } from "@/context/ProjectContext";
 import { InstitutionProvider } from "@/context/InstitutionContext";
+import { InstitutionConfigProvider } from "@/context/InstitutionConfigContext";
+import { AuditProvider } from "@/context/AuditContext";
+import { NotificationProvider } from "@/context/NotificationContext";
+import { Building2, Crown, GraduationCap, Gavel, ShieldAlert, LayoutDashboard, Users, FolderKanban, Settings, ScrollText } from "lucide-react";
+import RoleShell from "@/components/layout/RoleShell";
+import DeanOverview from "./pages/dean/DeanOverview";
+import PgCoordinatorOverview from "./pages/pg-coordinator/PgCoordinatorOverview";
+import VcOverview from "./pages/vc/VcOverview";
+import ExaminerQueue from "./pages/examiner/ExaminerQueue";
+import EthicsQueue from "./pages/ethics/EthicsQueue";
+import AuditLogPage from "./pages/admin/AuditLogPage";
 
 import Landing from "./pages/Landing";
 import Auth from "./pages/Auth";
@@ -62,6 +73,9 @@ const App = () => (
     <AuthProvider>
       <ProjectProvider>
         <InstitutionProvider>
+          <InstitutionConfigProvider>
+            <AuditProvider>
+              <NotificationProvider>
           <TooltipProvider>
             <Toaster />
             <Sonner />
