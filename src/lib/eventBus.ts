@@ -23,8 +23,8 @@ export const eventBus = {
       try { l(event); } catch (err) { console.error("eventBus listener error", err); }
     });
   },
-  subscribe(l: Listener) {
+  subscribe(l: Listener): () => void {
     listeners.add(l);
-    return () => listeners.delete(l);
+    return () => { listeners.delete(l); };
   },
 };
