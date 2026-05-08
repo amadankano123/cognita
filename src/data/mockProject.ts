@@ -64,6 +64,19 @@ export const mockPhdUser: User = {
   institution: "Greenfield University",
 };
 
+const makeUser = (id: string, name: string, email: string, role: AppRole): User => ({
+  id, name, email, role, institution: "Greenfield University",
+});
+
+export const mockCoSupervisorUser: User = makeUser("co-sup-001", "Dr. Linda Akpan", "l.akpan@greenfield.edu", "Co-Supervisor");
+export const mockDeanUser: User = makeUser("dean-001", "Prof. Ifeanyi Eze", "i.eze@greenfield.edu", "Dean");
+export const mockPgCoordinatorUser: User = makeUser("pgc-001", "Dr. Chioma Bello", "c.bello@greenfield.edu", "PG Coordinator");
+export const mockDirectorUser: User = makeUser("dor-001", "Prof. Tunde Bakare", "t.bakare@greenfield.edu", "Director of Research");
+export const mockVcUser: User = makeUser("vc-001", "Prof. Amina Yusuf", "vc@greenfield.edu", "Vice Chancellor");
+export const mockExternalExaminerUser: User = makeUser("ext-001", "Prof. David Mensah", "d.mensah@external.edu", "External Examiner");
+export const mockEthicsUser: User = makeUser("eth-001", "Dr. Grace Owusu", "g.owusu@greenfield.edu", "Ethics Committee Member");
+export const mockCentralAdminUser: User = makeUser("ca-001", "Mr. Samuel Ade", "s.ade@greenfield.edu", "Central Admin");
+
 /** Map each role to its canonical mock user */
 export const roleUserMap: Record<AppRole, User> = {
   "Researcher": mockUser,
@@ -71,9 +84,17 @@ export const roleUserMap: Record<AppRole, User> = {
   "Master's Student": mockMastersUser,
   "PhD Student": mockPhdUser,
   "Supervisor": mockSupervisorUser,
+  "Co-Supervisor": mockCoSupervisorUser,
   "Head of Department": mockHodUser,
+  "PG Coordinator": mockPgCoordinatorUser,
+  "Dean": mockDeanUser,
+  "Director of Research": mockDirectorUser,
+  "Vice Chancellor": mockVcUser,
+  "External Examiner": mockExternalExaminerUser,
+  "Ethics Committee Member": mockEthicsUser,
   "Research Director": mockAdminUser,
   "Compliance Officer": mockComplianceUser,
+  "Central Admin": mockCentralAdminUser,
 };
 
 export const defaultProject: ResearchProject = {
