@@ -70,25 +70,8 @@ const TopNav = () => {
       <div className="flex items-center gap-3">
         <ProjectContextDrawer />
 
-        {/* Notifications */}
-        <DropdownMenu open={notifOpen} onOpenChange={setNotifOpen}>
-          <DropdownMenuTrigger asChild>
-            <button className="relative text-muted-foreground hover:text-foreground transition-colors" aria-label="Notifications">
-              <Bell className="h-4 w-4" />
-              <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-destructive border-2 border-card" />
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-72">
-            <DropdownMenuLabel>Notifications</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            {notifications.map(n => (
-              <DropdownMenuItem key={n.id} className="flex flex-col items-start gap-0.5 py-2">
-                <span className="text-sm">{n.text}</span>
-                <span className="text-xs text-muted-foreground">{n.time}</span>
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {/* Notifications (event-driven) */}
+        <NotificationBell />
 
         {/* Switch Role */}
         <DropdownMenu>
