@@ -41,11 +41,23 @@ export const ROLE_GROUPS: RoleGroup[] = [
   { label: "Faculty", roles: [
     { value: "Researcher", label: "Researcher" },
     { value: "Supervisor", label: "Supervisor" },
+    { value: "Co-Supervisor", label: "Co-Supervisor" },
+  ]},
+  { label: "Department & Faculty Leadership", roles: [
     { value: "Head of Department", label: "Head of Department" },
+    { value: "PG Coordinator", label: "PG Coordinator" },
+    { value: "Dean", label: "Dean of Faculty" },
+  ]},
+  { label: "Review & Governance", roles: [
+    { value: "External Examiner", label: "External Examiner" },
+    { value: "Ethics Committee Member", label: "Ethics Committee Member" },
   ]},
   { label: "Administration", roles: [
-    { value: "Research Director", label: "Research Director (Admin)" },
-    { value: "Compliance Officer", label: "Compliance Officer (Admin)" },
+    { value: "Director of Research", label: "Director of Research" },
+    { value: "Vice Chancellor", label: "Vice Chancellor" },
+    { value: "Central Admin", label: "Central Admin" },
+    { value: "Research Director", label: "Research Director (Legacy)" },
+    { value: "Compliance Officer", label: "Compliance Officer" },
   ]},
 ];
 
