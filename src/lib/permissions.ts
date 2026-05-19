@@ -57,11 +57,6 @@ const SUPERVISOR: Permission[] = [
   "project.view.department", "ai.use.generate",
 ];
 
-const CO_SUPERVISOR: Permission[] = [
-  "project.view.own", "project.view.department",
-  "review.comment", "review.approve.section", "supervision.cosupervise",
-];
-
 const HOD: Permission[] = [
   ...SUPERVISOR,
   "review.approve.final", "users.manage.department",
@@ -91,28 +86,18 @@ const DIRECTOR_OF_RESEARCH: Permission[] = [
 const VC: Permission[] = [
   "project.view.institution", "analytics.view.institution",
   "analytics.view.executive", "audit.view.institution",
-];
-
-const CENTRAL_ADMIN: Permission[] = [
-  "users.manage.institution", "institution.configure", "institution.theming",
-  "ai.policy.set", "compliance.policy.set", "audit.view.institution",
-  "analytics.view.institution", "users.invite",
+  "compliance.policy.set", "compliance.threshold.set",
+  "institution.configure", "institution.theming",
+  "users.manage.institution", "users.invite",
 ];
 
 const EXTERNAL_EXAMINER: Permission[] = [
   "project.view.own", "review.examine.external", "review.comment",
 ];
 
-const ETHICS_MEMBER: Permission[] = [
-  "project.view.own", "review.ethics.approve", "review.comment",
+const INTERNAL_EXAMINER: Permission[] = [
+  "project.view.department", "review.examine.external", "review.comment",
 ];
-
-const COMPLIANCE_OFFICER: Permission[] = [
-  "project.view.institution", "audit.view.institution",
-  "compliance.policy.set", "compliance.threshold.set",
-];
-
-const RESEARCH_DIRECTOR_LEGACY: Permission[] = DIRECTOR_OF_RESEARCH;
 
 export const ROLE_PERMISSIONS: Record<AppRole, Permission[]> = {
   "Undergraduate Student": STUDENT,
@@ -120,17 +105,13 @@ export const ROLE_PERMISSIONS: Record<AppRole, Permission[]> = {
   "PhD Student": STUDENT,
   "Researcher": [...STUDENT, "ai.use.generate"],
   "Supervisor": SUPERVISOR,
-  "Co-Supervisor": CO_SUPERVISOR,
   "Head of Department": HOD,
   "PG Coordinator": PG_COORDINATOR,
   "Dean": DEAN,
   "Director of Research": DIRECTOR_OF_RESEARCH,
   "Vice Chancellor": VC,
   "External Examiner": EXTERNAL_EXAMINER,
-  "Ethics Committee Member": ETHICS_MEMBER,
-  "Research Director": RESEARCH_DIRECTOR_LEGACY,
-  "Compliance Officer": COMPLIANCE_OFFICER,
-  "Central Admin": CENTRAL_ADMIN,
+  "Internal Examiner": INTERNAL_EXAMINER,
 };
 
 export function hasPermission(role: AppRole | undefined | null, perm: Permission): boolean {
@@ -149,15 +130,11 @@ export const ROLE_HOME_ROUTE: Record<AppRole, string> = {
   "PhD Student": "/app/proj-001/dashboard",
   "Researcher": "/app/proj-001/dashboard",
   "Supervisor": "/supervisor/overview",
-  "Co-Supervisor": "/supervisor/overview",
   "Head of Department": "/hod/overview",
   "PG Coordinator": "/pg-coordinator/overview",
   "Dean": "/dean/overview",
   "Director of Research": "/admin/dashboard",
   "Vice Chancellor": "/vc/overview",
   "External Examiner": "/examiner/queue",
-  "Ethics Committee Member": "/ethics/queue",
-  "Research Director": "/admin/dashboard",
-  "Compliance Officer": "/admin/compliance",
-  "Central Admin": "/admin/dashboard",
+  "Internal Examiner": "/examiner/queue",
 };

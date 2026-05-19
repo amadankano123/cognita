@@ -42,7 +42,7 @@ export const NotificationProvider: React.FC<{ children: React.ReactNode }> = ({ 
   useEffect(() => {
     return eventBus.subscribe((e) => {
       if (e.type === "review.requested") push({ title: "New review requested", level: "info", link: "/supervisor/reviews" });
-      if (e.type === "ethics.requested") push({ title: "Ethics review requested", level: "warning", link: "/ethics/queue" });
+      if (e.type === "ethics.requested") push({ title: "Ethics review requested", level: "warning", link: "/admin/compliance" });
       if (e.type === "ai.policy.changed") push({ title: "AI policy updated", level: "info" });
     });
   }, [push]);
