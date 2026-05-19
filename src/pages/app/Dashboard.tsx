@@ -10,6 +10,8 @@ import { Badge } from "@/components/ui/badge";
 import { FileEdit, BookOpen, BarChart3, Clock, Users, ShieldCheck, Database, Download, Bot, ArrowRight, UserCheck, AlertTriangle } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { RESEARCHER_ROLES } from "@/types/research";
+import FlagsPanel from "@/components/dashboard/FlagsPanel";
+import { mockAccountabilityFlags } from "@/data/mockFlags";
 
 const Dashboard = () => {
   const { project, toggleChecklist } = useProject();
