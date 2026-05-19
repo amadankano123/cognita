@@ -116,15 +116,22 @@ const ArchitectureDoc = () => {
   | "PhD Student"
   | "Researcher"
   | "Supervisor"
-  | "Research Director"
-  | "Compliance Officer";`}</Code>
+  | "Head of Department"
+  | "PG Coordinator"
+  | "Dean"
+  | "Director of Research"
+  | "Vice Chancellor"
+  | "External Examiner"
+  | "Internal Examiner";`}</Code>
 
         <h3 className="text-xl font-semibold mt-6 mb-3">3.2 Role Groups</h3>
         <Table data={[
           ["Undergraduate", "Undergraduate Student", "Researcher workspace"],
           ["Postgraduate", "Master's Student, PhD Student", "Researcher workspace"],
           ["Faculty", "Researcher, Supervisor", "Researcher / Supervisor dashboard"],
-          ["Administration", "Research Director, Compliance Officer", "Admin dashboard"],
+          ["Dept & Faculty Leadership", "HOD, PG Coordinator, Dean", "Dept / Faculty dashboard"],
+          ["Review & Governance", "External Examiner, Internal Examiner", "Examination queue"],
+          ["Administration", "Director of Research, Vice Chancellor", "Admin / Executive dashboard"],
         ]} headers={["Group", "Roles", "Dashboard"]} />
 
         <h3 className="text-xl font-semibold mt-6 mb-3">3.3 Post-Auth Routing Logic</h3>

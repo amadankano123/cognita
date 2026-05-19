@@ -9,13 +9,12 @@ import { InstitutionProvider } from "@/context/InstitutionContext";
 import { InstitutionConfigProvider } from "@/context/InstitutionConfigContext";
 import { AuditProvider } from "@/context/AuditContext";
 import { NotificationProvider } from "@/context/NotificationContext";
-import { Building2, Crown, GraduationCap, Gavel, ShieldAlert, LayoutDashboard, Users, FolderKanban, ScrollText } from "lucide-react";
+import { Building2, Crown, GraduationCap, Gavel, LayoutDashboard, Users, FolderKanban, ScrollText } from "lucide-react";
 import RoleShell from "@/components/layout/RoleShell";
 import DeanOverview from "./pages/dean/DeanOverview";
 import PgCoordinatorOverview from "./pages/pg-coordinator/PgCoordinatorOverview";
 import VcOverview from "./pages/vc/VcOverview";
 import ExaminerQueue from "./pages/examiner/ExaminerQueue";
-import EthicsQueue from "./pages/ethics/EthicsQueue";
 import AuditLogPage from "./pages/admin/AuditLogPage";
 
 import Landing from "./pages/Landing";
@@ -175,21 +174,16 @@ const App = () => (
                   <Route path="audit" element={<AuditLogPage />} />
                 </Route>
 
-                {/* External Examiner */}
-                <Route path="/examiner" element={<RoleShell roleLabel="External Examiner" roleIcon={Gavel} items={[
+                {/* Examiner (External / Internal) */}
+                <Route path="/examiner" element={<RoleShell roleLabel="Examiner" roleIcon={Gavel} items={[
                   { title: "Examination Queue", path: "/examiner/queue", icon: FolderKanban },
                 ]} />}>
                   <Route index element={<Navigate to="queue" replace />} />
                   <Route path="queue" element={<ExaminerQueue />} />
                 </Route>
 
-                {/* Ethics Committee */}
-                <Route path="/ethics" element={<RoleShell roleLabel="Ethics Committee" roleIcon={ShieldAlert} items={[
-                  { title: "Application Queue", path: "/ethics/queue", icon: FolderKanban },
-                ]} />}>
-                  <Route index element={<Navigate to="queue" replace />} />
-                  <Route path="queue" element={<EthicsQueue />} />
-                </Route>
+                {/* Legacy redirect: /ethics → examiner queue */}
+                <Route path="/ethics/*" element={<Navigate to="/examiner/queue" replace />} />
 
                 <Route path="*" element={<NotFound />} />
               </Routes>

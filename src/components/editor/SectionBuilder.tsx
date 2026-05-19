@@ -39,7 +39,7 @@ const SectionBuilder = ({ activeSectionId, onSelectSection }: SectionBuilderProp
 
   const isStudent = role === "Undergraduate Student" || role === "Master's Student" || role === "PhD Student";
   const isSupervisor = role === "Supervisor";
-  const isAdmin = role === "Research Director" || role === "Compliance Officer";
+  const isAdmin = role === "Director of Research" || role === "Vice Chancellor";
   const isResearcher = role === "Researcher";
   const canEdit = !isAdmin;
   const canDelete = isResearcher || isSupervisor;
