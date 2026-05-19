@@ -133,6 +133,19 @@ const SupervisorOverview = () => {
           </div>
         </Card>
       </div>
+
+      {/* Accountability flags */}
+      <div className="mt-6">
+        <FlagsPanel
+          flags={mockAccountabilityFlags.filter(f =>
+            f.supervisorName === (user?.name || "Prof. Kwame Mwangi") ||
+            f.category !== "supervisor-responsiveness"
+          )}
+          title="Flags on My Cohort"
+          subtitle="Stagnation, my response SLAs, and milestone deadlines"
+          showSubject
+        />
+      </div>
     </div>
   );
 };
