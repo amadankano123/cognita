@@ -126,6 +126,16 @@ const AdminDashboard = () => {
           ))}
         </div>
       </Card>
+
+      <div className="mt-6">
+        <FlagsPanel
+          flags={mockAccountabilityFlags}
+          title="Institutional Accountability Flags"
+          subtitle="Inactivity · Supervisor Responsiveness · Deadline Compliance"
+          showSubject
+          compact
+        />
+      </div>
     </div>
   );
 };
