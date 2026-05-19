@@ -165,6 +165,13 @@ const HodOverview = () => {
           </div>
         </Card>
       )}
+
+      <FlagsPanel
+        flags={mockAccountabilityFlags}
+        title="Departmental Accountability Flags"
+        subtitle="Inactivity · Supervisor Responsiveness · Deadline Compliance"
+        showSubject
+      />
     </div>
   );
 };
