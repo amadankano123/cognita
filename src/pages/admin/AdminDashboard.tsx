@@ -5,6 +5,8 @@ import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import { FolderOpen, AlertTriangle, Bot, FileText, TrendingUp, ArrowRight } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
+import FlagsPanel from "@/components/dashboard/FlagsPanel";
+import { mockAccountabilityFlags } from "@/data/mockFlags";
 
 const AdminDashboard = () => {
   const { institution } = useInstitution();
@@ -124,6 +126,16 @@ const AdminDashboard = () => {
           ))}
         </div>
       </Card>
+
+      <div className="mt-6">
+        <FlagsPanel
+          flags={mockAccountabilityFlags}
+          title="Institutional Accountability Flags"
+          subtitle="Inactivity · Supervisor Responsiveness · Deadline Compliance"
+          showSubject
+          compact
+        />
+      </div>
     </div>
   );
 };

@@ -10,6 +10,8 @@ import { Badge } from "@/components/ui/badge";
 import { FileEdit, BookOpen, BarChart3, Clock, Users, ShieldCheck, Database, Download, Bot, ArrowRight, UserCheck, AlertTriangle } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { RESEARCHER_ROLES } from "@/types/research";
+import FlagsPanel from "@/components/dashboard/FlagsPanel";
+import { mockAccountabilityFlags } from "@/data/mockFlags";
 
 const Dashboard = () => {
   const { project, toggleChecklist } = useProject();
@@ -148,6 +150,17 @@ const Dashboard = () => {
           <Button className="w-full" size="lg" onClick={() => nav("ai-reviewer")}>
             <Bot className="h-4 w-4 mr-2" /> Run Full Review
           </Button>
+
+          {/* Accountability flags affecting this student */}
+          <FlagsPanel
+            flags={mockAccountabilityFlags.filter(f =>
+              ["stu-pg-001", "stu-pg-002", "stu-ug-004"].includes(f.studentId || "")
+            ).slice(0, 4)}
+            title="Your Accountability Flags"
+            subtitle="Inactivity, supervisor SLAs, and your deadlines"
+            compact
+            emptyMessage="No flags. You're on track — keep it up!"
+          />
         </div>
 
         <div className="space-y-4">

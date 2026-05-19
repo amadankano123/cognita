@@ -3,6 +3,8 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Users, UserCheck, BarChart3, Shield, FileText, GraduationCap } from "lucide-react";
 import { mockHodDepartment, mockDepartmentSupervisors, mockDepartmentStudents } from "@/data/mockHod";
+import FlagsPanel from "@/components/dashboard/FlagsPanel";
+import { mockAccountabilityFlags } from "@/data/mockFlags";
 
 const StatCard = ({ icon: Icon, label, value, sub }: { icon: any; label: string; value: string; sub?: string }) => (
   <Card className="p-5">
@@ -163,6 +165,13 @@ const HodOverview = () => {
           </div>
         </Card>
       )}
+
+      <FlagsPanel
+        flags={mockAccountabilityFlags}
+        title="Departmental Accountability Flags"
+        subtitle="Inactivity · Supervisor Responsiveness · Deadline Compliance"
+        showSubject
+      />
     </div>
   );
 };

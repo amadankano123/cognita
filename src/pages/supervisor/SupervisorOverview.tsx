@@ -6,6 +6,8 @@ import { Sparkles, Users, AlertTriangle, CheckCircle, GraduationCap } from "luci
 import { mockSupervisedStudents } from "@/data/mockSupervisor";
 import { useAuth } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
+import FlagsPanel from "@/components/dashboard/FlagsPanel";
+import { mockAccountabilityFlags } from "@/data/mockFlags";
 
 const SupervisorOverview = () => {
   const { user } = useAuth();
@@ -130,6 +132,19 @@ const SupervisorOverview = () => {
             </div>
           </div>
         </Card>
+      </div>
+
+      {/* Accountability flags */}
+      <div className="mt-6">
+        <FlagsPanel
+          flags={mockAccountabilityFlags.filter(f =>
+            f.supervisorName === (user?.name || "Prof. Kwame Mwangi") ||
+            f.category !== "supervisor-responsiveness"
+          )}
+          title="Flags on My Cohort"
+          subtitle="Stagnation, my response SLAs, and milestone deadlines"
+          showSubject
+        />
       </div>
     </div>
   );
