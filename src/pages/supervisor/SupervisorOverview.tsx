@@ -6,6 +6,8 @@ import { Sparkles, Users, AlertTriangle, CheckCircle, GraduationCap } from "luci
 import { mockSupervisedStudents } from "@/data/mockSupervisor";
 import { useAuth } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
+import FlagsPanel from "@/components/dashboard/FlagsPanel";
+import { mockAccountabilityFlags } from "@/data/mockFlags";
 
 const SupervisorOverview = () => {
   const { user } = useAuth();
