@@ -1,36 +1,46 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import cognitaLogo from "@/assets/cognita-logo.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/context/AuthContext";
-import { AppRole, ADMIN_ROLES, HOD_ROLES, ROLE_GROUPS } from "@/types/research";
+import { AppRole, ADMIN_ROLES, HOD_ROLES, STUDENT_ROLES, ROLE_GROUPS } from "@/types/research";
+import { ROLE_HOME_ROUTE } from "@/lib/permissions";
 
 const Auth = () => {
   const [mode, setMode] = useState<"login" | "signup">("login");
-  const [email, setEmail] = useState("f.hassan@greenfield.edu");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("password");
   const [name, setName] = useState("");
-  const [role, setRole] = useState<AppRole>("Researcher");
+  const [role, setRole] = useState<AppRole | "">("");
   const { login, signup } = useAuth();
   const navigate = useNavigate();
 
   const getPostAuthRoute = (selectedRole: AppRole, isSignup: boolean) => {
-    if (ADMIN_ROLES.includes(selectedRole)) return isSignup ? "/admin-onboarding" : "/admin/dashboard";
-    if (HOD_ROLES.includes(selectedRole)) return isSignup ? "/hod-onboarding" : "/hod/overview";
-    if (selectedRole === "Supervisor") return isSignup ? "/supervisor-onboarding" : "/supervisor/students";
-    return isSignup ? "/onboarding" : "/app/proj-001/dashboard";
+    if (isSignup) {
+      if (ADMIN_ROLES.includes(selectedRole)) return "/admin-onboarding";
+      if (HOD_ROLES.includes(selectedRole)) return "/hod-onboarding";
+      if (selectedRole === "Supervisor") return "/supervisor-onboarding";
+      if (([...STUDENT_ROLES, "Researcher"] as AppRole[]).includes(selectedRole)) return "/onboarding";
+    }
+    return ROLE_HOME_ROUTE[selectedRole] ?? "/auth";
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (!role) {
+      toast.error("Please select your role to continue");
+      return;
+    }
+    const effectiveEmail = email || "demo@cognita.edu";
     if (mode === "login") {
-      const success = login(email, password, role);
+      const success = login(effectiveEmail, password, role);
       if (success) navigate(getPostAuthRoute(role, false));
     } else {
-      const success = signup(name, email, password, role);
+      const success = signup(name, effectiveEmail, password, role);
       if (success) navigate(getPostAuthRoute(role, true));
     }
   };
@@ -70,14 +80,14 @@ const Auth = () => {
             )}
             <div>
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+              <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@institution.edu" />
             </div>
             <div>
               <Label htmlFor="password">Password</Label>
               <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
             <div>
-              <Label htmlFor="role">Role</Label>
+              <Label htmlFor="role">Role <span className="text-destructive">*</span></Label>
               <Select value={role} onValueChange={(v) => setRole(v as AppRole)}>
                 <SelectTrigger id="role" className="w-full">
                   <SelectValue placeholder="Select your role" />
@@ -93,20 +103,23 @@ const Auth = () => {
                   ))}
                 </SelectContent>
               </Select>
-              {ADMIN_ROLES.includes(role) && (
+              {role && ADMIN_ROLES.includes(role as AppRole) && (
                 <p className="text-xs text-primary mt-1">🏛️ You'll be directed to the Institutional Dashboard</p>
               )}
-              {HOD_ROLES.includes(role) && (
+              {role && HOD_ROLES.includes(role as AppRole) && (
                 <p className="text-xs text-primary mt-1">🏢 You'll be directed to the Department Dashboard</p>
               )}
+              {role && !role && (
+                <p className="text-xs text-muted-foreground mt-1">Choose your role to continue</p>
+              )}
             </div>
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full" disabled={!role}>
               {mode === "login" ? "Login" : "Create Account"}
             </Button>
           </form>
 
           <p className="text-xs text-muted-foreground text-center mt-4">
-            Demo credentials pre-filled. Select a role and click Login.
+            Select your role — you'll land on the dashboard for that role.
           </p>
         </div>
       </div>
