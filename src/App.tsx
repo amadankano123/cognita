@@ -147,39 +147,44 @@ const App = () => (
 
                 {/* Dean of Faculty */}
                 <Route path="/dean" element={<RoleShell roleLabel="Dean" roleIcon={Building2} items={[
-                  { title: "Overview", path: "/dean/overview", icon: LayoutDashboard },
-                  { title: "Departments", path: "/dean/overview", icon: Building2 },
+                  { title: "Dashboard", path: "/dean/dashboard", icon: LayoutDashboard },
+                  { title: "Departments", path: "/dean/dashboard", icon: Building2 },
                   { title: "Audit Trail", path: "/dean/audit", icon: ScrollText },
                 ]} />}>
-                  <Route index element={<Navigate to="overview" replace />} />
-                  <Route path="overview" element={<DeanOverview />} />
+                  <Route index element={<Navigate to="dashboard" replace />} />
+                  <Route path="dashboard" element={<DeanOverview />} />
+                  <Route path="overview" element={<Navigate to="/dean/dashboard" replace />} />
                   <Route path="audit" element={<AuditLogPage />} />
                 </Route>
 
                 {/* PG Coordinator */}
                 <Route path="/pg-coordinator" element={<RoleShell roleLabel="PG Coordinator" roleIcon={GraduationCap} items={[
-                  { title: "Overview", path: "/pg-coordinator/overview", icon: LayoutDashboard },
-                  { title: "Cohort", path: "/pg-coordinator/overview", icon: Users },
+                  { title: "Dashboard", path: "/pg-coordinator/dashboard", icon: LayoutDashboard },
+                  { title: "Cohort", path: "/pg-coordinator/dashboard", icon: Users },
                 ]} />}>
-                  <Route index element={<Navigate to="overview" replace />} />
-                  <Route path="overview" element={<PgCoordinatorOverview />} />
+                  <Route index element={<Navigate to="dashboard" replace />} />
+                  <Route path="dashboard" element={<PgCoordinatorOverview />} />
+                  <Route path="overview" element={<Navigate to="/pg-coordinator/dashboard" replace />} />
                 </Route>
 
                 {/* Vice Chancellor */}
                 <Route path="/vc" element={<RoleShell roleLabel="Vice Chancellor" roleIcon={Crown} items={[
-                  { title: "Executive View", path: "/vc/overview", icon: LayoutDashboard },
+                  { title: "Dashboard", path: "/vc/dashboard", icon: LayoutDashboard },
                   { title: "Audit Trail", path: "/vc/audit", icon: ScrollText },
                 ]} />}>
-                  <Route index element={<Navigate to="overview" replace />} />
-                  <Route path="overview" element={<VcOverview />} />
+                  <Route index element={<Navigate to="dashboard" replace />} />
+                  <Route path="dashboard" element={<VcOverview />} />
+                  <Route path="overview" element={<Navigate to="/vc/dashboard" replace />} />
                   <Route path="audit" element={<AuditLogPage />} />
                 </Route>
 
                 {/* Examiner (External / Internal) */}
                 <Route path="/examiner" element={<RoleShell roleLabel="Examiner" roleIcon={Gavel} items={[
+                  { title: "Dashboard", path: "/examiner/dashboard", icon: LayoutDashboard },
                   { title: "Examination Queue", path: "/examiner/queue", icon: FolderKanban },
                 ]} />}>
-                  <Route index element={<Navigate to="queue" replace />} />
+                  <Route index element={<Navigate to="dashboard" replace />} />
+                  <Route path="dashboard" element={<ExaminerDashboard />} />
                   <Route path="queue" element={<ExaminerQueue />} />
                 </Route>
 
