@@ -20,10 +20,8 @@ export type Permission =
   | "review.approve.section"
   | "review.approve.final"
   | "review.examine.external"
-  | "review.ethics.approve"
   // Supervision
   | "supervision.assign"
-  | "supervision.cosupervise"
   // Compliance & audit
   | "compliance.threshold.set"
   | "compliance.policy.set"

@@ -99,8 +99,13 @@ type AppRole =
   | "PhD Student"
   | "Researcher"
   | "Supervisor"
-  | "Research Director"
-  | "Compliance Officer";
+  | "Head of Department"
+  | "PG Coordinator"
+  | "Dean"
+  | "Director of Research"
+  | "Vice Chancellor"
+  | "External Examiner"
+  | "Internal Examiner";
 ```
 
 ### 3.2 Role Groups
@@ -110,7 +115,9 @@ type AppRole =
 | Undergraduate | Undergraduate Student | Researcher workspace |
 | Postgraduate | Master's Student, PhD Student | Researcher workspace |
 | Faculty | Researcher, Supervisor | Researcher workspace / Supervisor dashboard |
-| Administration | Research Director, Compliance Officer | Admin dashboard |
+| Department & Faculty Leadership | Head of Department, PG Coordinator, Dean | HOD / PG Coordinator / Dean dashboards |
+| Review & Governance | External Examiner, Internal Examiner | Examiner queue |
+| Administration | Director of Research, Vice Chancellor | Admin dashboard / VC executive view |
 
 ### 3.3 Post-Auth Routing Logic (`Auth.tsx`)
 
