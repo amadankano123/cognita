@@ -15,6 +15,7 @@ import DeanOverview from "./pages/dean/DeanOverview";
 import PgCoordinatorOverview from "./pages/pg-coordinator/PgCoordinatorOverview";
 import VcOverview from "./pages/vc/VcOverview";
 import ExaminerQueue from "./pages/examiner/ExaminerQueue";
+import ExaminerDashboard from "./pages/examiner/ExaminerDashboard";
 import AuditLogPage from "./pages/admin/AuditLogPage";
 
 import Landing from "./pages/Landing";
