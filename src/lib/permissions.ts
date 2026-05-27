@@ -97,6 +97,16 @@ const INTERNAL_EXAMINER: Permission[] = [
   "project.view.department", "review.examine.external", "review.comment",
 ];
 
+// SPGS Dean — institution-wide PG oversight, read-only.
+// No supervisor assignment, no departmental assessment changes.
+const SPGS_DEAN: Permission[] = [
+  "project.view.institution",
+  "analytics.view.institution",
+  "analytics.view.faculty",
+  "analytics.view.executive",
+  "audit.view.institution",
+];
+
 export const ROLE_PERMISSIONS: Record<AppRole, Permission[]> = {
   "Undergraduate Student": STUDENT,
   "Master's Student": STUDENT,
@@ -106,6 +116,7 @@ export const ROLE_PERMISSIONS: Record<AppRole, Permission[]> = {
   "Head of Department": HOD,
   "PG Coordinator": PG_COORDINATOR,
   "Dean": DEAN,
+  "SPGS Dean": SPGS_DEAN,
   "Director of Research": DIRECTOR_OF_RESEARCH,
   "Vice Chancellor": VC,
   "External Examiner": EXTERNAL_EXAMINER,
@@ -131,6 +142,7 @@ export const ROLE_HOME_ROUTE: Record<AppRole, string> = {
   "Head of Department": "/hod/overview",
   "PG Coordinator": "/pg-coordinator/dashboard",
   "Dean": "/dean/dashboard",
+  "SPGS Dean": "/spgs/dashboard",
   "Director of Research": "/admin/dashboard",
   "Vice Chancellor": "/vc/dashboard",
   "External Examiner": "/examiner/dashboard",

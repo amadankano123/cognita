@@ -9,13 +9,18 @@ import { InstitutionProvider } from "@/context/InstitutionContext";
 import { InstitutionConfigProvider } from "@/context/InstitutionConfigContext";
 import { AuditProvider } from "@/context/AuditContext";
 import { NotificationProvider } from "@/context/NotificationContext";
-import { Building2, Crown, GraduationCap, Gavel, LayoutDashboard, Users, FolderKanban, ScrollText } from "lucide-react";
+import { Building2, Crown, GraduationCap, Gavel, LayoutDashboard, Users, FolderKanban, ScrollText, BarChart3, Award, FileText } from "lucide-react";
 import RoleShell from "@/components/layout/RoleShell";
 import DeanOverview from "./pages/dean/DeanOverview";
 import PgCoordinatorOverview from "./pages/pg-coordinator/PgCoordinatorOverview";
 import VcOverview from "./pages/vc/VcOverview";
 import ExaminerQueue from "./pages/examiner/ExaminerQueue";
 import ExaminerDashboard from "./pages/examiner/ExaminerDashboard";
+import SpgsDashboard from "./pages/spgs/SpgsDashboard";
+import SpgsStudents from "./pages/spgs/SpgsStudents";
+import SpgsAnalytics from "./pages/spgs/SpgsAnalytics";
+import SpgsSenate from "./pages/spgs/SpgsSenate";
+import SpgsReports from "./pages/spgs/SpgsReports";
 import AuditLogPage from "./pages/admin/AuditLogPage";
 import RequireRole from "@/components/auth/RequireRole";
 import { STUDENT_ROLES, ADMIN_ROLES, REVIEW_ROLES } from "@/types/research";
@@ -188,6 +193,24 @@ const App = () => (
                   <Route index element={<Navigate to="dashboard" replace />} />
                   <Route path="dashboard" element={<ExaminerDashboard />} />
                   <Route path="queue" element={<ExaminerQueue />} />
+                </Route>
+
+                {/* SPGS — School of Postgraduate Studies oversight */}
+                <Route path="/spgs" element={<RequireRole allow={["SPGS Dean"]}><RoleShell roleLabel="SPGS Dean" roleIcon={GraduationCap} items={[
+                  { title: "Dashboard", path: "/spgs/dashboard", icon: LayoutDashboard },
+                  { title: "PG Students", path: "/spgs/students", icon: Users },
+                  { title: "Analytics", path: "/spgs/analytics", icon: BarChart3 },
+                  { title: "Senate Readiness", path: "/spgs/senate", icon: Award },
+                  { title: "Reports", path: "/spgs/reports", icon: FileText },
+                  { title: "Audit Trail", path: "/spgs/audit", icon: ScrollText },
+                ]} /></RequireRole>}>
+                  <Route index element={<Navigate to="dashboard" replace />} />
+                  <Route path="dashboard" element={<SpgsDashboard />} />
+                  <Route path="students" element={<SpgsStudents />} />
+                  <Route path="analytics" element={<SpgsAnalytics />} />
+                  <Route path="senate" element={<SpgsSenate />} />
+                  <Route path="reports" element={<SpgsReports />} />
+                  <Route path="audit" element={<AuditLogPage />} />
                 </Route>
 
                 {/* Legacy redirect: /ethics → examiner queue */}
