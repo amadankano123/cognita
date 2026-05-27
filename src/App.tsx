@@ -92,7 +92,7 @@ const App = () => (
                 <Route path="/admin-onboarding" element={<AdminOnboarding />} />
 
                 {/* Researcher Workspace */}
-                <Route path="/app/:projectId" element={<AppLayout />}>
+                <Route path="/app/:projectId" element={<RequireRole allow={[...STUDENT_ROLES, "Researcher"]}><AppLayout /></RequireRole>}>
                   <Route index element={<Navigate to="dashboard" replace />} />
                   <Route path="dashboard" element={<Dashboard />} />
                   <Route path="editor" element={<Editor />} />
@@ -112,8 +112,8 @@ const App = () => (
                 <Route path="/app" element={<Navigate to="/app/proj-001/dashboard" replace />} />
                 <Route path="/app/dashboard" element={<Navigate to="/app/proj-001/dashboard" replace />} />
 
-                {/* Institution Dashboard */}
-                <Route path="/admin" element={<AdminLayout />}>
+                {/* Institution Dashboard — Director of Research */}
+                <Route path="/admin" element={<RequireRole allow={ADMIN_ROLES}><AdminLayout /></RequireRole>}>
                   <Route index element={<Navigate to="dashboard" replace />} />
                   <Route path="dashboard" element={<AdminDashboard />} />
                   <Route path="projects" element={<AdminProjects />} />
@@ -125,7 +125,7 @@ const App = () => (
                 </Route>
 
                 {/* Supervisor Dashboard */}
-                <Route path="/supervisor" element={<SupervisorLayout />}>
+                <Route path="/supervisor" element={<RequireRole allow={["Supervisor"]}><SupervisorLayout /></RequireRole>}>
                   <Route index element={<Navigate to="overview" replace />} />
                   <Route path="overview" element={<SupervisorOverview />} />
                   <Route path="students" element={<SupervisorStudents />} />
@@ -139,7 +139,7 @@ const App = () => (
                 </Route>
 
                 {/* HOD Dashboard */}
-                <Route path="/hod" element={<HodLayout />}>
+                <Route path="/hod" element={<RequireRole allow={["Head of Department"]}><HodLayout /></RequireRole>}>
                   <Route index element={<Navigate to="overview" replace />} />
                   <Route path="overview" element={<HodOverview />} />
                   <Route path="supervisors" element={<HodSupervisors />} />
@@ -148,11 +148,11 @@ const App = () => (
                 </Route>
 
                 {/* Dean of Faculty */}
-                <Route path="/dean" element={<RoleShell roleLabel="Dean" roleIcon={Building2} items={[
+                <Route path="/dean" element={<RequireRole allow={["Dean"]}><RoleShell roleLabel="Dean" roleIcon={Building2} items={[
                   { title: "Dashboard", path: "/dean/dashboard", icon: LayoutDashboard },
                   { title: "Departments", path: "/dean/dashboard", icon: Building2 },
                   { title: "Audit Trail", path: "/dean/audit", icon: ScrollText },
-                ]} />}>
+                ]} /></RequireRole>}>
                   <Route index element={<Navigate to="dashboard" replace />} />
                   <Route path="dashboard" element={<DeanOverview />} />
                   <Route path="overview" element={<Navigate to="/dean/dashboard" replace />} />
@@ -160,20 +160,20 @@ const App = () => (
                 </Route>
 
                 {/* PG Coordinator */}
-                <Route path="/pg-coordinator" element={<RoleShell roleLabel="PG Coordinator" roleIcon={GraduationCap} items={[
+                <Route path="/pg-coordinator" element={<RequireRole allow={["PG Coordinator"]}><RoleShell roleLabel="PG Coordinator" roleIcon={GraduationCap} items={[
                   { title: "Dashboard", path: "/pg-coordinator/dashboard", icon: LayoutDashboard },
                   { title: "Cohort", path: "/pg-coordinator/dashboard", icon: Users },
-                ]} />}>
+                ]} /></RequireRole>}>
                   <Route index element={<Navigate to="dashboard" replace />} />
                   <Route path="dashboard" element={<PgCoordinatorOverview />} />
                   <Route path="overview" element={<Navigate to="/pg-coordinator/dashboard" replace />} />
                 </Route>
 
                 {/* Vice Chancellor */}
-                <Route path="/vc" element={<RoleShell roleLabel="Vice Chancellor" roleIcon={Crown} items={[
+                <Route path="/vc" element={<RequireRole allow={["Vice Chancellor"]}><RoleShell roleLabel="Vice Chancellor" roleIcon={Crown} items={[
                   { title: "Dashboard", path: "/vc/dashboard", icon: LayoutDashboard },
                   { title: "Audit Trail", path: "/vc/audit", icon: ScrollText },
-                ]} />}>
+                ]} /></RequireRole>}>
                   <Route index element={<Navigate to="dashboard" replace />} />
                   <Route path="dashboard" element={<VcOverview />} />
                   <Route path="overview" element={<Navigate to="/vc/dashboard" replace />} />
@@ -181,10 +181,10 @@ const App = () => (
                 </Route>
 
                 {/* Examiner (External / Internal) */}
-                <Route path="/examiner" element={<RoleShell roleLabel="Examiner" roleIcon={Gavel} items={[
+                <Route path="/examiner" element={<RequireRole allow={REVIEW_ROLES}><RoleShell roleLabel="Examiner" roleIcon={Gavel} items={[
                   { title: "Dashboard", path: "/examiner/dashboard", icon: LayoutDashboard },
                   { title: "Examination Queue", path: "/examiner/queue", icon: FolderKanban },
-                ]} />}>
+                ]} /></RequireRole>}>
                   <Route index element={<Navigate to="dashboard" replace />} />
                   <Route path="dashboard" element={<ExaminerDashboard />} />
                   <Route path="queue" element={<ExaminerQueue />} />
