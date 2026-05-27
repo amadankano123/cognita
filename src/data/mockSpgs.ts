@@ -134,7 +134,8 @@ export const mockPgStudents: PgStudent[] = [
     degree: "PhD", enrolmentYear: 2020, session: "2024/2025", supervisor: "Prof. Idris Yusuf",
     researchArea: "Smart Grid Optimisation", currentStage: "External Examination", progress: 86,
     residencyMonths: 58, residencyLimitMonths: 60, daysInactive: 12, riskScore: 71,
-    completionForecast: "At risk — residency expiring", delayFlags: ["Residency expiring", "External examiner delay"],
+    completionForecast: "At risk — residency expiring",
+    delayFlags: ["Residency expiring", "External examiner delay"],
     milestones: buildMilestones("External Examination", "PhD"),
   },
   {

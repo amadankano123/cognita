@@ -58,6 +58,7 @@ export const mockDirectorUser: User = makeUser("dor-001", "Prof. Tunde Bakare", 
 export const mockVcUser: User = makeUser("vc-001", "Prof. Amina Yusuf", "vc@greenfield.edu", "Vice Chancellor");
 export const mockExternalExaminerUser: User = makeUser("ext-001", "Prof. David Mensah", "d.mensah@external.edu", "External Examiner");
 export const mockInternalExaminerUser: User = makeUser("int-001", "Dr. Grace Owusu", "g.owusu@greenfield.edu", "Internal Examiner");
+export const mockSpgsDeanUser: User = makeUser("spgs-001", "Prof. Adebola Adekunle", "spgs.dean@greenfield.edu", "SPGS Dean");
 
 // Backwards-compat aliases (some legacy modules may import these names)
 export const mockAdminUser: User = mockDirectorUser;
@@ -73,6 +74,7 @@ export const roleUserMap: Record<AppRole, User> = {
   "Head of Department": mockHodUser,
   "PG Coordinator": mockPgCoordinatorUser,
   "Dean": mockDeanUser,
+  "SPGS Dean": mockSpgsDeanUser,
   "Director of Research": mockDirectorUser,
   "Vice Chancellor": mockVcUser,
   "External Examiner": mockExternalExaminerUser,
