@@ -17,6 +17,8 @@ import VcOverview from "./pages/vc/VcOverview";
 import ExaminerQueue from "./pages/examiner/ExaminerQueue";
 import ExaminerDashboard from "./pages/examiner/ExaminerDashboard";
 import AuditLogPage from "./pages/admin/AuditLogPage";
+import RequireRole from "@/components/auth/RequireRole";
+import { STUDENT_ROLES, ADMIN_ROLES, REVIEW_ROLES } from "@/types/research";
 
 import Landing from "./pages/Landing";
 import Auth from "./pages/Auth";
