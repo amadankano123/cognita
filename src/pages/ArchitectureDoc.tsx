@@ -117,8 +117,8 @@ const ArchitectureDoc = () => {
   | "Researcher"
   | "Supervisor"
   | "Head of Department"
-  | "PG Coordinator"
   | "Dean"
+  | "SPGS Dean"
   | "Director of Research"
   | "Vice Chancellor"
   | "External Examiner"
@@ -129,7 +129,7 @@ const ArchitectureDoc = () => {
           ["Undergraduate", "Undergraduate Student", "Researcher workspace"],
           ["Postgraduate", "Master's Student, PhD Student", "Researcher workspace"],
           ["Faculty", "Researcher, Supervisor", "Researcher / Supervisor dashboard"],
-          ["Dept & Faculty Leadership", "HOD, PG Coordinator, Dean", "Dept / Faculty dashboard"],
+          ["Dept & Faculty Leadership", "HOD, Dean, SPGS Dean", "Dept / Faculty / SPGS dashboard"],
           ["Review & Governance", "External Examiner, Internal Examiner", "Examination queue"],
           ["Administration", "Director of Research, Vice Chancellor", "Admin / Executive dashboard"],
         ]} headers={["Group", "Roles", "Dashboard"]} />

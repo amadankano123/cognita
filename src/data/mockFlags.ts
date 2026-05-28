@@ -27,7 +27,7 @@ export interface AccountabilityFlag {
   milestone?: string;      // e.g. "Chapter 3 Submission", "Proposal Defense"
   createdAt: string;       // ISO date
   remindersSent: number;
-  escalatedTo?: string;    // "Supervisor" | "HOD" | "PG Coordinator"
+  escalatedTo?: string;    // "Supervisor" | "HOD" | "Dean" | "SPGS Dean"
 }
 
 // Institution-wide thresholds (admin/HOD configurable in the real product).
@@ -185,7 +185,7 @@ export const mockAccountabilityFlags: AccountabilityFlag[] = [
     severity: "critical",
     status: "escalated",
     title: "Missed deadline — Data Collection phase",
-    detail: "Phase was due 1 May. No submission received. Escalated to PG Coordinator.",
+    detail: "Phase was due 1 May. No submission received. Escalated to SPGS Dean.",
     studentId: "stu-pg-003",
     studentName: "Kofi Mensah",
     supervisorName: "Dr. Aisha Bello",
@@ -195,7 +195,7 @@ export const mockAccountabilityFlags: AccountabilityFlag[] = [
     milestone: "Data Collection",
     createdAt: "2026-05-02",
     remindersSent: 3,
-    escalatedTo: "PG Coordinator",
+    escalatedTo: "SPGS Dean",
   },
   {
     id: "flg-009",

@@ -147,7 +147,7 @@ const SpgsDashboard = () => {
         <p className="text-xs text-muted-foreground">
           <strong className="text-foreground">Read-only oversight.</strong> The SPGS office monitors institution-wide
           postgraduate progress. Supervisor assignment, departmental assessment and academic decisions remain with the
-          Head of Department and PG Coordinator. All actions in this module are logged to the institutional audit trail.
+          Head of Department and Dean of Faculty. All actions in this module are logged to the institutional audit trail.
         </p>
       </Card>
     </div>
