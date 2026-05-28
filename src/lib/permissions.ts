@@ -62,13 +62,6 @@ const HOD: Permission[] = [
   "analytics.view.department",
 ];
 
-const PG_COORDINATOR: Permission[] = [
-  "project.view.department", "project.view.faculty",
-  "review.comment", "review.approve.section",
-  "supervision.assign", "users.manage.department",
-  "analytics.view.department", "analytics.view.faculty",
-];
-
 const DEAN: Permission[] = [
   "project.view.faculty", "users.manage.faculty",
   "review.approve.final", "audit.view.department",
@@ -114,7 +107,6 @@ export const ROLE_PERMISSIONS: Record<AppRole, Permission[]> = {
   "Researcher": [...STUDENT, "ai.use.generate"],
   "Supervisor": SUPERVISOR,
   "Head of Department": HOD,
-  "PG Coordinator": PG_COORDINATOR,
   "Dean": DEAN,
   "SPGS Dean": SPGS_DEAN,
   "Director of Research": DIRECTOR_OF_RESEARCH,
@@ -140,7 +132,6 @@ export const ROLE_HOME_ROUTE: Record<AppRole, string> = {
   "Researcher": "/app/proj-001/dashboard",
   "Supervisor": "/supervisor/overview",
   "Head of Department": "/hod/overview",
-  "PG Coordinator": "/pg-coordinator/dashboard",
   "Dean": "/dean/dashboard",
   "SPGS Dean": "/spgs/dashboard",
   "Director of Research": "/admin/dashboard",

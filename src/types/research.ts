@@ -5,7 +5,6 @@ export type AppRole =
   | "Researcher"
   | "Supervisor"
   | "Head of Department"
-  | "PG Coordinator"
   | "Dean"
   | "SPGS Dean"
   | "Director of Research"
@@ -15,7 +14,7 @@ export type AppRole =
 
 export const ADMIN_ROLES: AppRole[] = ["Director of Research", "Vice Chancellor"];
 export const HOD_ROLES: AppRole[] = ["Head of Department"];
-export const FACULTY_LEADERSHIP_ROLES: AppRole[] = ["Dean", "PG Coordinator", "SPGS Dean"];
+export const FACULTY_LEADERSHIP_ROLES: AppRole[] = ["Dean", "SPGS Dean"];
 export const EXECUTIVE_ROLES: AppRole[] = ["Vice Chancellor", "Director of Research", "SPGS Dean"];
 export const REVIEW_ROLES: AppRole[] = ["External Examiner", "Internal Examiner"];
 export const STUDENT_ROLES: AppRole[] = ["Undergraduate Student", "Master's Student", "PhD Student"];
@@ -41,7 +40,6 @@ export const ROLE_GROUPS: RoleGroup[] = [
   ]},
   { label: "Department & Faculty Leadership", roles: [
     { value: "Head of Department", label: "Head of Department" },
-    { value: "PG Coordinator", label: "PG Coordinator" },
     { value: "Dean", label: "Dean of Faculty" },
     { value: "SPGS Dean", label: "Dean, School of Postgraduate Studies" },
   ]},

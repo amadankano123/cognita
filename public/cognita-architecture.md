@@ -100,8 +100,8 @@ type AppRole =
   | "Researcher"
   | "Supervisor"
   | "Head of Department"
-  | "PG Coordinator"
   | "Dean"
+  | "SPGS Dean"
   | "Director of Research"
   | "Vice Chancellor"
   | "External Examiner"
@@ -115,7 +115,7 @@ type AppRole =
 | Undergraduate | Undergraduate Student | Researcher workspace |
 | Postgraduate | Master's Student, PhD Student | Researcher workspace |
 | Faculty | Researcher, Supervisor | Researcher workspace / Supervisor dashboard |
-| Department & Faculty Leadership | Head of Department, PG Coordinator, Dean | HOD / PG Coordinator / Dean dashboards |
+| Department & Faculty Leadership | Head of Department, Dean, SPGS Dean | HOD / Dean / SPGS dashboards |
 | Review & Governance | External Examiner, Internal Examiner | Examiner queue |
 | Administration | Director of Research, Vice Chancellor | Admin dashboard / VC executive view |
 

@@ -12,7 +12,7 @@ import { NotificationProvider } from "@/context/NotificationContext";
 import { Building2, Crown, GraduationCap, Gavel, LayoutDashboard, Users, FolderKanban, ScrollText, BarChart3, Award, FileText } from "lucide-react";
 import RoleShell from "@/components/layout/RoleShell";
 import DeanOverview from "./pages/dean/DeanOverview";
-import PgCoordinatorOverview from "./pages/pg-coordinator/PgCoordinatorOverview";
+
 import VcOverview from "./pages/vc/VcOverview";
 import ExaminerQueue from "./pages/examiner/ExaminerQueue";
 import ExaminerDashboard from "./pages/examiner/ExaminerDashboard";
@@ -164,15 +164,8 @@ const App = () => (
                   <Route path="audit" element={<AuditLogPage />} />
                 </Route>
 
-                {/* PG Coordinator */}
-                <Route path="/pg-coordinator" element={<RequireRole allow={["PG Coordinator"]}><RoleShell roleLabel="PG Coordinator" roleIcon={GraduationCap} items={[
-                  { title: "Dashboard", path: "/pg-coordinator/dashboard", icon: LayoutDashboard },
-                  { title: "Cohort", path: "/pg-coordinator/dashboard", icon: Users },
-                ]} /></RequireRole>}>
-                  <Route index element={<Navigate to="dashboard" replace />} />
-                  <Route path="dashboard" element={<PgCoordinatorOverview />} />
-                  <Route path="overview" element={<Navigate to="/pg-coordinator/dashboard" replace />} />
-                </Route>
+                {/* Legacy redirect: PG Coordinator role removed — route to SPGS oversight */}
+                <Route path="/pg-coordinator/*" element={<Navigate to="/spgs/dashboard" replace />} />
 
                 {/* Vice Chancellor */}
                 <Route path="/vc" element={<RequireRole allow={["Vice Chancellor"]}><RoleShell roleLabel="Vice Chancellor" roleIcon={Crown} items={[
