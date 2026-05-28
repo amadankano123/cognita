@@ -53,7 +53,6 @@ const makeUser = (id: string, name: string, email: string, role: AppRole): User 
 });
 
 export const mockDeanUser: User = makeUser("dean-001", "Prof. Ifeanyi Eze", "i.eze@greenfield.edu", "Dean");
-export const mockPgCoordinatorUser: User = makeUser("pgc-001", "Dr. Chioma Bello", "c.bello@greenfield.edu", "PG Coordinator");
 export const mockDirectorUser: User = makeUser("dor-001", "Prof. Tunde Bakare", "t.bakare@greenfield.edu", "Director of Research");
 export const mockVcUser: User = makeUser("vc-001", "Prof. Amina Yusuf", "vc@greenfield.edu", "Vice Chancellor");
 export const mockExternalExaminerUser: User = makeUser("ext-001", "Prof. David Mensah", "d.mensah@external.edu", "External Examiner");
@@ -72,7 +71,6 @@ export const roleUserMap: Record<AppRole, User> = {
   "PhD Student": mockPhdUser,
   "Supervisor": mockSupervisorUser,
   "Head of Department": mockHodUser,
-  "PG Coordinator": mockPgCoordinatorUser,
   "Dean": mockDeanUser,
   "SPGS Dean": mockSpgsDeanUser,
   "Director of Research": mockDirectorUser,
