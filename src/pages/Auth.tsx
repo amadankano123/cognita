@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/context/AuthContext";
-import { AppRole, ADMIN_ROLES, HOD_ROLES, STUDENT_ROLES, ROLE_GROUPS } from "@/types/research";
+import { AppRole, ADMIN_ROLES, HOD_ROLES, STUDENT_ROLES, FACULTY_LEADERSHIP_ROLES, ROLE_GROUPS } from "@/types/research";
 import { ROLE_HOME_ROUTE } from "@/lib/permissions";
 
 const Auth = () => {
@@ -22,6 +22,7 @@ const Auth = () => {
   const getPostAuthRoute = (selectedRole: AppRole, isSignup: boolean) => {
     if (isSignup) {
       if (ADMIN_ROLES.includes(selectedRole)) return "/admin-onboarding";
+      if (selectedRole === "SPGS Dean" || selectedRole === "Dean") return "/admin-onboarding";
       if (HOD_ROLES.includes(selectedRole)) return "/hod-onboarding";
       if (selectedRole === "Supervisor") return "/supervisor-onboarding";
       if (([...STUDENT_ROLES, "Researcher"] as AppRole[]).includes(selectedRole)) return "/onboarding";
@@ -109,8 +110,11 @@ const Auth = () => {
               {role && HOD_ROLES.includes(role as AppRole) && (
                 <p className="text-xs text-primary mt-1">🏢 You'll be directed to the Department Dashboard</p>
               )}
-              {role && !role && (
-                <p className="text-xs text-muted-foreground mt-1">Choose your role to continue</p>
+              {role === "SPGS Dean" && (
+                <p className="text-xs text-primary mt-1">🎓 You'll be directed to the SPGS Oversight Dashboard</p>
+              )}
+              {role === "Dean" && (
+                <p className="text-xs text-primary mt-1">🏛️ You'll be directed to the Faculty Dashboard</p>
               )}
             </div>
             <Button type="submit" className="w-full" disabled={!role}>
